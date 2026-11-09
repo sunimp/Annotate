@@ -534,6 +534,40 @@
         }
       }
     },
+    "All Screens": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Todas las pantallas"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tous les écrans"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "すべての画面"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "所有屏幕"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "所有螢幕"
+          }
+        }
+      }
+    },
     "Allow URL commands": {
       "localizations": {
         "es": {
@@ -604,6 +638,40 @@
     },
     "Annotate": {
       "shouldTranslate": false
+    },
+    "Annotate On": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anotar en"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annoter sur"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "注釈を表示する画面"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "标注范围"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "標註範圍"
+          }
+        }
+      }
     },
     "Annotate Settings": {
       "localizations": {
@@ -6048,6 +6116,40 @@
         }
       }
     },
+    "Open the overlay on the screen under the pointer, or on every screen": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abre la superposición en la pantalla bajo el puntero o en todas las pantallas"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvre la superposition sur l’écran sous le pointeur ou sur tous les écrans"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ポインタがある画面、またはすべての画面でオーバーレイを開きます"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在指针所在的屏幕上打开叠加层，或在所有屏幕上打开"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在指標所在的螢幕上開啟疊加層，或在所有螢幕上開啟"
+          }
+        }
+      }
+    },
     "Opens the annotation overlay on the display under the pointer, leaving Always-On mode.": {
       "localizations": {
         "es": {
@@ -7812,6 +7914,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "尚未取得螢幕錄製權限"
+          }
+        }
+      }
+    },
+    "Screen Under Pointer": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pantalla bajo el puntero"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Écran sous le pointeur"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ポインタがある画面"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "指针所在屏幕"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "指標所在螢幕"
           }
         }
       }

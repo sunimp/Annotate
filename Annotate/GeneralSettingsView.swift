@@ -14,6 +14,8 @@ struct GeneralSettingsView: View {
     private var toolbarShowsShortcuts: Bool
     @AppStorage(.toolbarLayout)
     private var toolbarLayout: ToolbarLayout
+    @AppStorage(.overlayScope)
+    private var overlayScope: OverlayScope
     @AppStorage(.soundsEnabled)
     private var soundsEnabled: Bool
     @AppStorage(.soundTheme)
@@ -74,6 +76,15 @@ struct GeneralSettingsView: View {
             }
 
             Section {
+                Picker(selection: $overlayScope) {
+                    ForEach(OverlayScope.allCases, id: \.self) { scope in
+                        Text(scope.displayName).tag(scope)
+                    }
+                } label: {
+                    Text("Annotate On")
+                    Text("Open the overlay on the screen under the pointer, or on every screen")
+                }
+
                 Toggle(isOn: $clearDrawingsOnStart) {
                     Text("Clear Drawings on Toggle")
                     Text("Clear all drawings when toggling overlay off")

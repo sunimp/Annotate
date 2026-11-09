@@ -3,495 +3,498 @@
   <h1>Annotate</h1>
 </div>
 
+<p align="center"><strong>简体中文</strong> | <a href="README.en.md">English</a></p>
+
  <p align="center">
-  <strong>A lightweight, keyboard-driven screen annotation tool for macOS that allows you to quickly draw, highlight, and annotate anything on your screen.</strong>
+  <strong>一款轻量、以键盘为核心的 macOS 屏幕标注工具，可以在屏幕上快速绘制、高亮和标注任何内容。</strong>
 </p>
 
 ![annotate](https://github.com/user-attachments/assets/16baefb6-9fad-4702-9233-2991992ad030)
 
-## ❓ Why?
+## ❓ 为什么做 Annotate？
 
-Sometimes you need to emphasize a part of your screen or share ideas visually, and Annotate fills that gap with a simple, efficient interface. It enables real-time screen annotations using tools like pen, arrow, highlighter, rectangle, circle, counter, and text—perfect for highlighting and explaining concepts during presentations, live demos, or teaching sessions where visual annotations enhance understanding and clarity.
+有时你需要突出屏幕上的某个部分，或用图形直观地表达想法。Annotate 用简单高效的界面满足这一需求。它支持画笔、箭头、荧光笔、矩形、圆形、编号和文本等工具进行实时屏幕标注，非常适合在演示、现场 Demo 或教学中突出和讲解内容，让观众看得更明白。
 
-## ✨ Features
+## ✨ 功能
 
-- 🎨 **Drawing Tools**:
-  - ✒️ **Pen** tool for freehand drawing.
-  - ➡️ **Arrow** tool for directional indicators.
-  - 📏 **Line** tool for straight lines.
-  - 🟨 **Highlighter** for emphasizing content.
-  - 🔲 **Rectangle** shapes for boxing content.
-  - ⭕ **Circle** shapes for highlighting areas.
-  - 🕶️ **Redact** rectangles that hide confidential content with a solid, pixelated, or blurred fill. Use Solid for passwords and other secrets.
-  - 🔢 **Counter** tool for adding sequential numbered circles.
-  - 📝 **Text** annotations with drag & edit support, live resizing, and an optional background pill.
-  - 👆 **Select** tool for moving and managing objects.
-  - 🧹 **Eraser** tool for removing annotations.
-- ✨ **Fade/Persist Mode:** Control whether annotations fade out after a duration or persist on the screen.
-- 📌 **Always-On Mode:** Display annotations persistently without user interaction.
-- 🌈 **Quick Color Picker:** Press <kbd>C</kbd> to open a glass swatch picker right on the overlay. Your choice persists across sessions.
-- ↕️ **Quick Size Picker:** Press <kbd>W</kbd> for an in-overlay size ladder that adapts to the active tool, or step it with <kbd>[</kbd> and <kbd>]</kbd>.
-- ⬛ **Board**: Toggle whiteboard or blackboard based on system appearance.
-- 👆 **Cursor Highlight**: Visual spotlight that follows your cursor for better visibility during presentations.
-- 🎯 **Active Cursor Indicator**: Custom cursor styles to visually indicate when Annotate is active.
-- 🧰 **Floating Toolbar:** Live overlay bar for tools, color, width, and quick actions, toggled with Option + Command + T. Drag it anywhere on screen; its position is remembered per display.
-- 🔊 **Sounds:** Optional feedback cues for overlay on, overlay off, and clear all, with five themes to choose from.
-- 🖥️ **Fullscreen Support:** Works seamlessly over fullscreen applications.
-- 🎛️ **Menu Bar Integration:** Quick access via a status icon.
-- 🧹 **Auto-Clear Option:** Automatically clear all drawings when toggling the overlay.
-- ⌨️ **Keyboard Shortcuts:** Switch between modes and toggle the overlay with customizable keyboard shortcuts.
-- ⚡ **Global Hotkey:** Toggle Annotate with a global shortcut.
-- 🤖 **Shortcuts Actions:** Open the overlay, pick a tool or color, clear, and switch the toolbar, Fade Mode, or board from the Shortcuts app.
-- 🔗 **URL Scheme:** Run the same commands from `annotate://` links in scripts, launchers, Stream Deck, or the browser.
-- 🌐 **Localized:** English, Simplified Chinese, Traditional Chinese, Japanese, Spanish, and French, following the macOS language by default, or switched in Settings → General → Language without relaunching.
-- 🔄 **Auto-Updates:** Automatic update checking with secure, cryptographically signed updates.
+- 🎨 **绘制工具**：
+  - ✒️ **画笔**：自由手绘。
+  - ➡️ **箭头**：指示方向。
+  - 📏 **直线**：绘制直线。
+  - 🟨 **荧光笔**：突出内容。
+  - 🔲 **矩形**：框出内容。
+  - ⭕ **圆形**：圈出区域。
+  - 🕶️ **遮盖**：用纯色、像素化或模糊填充的矩形隐藏机密内容。密码等敏感信息请使用纯色。
+  - 🔢 **编号**：添加按顺序编号的圆圈。
+  - 📝 **文本**：支持拖动与编辑、实时调整大小，可选圆角背景。
+  - 👆 **选择**：移动和管理对象。
+  - 🧹 **橡皮擦**：移除标注。
+- ✨ **淡出/保留模式**：控制标注在一段时间后淡出，还是一直保留在屏幕上。
+- 📌 **常开模式**：持续显示标注，不响应用户操作。
+- 🌈 **快速颜色选择器**：按 <kbd>C</kbd> 直接在叠加层上打开玻璃质感的色板。所选颜色在下次启动后依然保留。
+- ↕️ **快速大小选择器**：按 <kbd>W</kbd> 打开叠加层内的大小阶梯，会根据当前工具自动调整；也可以用 <kbd>[</kbd> 和 <kbd>]</kbd> 逐级调整。
+- ⬛ **画板**：根据系统外观切换白板或黑板。
+- 👆 **光标高亮**：跟随光标的聚光灯，演示时更容易看清光标位置。
+- 🎯 **激活状态光标指示**：自定义光标样式，直观显示 Annotate 正处于激活状态。
+- 🧰 **浮动工具栏**：叠加层上的实时工具栏，提供工具、颜色、线宽和快捷操作，用 Option + Command + T 显示或隐藏。可拖到屏幕任意位置，每个显示器分别记住它的位置。
+- 🔊 **音效**：可选的反馈音效，在打开叠加层、关闭叠加层和全部清除时播放，提供五种主题。
+- 🖥️ **全屏支持**：可在全屏应用上方正常使用。
+- 🎛️ **菜单栏集成**：通过菜单栏图标快速访问。
+- 🧹 **自动清除选项**：切换叠加层时自动清除所有绘制内容。
+- ⌨️ **键盘快捷键**：使用可自定义的快捷键切换模式和叠加层。
+- ⚡ **全局快捷键**：用全局快捷键开关 Annotate。
+- 🤖 **快捷指令操作**：在“快捷指令”App 中打开叠加层、选择工具或颜色、清除标注，以及切换工具栏、淡出模式或画板。
+- 🔗 **URL 协议**：在脚本、启动器、Stream Deck 或浏览器中通过 `annotate://` 链接执行相同的命令。
+- 🌐 **多语言**：支持英语、简体中文、繁体中文、日语、西班牙语和法语。默认跟随 macOS 系统语言，也可以在“设置 → 通用 → 语言”中切换，无需重新启动。
+- 🔄 **自动更新**：自动检查更新，更新包经过加密签名，安全可靠。
 
-## 📦 Installation
+## 📦 安装
 
-### Download Release
+### 下载发布版本
 
-1. **Download the Application:**
+1. **下载应用：**
 
-   - Go to [latest release](https://github.com/epilande/Annotate/releases/latest) page.
-   - Download the `Annotate-x.x.x.dmg` file for easy installation, or `Annotate-x.x.x.zip` for manual installation.
+   - 前往[最新发布](https://github.com/epilande/Annotate/releases/latest)页面。
+   - 下载 `Annotate-x.x.x.dmg` 文件以便安装，或下载 `Annotate-x.x.x.zip` 手动安装。
 
-2. **Install the Application:**
+2. **安装应用：**
 
-   **Using DMG (Recommended):**
+   **使用 DMG（推荐）：**
 
-   - Open the downloaded `Annotate-x.x.x.dmg` file.
-   - Drag the `Annotate.app` into your **Applications** folder.
+   - 打开下载的 `Annotate-x.x.x.dmg` 文件。
+   - 将 `Annotate.app` 拖到 **应用程序** 文件夹。
 
-   **Using ZIP:**
+   **使用 ZIP：**
 
-   - Unzip the downloaded `Annotate-x.x.x.zip` file.
-   - Drag the `Annotate.app` file into your **Applications** folder.
+   - 解压下载的 `Annotate-x.x.x.zip` 文件。
+   - 将 `Annotate.app` 拖到 **应用程序** 文件夹。
 
-3. **Run the Application:**
+3. **运行应用：**
 
-   - Open your **Applications** folder and double-click `Annotate.app` to launch it.
+   - 打开 **应用程序** 文件夹，双击 `Annotate.app` 启动。
 
 > [!NOTE]
-> Requires macOS 14 (Sonoma) or later. Supports both Apple Silicon and Intel Macs.
+> 需要 macOS 14（Sonoma）或更高版本。同时支持 Apple 芯片和 Intel 芯片的 Mac。
 >
-> The app is code-signed and notarized for macOS Gatekeeper compatibility.
+> 应用已经过代码签名和公证，可通过 macOS 门禁（Gatekeeper）检查。
 
 ### Homebrew
 
-Install via [Homebrew Cask](https://formulae.brew.sh/cask/annotate):
+通过 [Homebrew Cask](https://formulae.brew.sh/cask/annotate) 安装：
 
 ```sh
 brew install --cask annotate
 ```
 
-### Build from Source
+### 从源码构建
 
-1. **Clone the Repository:**
+1. **克隆仓库：**
 
    ```sh
    git clone https://github.com/epilande/Annotate
    ```
 
-2. **Open the Project in Xcode:**
+2. **在 Xcode 中打开项目：**
 
    ```sh
    cd Annotate
    open Annotate.xcodeproj
    ```
 
-3. **Build and Run:**
-   - Ensure you have the latest version of Xcode installed.
-   - Select your target macOS version, then build and run the project in Xcode.
+3. **构建并运行：**
+   - 确保已安装最新版本的 Xcode。
+   - 选择目标 macOS 版本，然后在 Xcode 中构建并运行项目。
 
-## 🚀 Quick Start
+## 🚀 快速上手
 
-1. Launch Annotate.
-2. Press the global hotkey (configurable in Settings) to toggle the overlay.
-3. Start annotating with the pen tool. Annotate remembers your last-used tool, line width, and color, or you can set fixed defaults for each in Settings → General.
-4. Press <kbd>Esc</kbd> to exit the overlay.
+1. 启动 Annotate。
+2. 按全局快捷键（可在设置中配置）切换叠加层。
+3. 用画笔开始标注。Annotate 会记住你上次使用的工具、线宽和颜色，你也可以在“设置 → 通用”中为它们分别设置固定的默认值。
+4. 按 <kbd>Esc</kbd> 退出叠加层。
 
 > [!TIP]
-> The application provides a menu bar item that lets you select tools, open the color and size pickers on the active overlay, and perform actions like undo and redo.
-> It also shows the application's active state, current color selection, tool, and mode.
+> 应用在菜单栏提供一个菜单项，可用来选择工具、在当前叠加层上打开颜色和大小选择器，以及执行撤销、重做等操作。
+> 它还会显示应用的激活状态、当前颜色、工具和模式。
 
 <img width="250" alt="image" src="https://github.com/user-attachments/assets/40a94d67-29f1-49a6-9a3a-453d7f3d89e1" />
 
-## 🎮 Usage
+## 🎮 使用方法
 
-### Keyboard Shortcuts
-
-> [!TIP]
-> All tool shortcuts can be customized in Settings.
-
-#### 🎨 Drawing Tools
-
-| Key          | Tool            | Description                                                                |
-| ------------ | --------------- | -------------------------------------------------------------------------- |
-| <kbd>P</kbd> | **Pen**         | Freehand drawing                                                           |
-| <kbd>L</kbd> | **Line**        | Draw straight lines                                                        |
-| <kbd>H</kbd> | **Highlighter** | Highlight areas with semi-transparent brush                                |
-| <kbd>R</kbd> | **Rectangle**   | Draw rectangles (<kbd>Option</kbd>: center, <kbd>Shift</kbd>: square)      |
-| <kbd>O</kbd> | **Circle**      | Draw circles (<kbd>Option</kbd>: center, <kbd>Shift</kbd>: perfect circle) |
-| <kbd>X</kbd> | **Redact**      | Hide content behind a solid, pixelated, or blurred rectangle               |
-| <kbd>A</kbd> | **Arrow**       | Draw directional arrows                                                    |
-| <kbd>N</kbd> | **Counter**     | Add sequential numbered circles (1, 2, 3...)                               |
-| <kbd>T</kbd> | **Text**        | Add text annotations                                                       |
-| <kbd>E</kbd> | **Eraser**      | Remove annotations by dragging over them                                   |
-
-#### 🎯 Tool Settings & Selection
-
-| Key          | Tool                   | Description                               |
-| ------------ | ---------------------- | ----------------------------------------- |
-| <kbd>C</kbd> | **Color Picker**       | Open the in-overlay color quick picker    |
-| <kbd>W</kbd> | **Line Width**         | Open the in-overlay size quick picker     |
-| <kbd>V</kbd> | **Select**             | Select, move, and manage objects          |
-| <kbd>B</kbd> | **Board**              | Toggle whiteboard/blackboard              |
-| <kbd>K</kbd> | **Cursor Highlight**   | Toggle cursor highlight and click effects |
-| Not set      | **Background Dimming** | Toggle background dimming                 |
-
-#### ⚡ Quick Actions
-
-Fade mode, toolbar visibility, size stepping, Clear All, Capture Screen, and Capture Area can be rebound in **Settings → Shortcuts**, using a single key or a modifier combination. The table shows their defaults.
-
-| Shortcut                                              | Action               | Description                                                                |
-| ----------------------------------------------------- | -------------------- | -------------------------------------------------------------------------- |
-| <kbd>Space</kbd>                                      | **Toggle Fade Mode** | Switch between fade and persist modes                                      |
-| <kbd>Option</kbd> + <kbd>Command</kbd> + <kbd>T</kbd> | **Toggle Toolbar**   | Show or hide the floating overlay toolbar                                  |
-| <kbd>Delete</kbd>                                     | **Delete**           | Remove selected objects or most recent annotation                          |
-| <kbd>Option</kbd> + <kbd>Delete</kbd>                 | **Clear All**        | Remove all annotations                                                     |
-| <kbd>Command</kbd> + <kbd>S</kbd>                     | **Capture Screen**   | Save the display with its annotations as a PNG and copy it                 |
-| <kbd>Command</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd>  | **Capture Area**     | Drag out part of the display, save it as a PNG, and copy it                |
-| <kbd>Command</kbd> + <kbd>Z</kbd>                     | **Undo**             | Undo the last action                                                       |
-| <kbd>Command</kbd> + <kbd>Shift</kbd> + <kbd>Z</kbd>  | **Redo**             | Redo the last undone action                                                |
-| Mouse Backward Button                                 | **Undo**             | Undo the last action (mouse button 3)                                      |
-| Mouse Forward Button                                  | **Redo**             | Redo the last undone action (mouse button 4)                               |
-| <kbd>Command</kbd> + <kbd>Scroll</kbd>                | **Adjust Width**     | Quickly change line width                                                  |
-| <kbd>[</kbd>                                          | **Decrease Size**    | Step stroke width, text size, or counter size down                         |
-| <kbd>]</kbd>                                          | **Increase Size**    | Step stroke width, text size, or counter size up                           |
-| <kbd>Shift</kbd> (while drawing)                      | **Constrain**        | Lines/Arrows: 45° angles; Pen/Highlighter: straight; Shapes: square/circle |
-| <kbd>Command</kbd> + <kbd>R</kbd>                     | **Reset Counter**    | Reset counter number to 1 (Counter tool only)                              |
-
-#### 📋 Copy/Paste (Select Mode Only)
-
-| Shortcut                          | Action         | Description                            |
-| --------------------------------- | -------------- | -------------------------------------- |
-| <kbd>Command</kbd> + <kbd>A</kbd> | **Select All** | Select all objects on the canvas       |
-| <kbd>Command</kbd> + <kbd>C</kbd> | **Copy**       | Copy selected objects to clipboard     |
-| <kbd>Command</kbd> + <kbd>X</kbd> | **Cut**        | Cut selected objects (copy + delete)   |
-| <kbd>Command</kbd> + <kbd>V</kbd> | **Paste**      | Paste objects at mouse cursor position |
-| <kbd>Command</kbd> + <kbd>D</kbd> | **Duplicate**  | Duplicate selected objects with offset |
-
-#### 🔤 Text Editing (While Typing a Label)
-
-| Shortcut                            | Action               | Description                                        |
-| ----------------------------------- | -------------------- | -------------------------------------------------- |
-| <kbd>Shift</kbd> + <kbd>Enter</kbd> | **Line Break**       | Start a new line in the same label                 |
-| <kbd>Command</kbd> + <kbd>+</kbd>   | **Increase Size**    | Step the label font size up one notch              |
-| <kbd>Command</kbd> + <kbd>-</kbd>   | **Decrease Size**    | Step the label font size down one notch            |
-| <kbd>Command</kbd> + <kbd>B</kbd>   | **Label Background** | Toggle the rounded background pill behind the text |
-
-<kbd>Command</kbd> + <kbd>B</kbd> also works with the Text tool selected, so you can set the background on or off before you place a label.
-
-#### 🪟 Overlay Controls
-
-| Shortcut                                            | Action                    | Description                                                       |
-| --------------------------------------------------- | ------------------------- | ----------------------------------------------------------------- |
-| Custom (Settings)                                   | **Toggle Overlay**        | Show or hide the annotation overlay                               |
-| Custom (Settings)                                   | **Always-On Mode**        | Persistent, non-interactive display                               |
-| <kbd>Esc</kbd> or <kbd>Command</kbd> + <kbd>W</kbd> | **Close**                 | Closes the annotation overlay                                     |
-| <kbd>Shift</kbd> + <kbd>Esc</kbd>                   | **Switch Mode**           | Close interactive → enable always-on                              |
-| <kbd>Enter</kbd> (in text)                          | **Commit Text**           | Place the label, switching to Select if that setting is on        |
-| <kbd>Command</kbd> + <kbd>Enter</kbd> (in text)     | **Commit Text**           | Place the label, same as Enter                                    |
-| <kbd>Esc</kbd> (in text)                            | **Commit or Cancel Text** | Place the label if it has text, otherwise discard the empty field |
-
-### Drawing Tools
-
-#### Pen & Highlighter
-
-- Click and drag to draw freehand lines
-- Pen creates solid lines while highlighter creates semi-transparent, thicker strokes
-- Hold <kbd>Shift</kbd> while drawing to constrain to a perfectly straight line at 45° angle increments (0°, 45°, 90°, 135°, 180°, 225°, 270°, 315°)
-- Adjust line thickness with the size picker (<kbd>W</kbd>), step it with <kbd>[</kbd> and <kbd>]</kbd>, or hold <kbd>Command</kbd> and scroll
-
-#### Quick Pickers
-
-Color and size live in glass pickers that open right on the overlay, so you never leave what you are annotating:
-
-- **Color Picker**: Press <kbd>C</kbd> to open the swatch picker
-- **Size Picker**: Press <kbd>W</kbd> to open the size ladder. It adapts to the active tool: stroke widths from 1 to 24 px for drawing tools, font sizes from 12 to 120 pt for Text, and badge sizes for Counter
-- **Choosing**: Tap the key, then click a swatch or type its digit. Or hold the key, move over your choice, and release. Press the same key or <kbd>Esc</kbd> to dismiss without changing anything
-- **Size Stepping**: Press <kbd>[</kbd> or <kbd>]</kbd> by default (customizable in Settings → Shortcuts) to step the active ladder without opening the picker. They do nothing while a picker is open, and while typing in a label they insert text; use <kbd>Command</kbd> + <kbd>+</kbd> and <kbd>Command</kbd> + <kbd>-</kbd> there instead
-- **Command + Scroll**: Hold <kbd>Command</kbd> and scroll to fine-tune the active size, stroke width from 0.5 to 24 px for drawing tools or the text and counter size for those tools, with a preview at the bottom center of the screen
-- **Smart Scaling**: Arrowhead sizes scale with line width for better visual balance
+### 键盘快捷键
 
 > [!TIP]
-> Color and size persist across sessions and apply to every drawing tool. The menu bar's Color and Line Width items open the same pickers on the active overlay.
+> 所有工具快捷键都可以在设置中自定义。
 
-#### Shapes (Rectangle, Circle)
+#### 🎨 绘制工具
 
-- Click and drag to create shapes
-- Hold <kbd>Shift</kbd> while drawing to constrain rectangles to squares and circles to perfect circles
-- Hold <kbd>Option</kbd> while drawing to expand from the center point
-- Combine <kbd>Shift</kbd> + <kbd>Option</kbd> for constrained shapes that expand from center
+| 按键         | 工具       | 说明                                                                 |
+| ------------ | ---------- | -------------------------------------------------------------------- |
+| <kbd>P</kbd> | **画笔**   | 自由手绘                                                             |
+| <kbd>L</kbd> | **直线**   | 绘制直线                                                             |
+| <kbd>H</kbd> | **荧光笔** | 用半透明笔刷高亮区域                                                 |
+| <kbd>R</kbd> | **矩形**   | 绘制矩形（<kbd>Option</kbd>：从中心绘制，<kbd>Shift</kbd>：正方形）  |
+| <kbd>O</kbd> | **圆形**   | 绘制圆形（<kbd>Option</kbd>：从中心绘制，<kbd>Shift</kbd>：正圆）    |
+| <kbd>X</kbd> | **遮盖**   | 用纯色、像素化或模糊的矩形隐藏内容                                   |
+| <kbd>A</kbd> | **箭头**   | 绘制方向箭头                                                         |
+| <kbd>N</kbd> | **编号**   | 添加按顺序编号的圆圈（1、2、3……）                                    |
+| <kbd>T</kbd> | **文本**   | 添加文本标注                                                         |
+| <kbd>E</kbd> | **橡皮擦** | 拖过标注即可将其移除                                                 |
 
-#### Redact
+#### 🎯 工具设置与选择
 
-Hide confidential content before you take a screenshot or share your screen:
+| 按键         | 工具               | 说明                         |
+| ------------ | ------------------ | ---------------------------- |
+| <kbd>C</kbd> | **颜色选择器**     | 打开叠加层内的快速颜色选择器 |
+| <kbd>W</kbd> | **线宽**           | 打开叠加层内的快速大小选择器 |
+| <kbd>V</kbd> | **选择**           | 选择、移动和管理对象         |
+| <kbd>B</kbd> | **画板**           | 切换白板/黑板                |
+| <kbd>K</kbd> | **光标高亮**       | 切换光标高亮和点按效果       |
+| 未设置       | **背景调暗**       | 切换背景调暗                 |
 
-- Press <kbd>X</kbd>, then click and drag a rectangle over the content you want to hide. <kbd>Shift</kbd> and <kbd>Option</kbd> work the same as for other shapes
-- Pick the fill in **Settings → Tools → Redact Tool**:
-  - **Solid** (default): an opaque block (black, or dark gray on the blackboard)
-  - **Pixelate**: a coarse mosaic of the pixels under the rectangle
-  - **Blur**: a heavy blur of the pixels under the rectangle
-- Use **Solid** for passwords and other secrets. Pixelate and Blur keep the rough shape of the content, which can sometimes be partly recovered
-- A redaction hides whatever was drawn before it; annotations you add afterwards draw on top of it
-- Redactions never fade, even in Fade Mode. Remove them with Delete, the Eraser, Clear All, or undo
-- Click anywhere inside a redaction with the Select tool to move it; it resamples at its new spot
+#### ⚡ 快捷操作
+
+淡出模式、工具栏显示、大小步进、全部清除、截取屏幕和截取区域都可以在 **设置 → 快捷键** 中重新绑定，可以是单个按键，也可以是修饰键组合。下表列出的是默认设置。
+
+| 快捷键                                                | 操作               | 说明                                                       |
+| ----------------------------------------------------- | ------------------ | ---------------------------------------------------------- |
+| <kbd>Space</kbd>                                      | **切换淡出模式**   | 在淡出模式和保留模式之间切换                               |
+| <kbd>Option</kbd> + <kbd>Command</kbd> + <kbd>T</kbd> | **切换工具栏**     | 显示或隐藏叠加层上的浮动工具栏                             |
+| <kbd>Delete</kbd>                                     | **删除**           | 移除所选对象，或最近添加的标注                             |
+| <kbd>Option</kbd> + <kbd>Delete</kbd>                 | **全部清除**       | 移除所有标注                                               |
+| <kbd>Command</kbd> + <kbd>S</kbd>                     | **截取屏幕**       | 将显示器画面连同标注保存为 PNG 并拷贝                      |
+| <kbd>Command</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd>  | **截取区域**       | 拖出显示器上的一块区域，保存为 PNG 并拷贝                  |
+| <kbd>Command</kbd> + <kbd>Z</kbd>                     | **撤销**           | 撤销上一步操作                                             |
+| <kbd>Command</kbd> + <kbd>Shift</kbd> + <kbd>Z</kbd>  | **重做**           | 重做上一步撤销的操作                                       |
+| 鼠标后退键                                            | **撤销**           | 撤销上一步操作（鼠标按键 3）                               |
+| 鼠标前进键                                            | **重做**           | 重做上一步撤销的操作（鼠标按键 4）                         |
+| <kbd>Command</kbd> + <kbd>Scroll</kbd>                | **调整线宽**       | 快速更改线宽                                               |
+| <kbd>[</kbd>                                          | **减小尺寸**       | 减小笔画粗细、文本大小或编号大小                           |
+| <kbd>]</kbd>                                          | **增大尺寸**       | 增大笔画粗细、文本大小或编号大小                           |
+| <kbd>Shift</kbd>（绘制时）                            | **约束**           | 直线/箭头：45° 角；画笔/荧光笔：直线；形状：正方形/正圆    |
+| <kbd>Command</kbd> + <kbd>R</kbd>                     | **重置编号**       | 将编号重置为 1（仅限编号工具）                             |
+
+#### 📋 拷贝/粘贴（仅限选择模式）
+
+| 快捷键                            | 操作         | 说明                         |
+| --------------------------------- | ------------ | ---------------------------- |
+| <kbd>Command</kbd> + <kbd>A</kbd> | **全选**     | 选择画布上的所有对象         |
+| <kbd>Command</kbd> + <kbd>C</kbd> | **拷贝**     | 将所选对象拷贝到剪贴板       |
+| <kbd>Command</kbd> + <kbd>X</kbd> | **剪切**     | 剪切所选对象（拷贝并删除）   |
+| <kbd>Command</kbd> + <kbd>V</kbd> | **粘贴**     | 在鼠标指针位置粘贴对象       |
+| <kbd>Command</kbd> + <kbd>D</kbd> | **复制**     | 复制所选对象并稍作偏移       |
+
+#### 🔤 文本编辑（输入文本时）
+
+| 快捷键                              | 操作         | 说明                         |
+| ----------------------------------- | ------------ | ---------------------------- |
+| <kbd>Shift</kbd> + <kbd>Enter</kbd> | **换行**     | 在同一个文本中另起一行       |
+| <kbd>Command</kbd> + <kbd>+</kbd>   | **增大尺寸** | 将文本字号增大一级           |
+| <kbd>Command</kbd> + <kbd>-</kbd>   | **减小尺寸** | 将文本字号减小一级           |
+| <kbd>Command</kbd> + <kbd>B</kbd>   | **文本背景** | 切换文本后方的圆角背景       |
+
+选中文本工具时也可以按 <kbd>Command</kbd> + <kbd>B</kbd>，这样在放置文本之前就能先打开或关闭背景。
+
+#### 🪟 叠加层控制
+
+| 快捷键                                              | 操作                   | 说明                                                 |
+| --------------------------------------------------- | ---------------------- | ---------------------------------------------------- |
+| 自定义（设置）                                      | **切换叠加层**         | 显示或隐藏标注叠加层                                 |
+| 自定义（设置）                                      | **常开模式**           | 持续显示，不可交互                                   |
+| <kbd>Esc</kbd> 或 <kbd>Command</kbd> + <kbd>W</kbd> | **关闭**               | 关闭标注叠加层                                       |
+| <kbd>Shift</kbd> + <kbd>Esc</kbd>                   | **切换模式**           | 关闭交互模式 → 启用常开模式                          |
+| <kbd>Enter</kbd>（在文本中）                        | **确认文本**           | 放置文本；若开启了对应设置，则切换到选择工具         |
+| <kbd>Command</kbd> + <kbd>Enter</kbd>（在文本中）   | **确认文本**           | 放置文本，与 Enter 相同                              |
+| <kbd>Esc</kbd>（在文本中）                          | **确认或取消文本**     | 有内容时放置文本，否则丢弃空白输入框                 |
+
+### 绘制工具
+
+#### 画笔与荧光笔
+
+- 点按并拖移即可自由绘制线条
+- 画笔绘制实线，荧光笔绘制更粗的半透明笔画
+- 绘制时按住 <kbd>Shift</kbd>，可将线条约束为以 45° 为增量的直线（0°、45°、90°、135°、180°、225°、270°、315°）
+- 用大小选择器（<kbd>W</kbd>）调整线条粗细，用 <kbd>[</kbd> 和 <kbd>]</kbd> 逐级调整，或按住 <kbd>Command</kbd> 滚动
+
+#### 快速选择器
+
+颜色和大小通过直接在叠加层上打开的玻璃质感选择器来设置，你无需离开正在标注的内容：
+
+- **颜色选择器**：按 <kbd>C</kbd> 打开色板
+- **大小选择器**：按 <kbd>W</kbd> 打开大小阶梯。它会根据当前工具调整：绘制工具为 1 到 24 px 的笔画粗细，文本为 12 到 120 pt 的字号，编号为徽章大小
+- **选择方式**：轻按按键后点按色块或输入对应数字；或者按住按键，移到目标选项上再松开。再次按同一个键或按 <kbd>Esc</kbd> 可关闭且不做任何更改
+- **大小步进**：默认按 <kbd>[</kbd> 或 <kbd>]</kbd>（可在“设置 → 快捷键”中自定义），无需打开选择器即可逐级调整当前阶梯。选择器打开时这两个键无效；输入文本时它们会输入字符，此时请改用 <kbd>Command</kbd> + <kbd>+</kbd> 和 <kbd>Command</kbd> + <kbd>-</kbd>
+- **Command + 滚动**：按住 <kbd>Command</kbd> 滚动可微调当前大小：绘制工具为 0.5 到 24 px 的笔画粗细，文本和编号工具为对应的大小，屏幕底部中央会显示预览
+- **智能缩放**：箭头大小随线宽缩放，视觉上更协调
+
+> [!TIP]
+> 颜色和大小在下次启动后依然保留，并应用于所有绘制工具。菜单栏中的“颜色”和“线宽”项会在当前叠加层上打开同样的选择器。
+
+#### 形状（矩形、圆形）
+
+- 点按并拖移即可创建形状
+- 绘制时按住 <kbd>Shift</kbd>，可将矩形约束为正方形、圆形约束为正圆
+- 绘制时按住 <kbd>Option</kbd>，可从中心点向外扩展
+- 同时按住 <kbd>Shift</kbd> + <kbd>Option</kbd>，可绘制从中心扩展的约束形状
+
+#### 遮盖
+
+在截图或共享屏幕之前隐藏机密内容：
+
+- 按 <kbd>X</kbd>，然后在要隐藏的内容上点按并拖出一个矩形。<kbd>Shift</kbd> 和 <kbd>Option</kbd> 的用法与其他形状相同
+- 在 **设置 → 工具 → 遮盖工具** 中选择填充方式：
+  - **纯色**（默认）：不透明色块（黑色；在黑板上为深灰色）
+  - **像素化**：将矩形下方的像素处理成粗糙的马赛克
+  - **模糊**：对矩形下方的像素进行重度模糊
+- 密码等敏感信息请使用 **纯色**。像素化和模糊会保留内容的大致轮廓，有时可以被部分还原
+- 遮盖会隐藏在它之前绘制的所有内容；之后添加的标注会绘制在它上方
+- 遮盖永不淡出，即使在淡出模式下也是如此。可用删除、橡皮擦、全部清除或撤销将其移除
+- 使用选择工具点按遮盖内部任意位置即可移动它；它会在新位置重新取样
 
 > [!NOTE]
-> Pixelate and Blur read the screen under the rectangle, which macOS gates behind **Screen Recording** permission. Annotate asks for it when you pick one of those styles in Settings → Tools (never from the overlay, where the system dialog would be hidden), and uses a solid fill until it is granted (macOS may ask you to relaunch Annotate). Settings → Capture shows whether it is granted. With a whiteboard or blackboard showing, redactions always draw solid.
+> 像素化和模糊需要读取矩形下方的屏幕内容，macOS 要求为此授予 **屏幕录制** 权限。当你在“设置 → 工具”中选择这两种样式之一时，Annotate 会请求该权限（不会在叠加层上请求，因为系统对话框会被遮住），在获得授权前使用纯色填充（macOS 可能要求你重新启动 Annotate）。“设置 → 截图”会显示是否已授权。显示白板或黑板时，遮盖始终以纯色绘制。
 
-#### Arrow & Line
+#### 箭头与直线
 
-- Click and drag to create directional arrows or straight lines
-- Hold <kbd>Shift</kbd> while drawing to snap to 45° angle increments for perfectly horizontal, vertical, or diagonal lines
-- Arrows automatically create arrowheads pointing in the direction of the drag
-- Lines create simple straight connections between two points
+- 点按并拖移即可创建方向箭头或直线
+- 绘制时按住 <kbd>Shift</kbd>，可吸附到以 45° 为增量的角度，画出完全水平、垂直或对角的线条
+- 箭头会自动在拖移方向上生成箭头
+- 直线在两点之间绘制简单的直线连接
 
-#### Text Annotations
+#### 文本标注
 
-- Click to place a text annotation. It grows with the text and wraps at the edge of the screen
-- Click and drag to draw a fixed-width text box, like in Keynote or Figma. The text wraps inside it and the box grows downward as you type
-- Press <kbd>Shift</kbd> + <kbd>Enter</kbd> to start a new line in the same label
-- Type your text and press <kbd>Enter</kbd> or <kbd>Esc</kbd> to place it. <kbd>Esc</kbd> on an empty field discards it, and <kbd>Esc</kbd> while editing an existing label leaves that label untouched
-- Double-click any text annotation to edit its content
-- With the Text tool, drag an existing label to reposition it
-- Press <kbd>Command</kbd> + <kbd>+</kbd> or <kbd>Command</kbd> + <kbd>-</kbd> while typing to resize the label
-- Press <kbd>Command</kbd> + <kbd>B</kbd> to toggle a rounded background pill behind the text
-- With the Text tool active and no label open, <kbd>[</kbd> and <kbd>]</kbd> step the size used for the next label
-- Select a single label to resize it: drag its left or right handle to change the width, and use <kbd>W</kbd>, <kbd>[</kbd> <kbd>]</kbd>, or <kbd>Command</kbd> + scroll to change its font size. Sizing a placed label leaves the size of the next one alone
+- 点按即可放置文本标注。它会随文本内容扩展，并在屏幕边缘自动换行
+- 点按并拖移可绘制固定宽度的文本框，与 Keynote 或 Figma 类似。文本在框内换行，输入时文本框向下扩展
+- 按 <kbd>Shift</kbd> + <kbd>Enter</kbd> 在同一个文本中另起一行
+- 输入文本后按 <kbd>Enter</kbd> 或 <kbd>Esc</kbd> 放置。输入框为空时按 <kbd>Esc</kbd> 会丢弃它；编辑已有文本时按 <kbd>Esc</kbd> 则保持该文本不变
+- 连按任意文本标注即可编辑其内容
+- 使用文本工具时，拖移已有文本可重新定位
+- 输入时按 <kbd>Command</kbd> + <kbd>+</kbd> 或 <kbd>Command</kbd> + <kbd>-</kbd> 调整文本大小
+- 按 <kbd>Command</kbd> + <kbd>B</kbd> 切换文本后方的圆角背景
+- 文本工具处于激活状态且没有打开的文本时，<kbd>[</kbd> 和 <kbd>]</kbd> 会逐级调整下一个文本使用的大小
+- 选中单个文本即可调整其大小：拖移左侧或右侧控制点更改宽度，用 <kbd>W</kbd>、<kbd>[</kbd> <kbd>]</kbd> 或 <kbd>Command</kbd> + 滚动更改字号。调整已放置文本的大小不会影响下一个文本的大小
 
-#### Counter Tool
+#### 编号工具
 
-- Click anywhere to add sequential numbered circles (1, 2, 3...)
-- Numbers increment automatically with each click
-- Press <kbd>Command</kbd> + <kbd>R</kbd> to reset the counter back to 1 (existing counters remain)
-- Press <kbd>[</kbd> or <kbd>]</kbd> to step the badge size, or <kbd>W</kbd> to pick one
+- 点按任意位置即可添加按顺序编号的圆圈（1、2、3……）
+- 每次点按时数字自动递增
+- 按 <kbd>Command</kbd> + <kbd>R</kbd> 将编号重置为 1（已有编号保持不变）
+- 按 <kbd>[</kbd> 或 <kbd>]</kbd> 逐级调整徽章大小，或按 <kbd>W</kbd> 选择大小
 
-#### Select Tool
+#### 选择工具
 
-The Select tool allows you to manipulate existing annotations with precision:
+选择工具可让你精确地调整已有标注：
 
-- **Select Objects**: Press <kbd>V</kbd> to enter select mode
+- **选择对象**：按 <kbd>V</kbd> 进入选择模式
 
-  - Click on objects to select them (lines, arrows, shapes, text, etc.)
-  - Circles and rectangles must be clicked on their edges
-  - A blue dashed bounding box appears around selected objects
+  - 点按对象即可选中（直线、箭头、形状、文本等）
+  - 圆形和矩形需要点按其边缘
+  - 所选对象周围会出现蓝色虚线边界框
 
-- **Multiple Selection**:
+- **多选**：
 
-  - **Rectangle Selection**: Click and drag on empty space to draw a selection rectangle
-    - All objects inside or touching the rectangle are selected
-  - **Shift+Click**: Hold <kbd>Shift</kbd> and click objects to add/remove them from selection
-  - **Shift+Rectangle**: Hold <kbd>Shift</kbd> while drawing a rectangle to add to existing selection
+  - **框选**：在空白处点按并拖移，绘制选择框
+    - 选择框内或与之接触的所有对象都会被选中
+  - **Shift + 点按**：按住 <kbd>Shift</kbd> 点按对象，可将其加入或移出选择
+  - **Shift + 框选**：按住 <kbd>Shift</kbd> 绘制选择框，可添加到已有选择
 
-- **Move Objects**:
+- **移动对象**：
 
-  - Click anywhere inside the blue bounding box and drag to move selected objects
-  - Multiple selected objects move together, maintaining their relative positions
+  - 在蓝色边界框内任意位置点按并拖移，即可移动所选对象
+  - 多个所选对象会一起移动，并保持相对位置
 
-- **Copy/Paste/Cut/Duplicate**:
+- **拷贝/粘贴/剪切/复制**：
 
-  - **Select All** (<kbd>Command</kbd>+<kbd>A</kbd>): Select all objects on the canvas
-  - **Copy** (<kbd>Command</kbd>+<kbd>C</kbd>): Copy selected objects to clipboard
-  - **Cut** (<kbd>Command</kbd>+<kbd>X</kbd>): Cut selected objects (copy and delete)
-  - **Paste** (<kbd>Command</kbd>+<kbd>V</kbd>): Paste objects at mouse cursor position
-    - Automatically switches to select mode with pasted objects selected
-  - **Duplicate** (<kbd>Command</kbd>+<kbd>D</kbd>): Duplicate selected objects with a small offset
-    - Keeps you in select mode with duplicated objects selected
+  - **全选**（<kbd>Command</kbd>+<kbd>A</kbd>）：选择画布上的所有对象
+  - **拷贝**（<kbd>Command</kbd>+<kbd>C</kbd>）：将所选对象拷贝到剪贴板
+  - **剪切**（<kbd>Command</kbd>+<kbd>X</kbd>）：剪切所选对象（拷贝并删除）
+  - **粘贴**（<kbd>Command</kbd>+<kbd>V</kbd>）：在鼠标指针位置粘贴对象
+    - 自动切换到选择模式，并选中粘贴的对象
+  - **复制**（<kbd>Command</kbd>+<kbd>D</kbd>）：复制所选对象并稍作偏移
+    - 保持在选择模式，并选中复制出的对象
 
-- **Delete Selected**:
+- **删除所选**：
 
-  - Press <kbd>Delete</kbd> to remove all selected objects
-  - Use <kbd>Command</kbd> + <kbd>Z</kbd> to undo deletions
+  - 按 <kbd>Delete</kbd> 移除所有所选对象
+  - 用 <kbd>Command</kbd> + <kbd>Z</kbd> 撤销删除
 
-- **Clear Selection**: Click on empty space (without <kbd>Shift</kbd>) to deselect all objects
+- **取消选择**：点按空白处（不按 <kbd>Shift</kbd>）即可取消选择所有对象
 
 > [!TIP]
-> The select tool makes it easy to correct mistakes, reposition elements, and build complex diagrams by moving groups of objects together.
+> 借助选择工具，你可以轻松纠正错误、调整元素位置，并通过整组移动对象来构建复杂的示意图。
 
-#### Eraser Tool
+#### 橡皮擦工具
 
-The Eraser tool allows you to remove specific annotations by dragging over them:
+橡皮擦工具可以通过拖过特定标注来将其移除：
 
-- **Activate Eraser**: Press <kbd>E</kbd> to enter eraser mode
-- **Erase Annotations**: Click and drag over any annotation to remove it
-  - Works with all annotation types (pen, arrows, lines, highlighters, shapes, redactions, text, counters)
-  - Annotations are removed instantly as you drag over them
-  - Supports undo (<kbd>Command</kbd> + <kbd>Z</kbd>) to restore erased items
+- **激活橡皮擦**：按 <kbd>E</kbd> 进入橡皮擦模式
+- **擦除标注**：在任意标注上点按并拖移即可将其移除
+  - 适用于所有标注类型（画笔、箭头、直线、荧光笔、形状、遮盖、文本、编号）
+  - 拖过标注时会立即将其移除
+  - 支持撤销（<kbd>Command</kbd> + <kbd>Z</kbd>）以恢复擦除的内容
 
-### Drawing Modes
+### 绘制模式
 
-Toggle between modes with <kbd>Space</kbd> by default, or rebind **Toggle Fade Mode** in Settings → Shortcuts.
+默认按 <kbd>Space</kbd> 切换模式，也可以在“设置 → 快捷键”中重新绑定 **切换淡出模式**。
 
-#### Fade Mode
+#### 淡出模式
 
-In fade mode, annotations stay at full opacity for a short delay and then fade out, keeping your screen clean while allowing for temporary emphasis. Set the delay with the **Fade Delay** slider in Settings → General (0.25 to 5 seconds, default 0.625). The fade-out after the delay always takes 0.625 seconds.
+在淡出模式下，标注会以完全不透明的状态保持一小段时间，然后淡出。这样既能临时强调内容，又能保持屏幕整洁。在“设置 → 通用”中用 **淡出延迟** 滑块设置延迟时长（0.25 到 5 秒，默认 0.625 秒）。延迟结束后的淡出过程固定为 0.625 秒。
 
-#### Persist Mode
+#### 保留模式
 
-In persist mode, annotations remain on screen until manually cleared, allowing you to build up complex annotations over time.
+在保留模式下，标注会一直留在屏幕上，直到手动清除，方便你逐步叠加出复杂的标注。
 
-### Always-On Mode
+### 常开模式
 
-Always-On Mode displays your annotations persistently without any user interaction capability. This mode is ideal for presentations where you need important information visible without accidental modifications, reference displays with static guides or markers, and multi-screen setups where annotations remain on secondary monitors.
+常开模式会持续显示你的标注，但不响应任何用户操作。它适用于以下场景：演示时需要重要信息始终可见且不会被误改；需要显示静态参考线或标记；多屏环境中让标注保留在副显示器上。
 
-#### How to use:
+#### 使用方法：
 
-1. Create your annotations in normal interactive mode
-2. Toggle always-on mode via the global hotkey (configurable in Settings) or menu bar
-3. Annotations become persistent and non-interactive
-4. Use the same hotkey or menu option to exit always-on mode and resume editing
+1. 在普通交互模式下创建标注
+2. 通过全局快捷键（可在设置中配置）或菜单栏切换常开模式
+3. 标注会持续显示且不可交互
+4. 再次使用同一快捷键或菜单项即可退出常开模式并继续编辑
 
-### Deletion Controls
+### 删除控制
 
-- <kbd>Delete</kbd>: Removes the most recently added annotation.
-- <kbd>Option</kbd> + <kbd>Delete</kbd>: Clear all annotations from the screen.
+- <kbd>Delete</kbd>：移除最近添加的标注。
+- <kbd>Option</kbd> + <kbd>Delete</kbd>：清除屏幕上的所有标注。
 
-### Shortcuts Actions
+### 快捷指令操作
 
-Annotate adds these actions to the Shortcuts app, so you can run them from a shortcut, a keyboard trigger, or another automation tool:
+Annotate 会向“快捷指令”App 添加以下操作，你可以在快捷指令、键盘触发器或其他自动化工具中运行它们：
 
-| Action            | What it does                                                                     |
-| ----------------- | -------------------------------------------------------------------------------- |
-| Toggle Overlay    | Opens the overlay on the display under the pointer, or closes it.                |
-| Show Overlay      | Opens the overlay. Leaves Always-On Mode first.                                  |
-| Hide Overlay      | Closes the overlay on every display. Leaves Always-On Mode.                      |
-| Select Tool       | Selects a tool and opens the overlay.                                            |
-| Set Color         | Sets the annotation color from the palette. Doesn't open the overlay.            |
-| Clear Annotations | Clears every open overlay. One Undo on any display brings them all back.         |
-| Set Toolbar       | Turns the toolbar on, off, or toggles it. Doesn't open the overlay.              |
-| Set Fade Mode     | Turns Fade Mode on, off, or toggles it. In Always-On Mode it applies on exit.    |
-| Set Board         | Turns the whiteboard (blackboard in Dark Mode) on, off, or toggles it.           |
+| 操作       | 作用                                                         |
+| ---------- | ------------------------------------------------------------ |
+| 切换叠加层 | 在指针所在的显示器上打开叠加层，或将其关闭。                 |
+| 显示叠加层 | 打开叠加层。会先退出常开模式。                               |
+| 隐藏叠加层 | 关闭所有显示器上的叠加层。会退出常开模式。                   |
+| 选择工具   | 选择一个工具并打开叠加层。                                   |
+| 设置颜色   | 从调色板中设置标注颜色。不会打开叠加层。                     |
+| 清除标注   | 清除所有已打开的叠加层。在任一显示器上撤销一次即可全部恢复。 |
+| 设置工具栏 | 打开、关闭或切换工具栏。不会打开叠加层。                     |
+| 设置淡出模式 | 打开、关闭或切换淡出模式。在常开模式下，退出时生效。       |
+| 设置画板   | 打开、关闭或切换白板（深色模式下为黑板）。                   |
 
-Select Tool, Set Color, Clear Annotations, and the Set actions show an on-screen message on any open overlay.
+选择工具、设置颜色、清除标注以及各项“设置”操作会在已打开的叠加层上显示屏幕提示。
 
-### URL Scheme
+### URL 协议
 
-Every Shortcuts action also has an `annotate://` link, so anything that can open a URL can run it:
+每个快捷指令操作都有对应的 `annotate://` 链接，任何能打开 URL 的工具都可以运行它：
 
 ```sh
 open "annotate://tool/arrow"
 ```
 
-| Link                                   | What it does                                                                  |
-| -------------------------------------- | ----------------------------------------------------------------------------- |
-| `annotate://toggle`                    | Opens the overlay on the display under the pointer, or closes it.             |
-| `annotate://show`                      | Opens the overlay. Leaves Always-On Mode first.                               |
-| `annotate://hide`                      | Closes the overlay on every display. Leaves Always-On Mode.                   |
-| `annotate://tool/<tool>`               | Selects a tool and opens the overlay.                                         |
-| `annotate://color/<color>`             | Sets the annotation color from the palette. Doesn't open the overlay.         |
-| `annotate://clear`                     | Clears every open overlay. One Undo on any display brings them all back.      |
-| `annotate://toolbar/<on\|off\|toggle>` | Turns the toolbar on, off, or toggles it. Doesn't open the overlay.           |
-| `annotate://fade/<on\|off\|toggle>`    | Turns Fade Mode on, off, or toggles it. In Always-On Mode it applies on exit. |
-| `annotate://board/<on\|off\|toggle>`   | Turns the whiteboard (blackboard in Dark Mode) on, off, or toggles it.        |
+| 链接                                   | 作用                                                         |
+| -------------------------------------- | ------------------------------------------------------------ |
+| `annotate://toggle`                    | 在指针所在的显示器上打开叠加层，或将其关闭。                 |
+| `annotate://show`                      | 打开叠加层。会先退出常开模式。                               |
+| `annotate://hide`                      | 关闭所有显示器上的叠加层。会退出常开模式。                   |
+| `annotate://tool/<tool>`               | 选择一个工具并打开叠加层。                                   |
+| `annotate://color/<color>`             | 从调色板中设置标注颜色。不会打开叠加层。                     |
+| `annotate://clear`                     | 清除所有已打开的叠加层。在任一显示器上撤销一次即可全部恢复。 |
+| `annotate://toolbar/<on\|off\|toggle>` | 打开、关闭或切换工具栏。不会打开叠加层。                     |
+| `annotate://fade/<on\|off\|toggle>`    | 打开、关闭或切换淡出模式。在常开模式下，退出时生效。         |
+| `annotate://board/<on\|off\|toggle>`   | 打开、关闭或切换白板（深色模式下为黑板）。                   |
 
-Capture has no link. Any web page or app can open a link, so links never read the screen or write to the clipboard. Use the keyboard or the menu bar icon instead.
+截图没有对应的链接。任何网页或应用都能打开链接，因此链接永远不会读取屏幕或写入剪贴板。请改用键盘或菜单栏图标截图。
 
-- **Tools:** `pen`, `arrow`, `line`, `highlighter`, `rectangle`, `circle`, `redact`, `text`, `counter`, `select`, `eraser`
-- **Colors:** `red`, `orange`, `yellow`, `green`, `cyan`, `indigo`, `magenta`, `white`, `black`
+- **工具：** `pen`、`arrow`、`line`、`highlighter`、`rectangle`、`circle`、`redact`、`text`、`counter`、`select`、`eraser`
+- **颜色：** `red`、`orange`、`yellow`、`green`、`cyan`、`indigo`、`magenta`、`white`、`black`
 
-Opening a link with plain `open` brings Annotate to the front for a moment. Once the link runs, focus goes back to the app you were in, unless an interactive overlay is still open, as it is after a tool or show link. When you open several links at once, that's decided after the last one. To keep a running Annotate in the background the whole time, open the link with `open -g`.
+用普通的 `open` 打开链接时，Annotate 会短暂切到前台。链接执行完毕后，焦点会回到你之前所在的应用，除非仍有可交互的叠加层处于打开状态（例如执行 tool 或 show 链接之后）。一次打开多个链接时，以最后一个链接的结果为准。若要让正在运行的 Annotate 始终留在后台，请用 `open -g` 打开链接。
 
-Links show the same on-screen messages as the Shortcuts actions. Matching ignores case. A link Annotate doesn't recognize, including one with a query string, does nothing. Turn links off with **Allow URL commands** in Settings → General.
+链接显示的屏幕提示与快捷指令操作相同。匹配时不区分大小写。Annotate 无法识别的链接（包括带查询字符串的链接）不会执行任何操作。在“设置 → 通用”中关闭 **允许 URL 命令** 即可停用链接。
 
-Debug builds answer to `annotate-debug://` instead, so a development build never takes links meant for the installed app.
+Debug 构建改为响应 `annotate-debug://`，因此开发版本永远不会接收原本发给已安装应用的链接。
 
-## ⚙️ Settings
+## ⚙️ 设置
 
-Access the Settings panel from the menu bar icon or by pressing <kbd>Command</kbd> + <kbd>,</kbd>.
+从菜单栏图标打开设置面板，或按 <kbd>Command</kbd> + <kbd>,</kbd>。
 
-Settings are organized into a sidebar with six panes: **General**, **Tools**, **Board**, **Cursor**, **Capture**, and **Shortcuts**.
+设置以边栏形式分为六个面板：**通用**、**工具**、**画板**、**光标**、**截图** 和 **快捷键**。
 
-### General
+### 通用
 
-- **Activation Shortcut**: Set a global keyboard shortcut to activate Annotate (requires modifier keys).
-- **Always-On Mode**: Set a global keyboard shortcut to keep Annotate active without auto-hide (requires modifier keys).
-- **Clear Drawings on Toggle**: Automatically clear all drawings when toggling the overlay off.
-- **Hide Tool Feedback**: Disable visual feedback when switching tools.
-- **Show toolbar**: Display the floating shortcut toolbar on annotation overlays. Drag the bar to reposition it; each display remembers where you left it.
-- **Show shortcuts in toolbar**: Label each toolbar button with its keyboard shortcut. On by default; turn it off for an icon-only bar.
-- **Toolbar Layout**: Horizontal (default) runs the bar along the bottom of the screen; Vertical runs it as a column down the left edge. Each layout remembers its own position per display.
-- **Play sounds**: Play feedback sounds for overlay and clear actions. Off by default.
-- **Sound Theme**: Choose between Chalk (default), Paper, Marker, Pencil, and Typewriter feedback sounds.
-- **Show in Dock**: Display Annotate icon in the Dock.
-- **Switch to Select after placing text**: After committing a label, switch to the Select tool with that label selected. Off by default so text mode stays selected.
-- **Default Tool**: Choose which tool is selected each time the overlay is activated (defaults to last used).
-- **Allow URL commands**: Run [`annotate://` links](#url-scheme) from other apps, scripts, and the browser. On by default; turn it off to ignore every link.
-- **Fade Delay**: How long annotations stay at full opacity in Fade Mode before fading out, from 0.25 to 5 seconds (default 0.625).
+- **激活快捷键**：设置用于激活 Annotate 的全局快捷键（需要包含修饰键）。
+- **常开模式**：设置全局快捷键，让 Annotate 保持激活而不自动隐藏（需要包含修饰键）。
+- **标注范围**：“指针所在屏幕”（默认）只在指针所在的显示器上打开叠加层。“所有屏幕”会在所有显示器上同时打开和关闭叠加层；工具栏留在打开时所在的显示器上，指针移到其他显示器时也不跟随。
+- **切换时清除绘制**：关闭叠加层时自动清除所有绘制内容。
+- **隐藏工具反馈**：切换工具时不显示视觉反馈。
+- **显示工具栏**：在标注叠加层上显示浮动快捷工具栏。拖移工具栏可调整位置；每个显示器都会记住你上次放置的位置。
+- **在工具栏中显示快捷键**：在每个工具栏按钮上标注其快捷键。默认开启；关闭后工具栏只显示图标。
+- **工具栏布局**：水平（默认）沿屏幕底部排列；垂直则沿左侧边缘纵向排列。每种布局在每个显示器上分别记住自己的位置。
+- **播放音效**：在叠加层和清除操作时播放反馈音效。默认关闭。
+- **音效主题**：可选择粉笔（默认）、纸张、马克笔、铅笔和打字机反馈音效。
+- **在程序坞中显示**：在程序坞中显示 Annotate 图标。
+- **放置文本后切换到选择工具**：确认文本后切换到选择工具，并选中该文本。默认关闭，以便保持文本工具处于选中状态。
+- **默认工具**：选择每次激活叠加层时选中的工具（默认为上次使用的工具）。
+- **允许 URL 命令**：允许其他应用、脚本和浏览器运行 [`annotate://` 链接](#url-协议)。默认开启；关闭后会忽略所有链接。
+- **淡出延迟**：淡出模式下标注在淡出前保持完全不透明的时长，范围为 0.25 到 5 秒（默认 0.625 秒）。
 
-### Tools
+### 工具
 
-- **Default Text Size**: Adjust the default font size for text annotations.
-- **Label background**: Draw new text annotations on a rounded background pill for contrast.
-- **Default Counter Size**: Adjust the default size for counter annotations.
-- **Counter Style**: Bordered (default) draws a circle outlined in the selected color with the number in that color. Filled draws a borderless circle in the selected color with a white number, or a black one on light colors such as yellow, cyan, and white. Existing counters keep the style they were placed with.
-- **Redact Tool**: Pick the **Style** (Solid, Pixelate, or Blur) for new redactions. Solid is the one to use for passwords and other secrets. Pixelate and Blur point to the Capture pane, which shows the Screen Recording permission status.
+- **默认文本大小**：调整文本标注的默认字号。
+- **文本背景**：为新的文本标注绘制圆角背景，以增强对比度。
+- **默认编号大小**：调整编号标注的默认大小。
+- **编号样式**：描边（默认）绘制以所选颜色描边的圆圈，数字也使用该颜色。填充绘制以所选颜色填充的无边框圆圈，数字为白色；在黄色、青色和白色等浅色上数字为黑色。已有编号保持放置时的样式。
+- **遮盖工具**：为新的遮盖选择 **样式**（纯色、像素化或模糊）。密码等敏感信息请使用纯色。像素化和模糊会提示前往“截图”面板，该面板会显示屏幕录制权限的状态。
 
-### Board
+### 画板
 
-- **Enable Board**: Show whiteboard or blackboard background.
-- **Board Opacity**: Adjust board background transparency (10-100%).
+- **启用画板**：显示白板或黑板背景。
+- **画板不透明度**：调整画板背景的透明度（10–100%）。
 
-### Cursor
+### 光标
 
-- **Cursor Style**: Choose how the cursor appears while annotating (None, Outline, Circle, Crosshair).
-- **Cursor Size**: Adjust the size of circle or crosshair cursor indicators (8-24px).
-- **Enable Cursor Spotlight**: Show a visual spotlight following your cursor.
-- **Spotlight Size**: Adjust the size of the cursor spotlight (30-100).
-- **Dim Background**: Darken the screen except a clear area around the cursor. Off each time the spotlight is enabled unless Dim Automatically is on.
-- **Dimming Amount**: Adjust how dark the background gets (20-90%).
-- **Dim Automatically**: Turn on background dimming whenever the spotlight is enabled.
-- **Only Show While Annotating**: Show the spotlight only while the overlay is active.
-- **Enable Click Effect**: Show a ripple on click and a highlight while holding.
-- **Click Effect Size**: Adjust the size of the click ripple and hold highlight (30-100).
-- **Effect Color**: Choose the color used for the spotlight and click effects from the color palette.
-- **Hide Cursor Effects In**: Suppress spotlight and click effects while one of these apps is focused (e.g. UTM, games, or remote desktop clients).
+- **光标样式**：选择标注时光标的外观（默认、描边、圆形、十字线）。
+- **光标大小**：调整圆形或十字线光标指示器的大小（8–24px）。
+- **启用光标聚光灯**：显示跟随光标的聚光灯。
+- **聚光灯大小**：调整光标聚光灯的大小（30–100）。
+- **调暗背景**：调暗光标周围清晰区域以外的屏幕。除非开启了“自动调暗”，否则每次启用聚光灯时它都处于关闭状态。
+- **调暗程度**：调整背景变暗的程度（20–90%）。
+- **自动调暗**：每次启用聚光灯时自动开启背景调暗。
+- **仅在标注时显示**：仅在叠加层激活时显示聚光灯。
+- **启用点按效果**：点按时显示波纹，按住时显示高亮。
+- **点按效果大小**：调整点按波纹和按住高亮的大小（30–100）。
+- **效果颜色**：从调色板中选择聚光灯和点按效果使用的颜色。
+- **在以下应用中隐藏光标效果**：当列表中的某个应用处于焦点时，不显示聚光灯和点按效果（例如 UTM、游戏或远程桌面客户端）。
 
-Cursor effects hide while the macOS screenshot selection (<kbd>Shift</kbd> + <kbd>Command</kbd> + <kbd>4</kbd> or <kbd>5</kbd>) is on screen, so they stay out of the capture. They still show in screen recordings.
+macOS 截图选区（<kbd>Shift</kbd> + <kbd>Command</kbd> + <kbd>4</kbd> 或 <kbd>5</kbd>）显示在屏幕上时，光标效果会隐藏，因此不会出现在截图中。但它们仍会出现在屏幕录制中。
 
-### Capture
+### 截图
 
-- **Folder**: Capture Screen and Capture Area save to `~/Pictures/Annotate` and also copy the image to the clipboard. **Show in Finder** opens the folder, and says so here if it can't create it.
-- **Capture Area**: Drag out the part of the display to save. Escape cancels. Annotations hold their fade while you drag, and the image shows them as they were. With no overlay open, including in Always-On Mode, Capture Area opens the overlay first.
-- **Screen Recording**: Shows whether Annotate has Screen Recording permission, with a shortcut to System Settings. Capture Screen, Capture Area, and the Redact tool's Pixelate and Blur styles need it. Capture works without it while a fully opaque board is showing, since the board hides the screen. If you capture without it otherwise, Annotate closes the overlay and opens this pane, which asks for access.
+- **文件夹**：截取屏幕和截取区域会保存到 `~/Pictures/Annotate`，同时将图像拷贝到剪贴板。**在访达中显示** 会打开该文件夹；如果无法创建该文件夹，这里会给出提示。
+- **截取区域**：拖出显示器上要保存的区域。按 Esc 取消。拖移期间标注会暂停淡出，图像中显示的是它们当时的样子。没有打开叠加层时（包括常开模式下），截取区域会先打开叠加层。
+- **屏幕录制**：显示 Annotate 是否拥有屏幕录制权限，并提供前往系统设置的快捷入口。截取屏幕、截取区域以及遮盖工具的像素化和模糊样式都需要该权限。显示完全不透明的画板时，即使没有该权限也能截图，因为画板会遮住屏幕。其他情况下若在无权限时截图，Annotate 会关闭叠加层并打开此面板请求授权。
 
-### Shortcuts
+### 快捷键
 
-Customize keys and modifier combinations for tools and utilities, organized into categories, with a **Reset All to Default** action:
+按类别自定义工具和实用功能的按键与修饰键组合，并提供 **全部恢复默认** 操作：
 
-- **Drawing Tools**: Pen, Arrow, Line, Highlighter
-- **Shapes**: Rectangle, Circle
-- **Advanced Tools**: Counter, Text, Select, Eraser
-- **Utilities**: Color Picker, Line Width, Toggle Board, Toggle Cursor Highlight, Toggle Background Dimming, Toggle Fade Mode, Toggle Toolbar, Decrease Size, Increase Size, Clear All, Capture Screen, Capture Area
+- **绘制工具**：画笔、箭头、直线、荧光笔
+- **形状**：矩形、圆形
+- **高级工具**：编号、文本、选择、橡皮擦
+- **实用功能**：颜色选择器、线宽、切换画板、切换光标高亮、切换背景调暗、切换淡出模式、切换工具栏、减小尺寸、增大尺寸、全部清除、截取屏幕、截取区域
 
-The **Built-in Shortcuts** reference lists the fixed keys: Delete, Undo (Command + Z), Redo (Shift + Command + Z), and Escape. Editable bindings cannot conflict with another assigned action or a fixed editing command. Escape cancels recording without changing the binding.
+**内置快捷键** 列出了固定按键：删除、撤销（Command + Z）、重做（Shift + Command + Z）和 Esc。可编辑的绑定不能与其他已分配的操作或固定的编辑命令冲突。按 Esc 会取消录制，不更改绑定。
 
-Each row can clear its shortcut (Not Set) or restore that row's default; **Reset All to Default** restores default keys and modifier combinations and leaves dimming unset. Bindings cannot reuse the Activation or Always-On shortcuts in General Settings; changing either global shortcut also checks for conflicts with tool and utility bindings. Defaults already used by a global shortcut stay Not Set when resetting. Existing custom bindings and cleared shortcuts are preserved on upgrade; if a new action’s default is already assigned, the new action starts as Not Set.
+每一行都可以清除其快捷键（未设置）或恢复该行的默认值；**全部恢复默认** 会恢复默认按键和修饰键组合，背景调暗保持未设置。绑定不能复用通用设置中的激活快捷键或常开模式快捷键；更改这两个全局快捷键时，也会检查是否与工具和实用功能的绑定冲突。重置时，已被全局快捷键占用的默认值保持未设置。升级时会保留已有的自定义绑定和已清除的快捷键；如果新操作的默认按键已被占用，新操作初始为未设置。
 
-**Toggle Background Dimming** is unassigned by default. Assign a key to use it while annotating. Turning dimming on also enables the spotlight if needed; turning it off leaves the spotlight enabled. This shortcut does not change click effects or the Dim Automatically preference.
+**切换背景调暗** 默认未分配。为其分配按键后即可在标注时使用。开启调暗时会在需要时同时启用聚光灯；关闭调暗时聚光灯保持启用。此快捷键不会更改点按效果或“自动调暗”偏好设置。
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/0dcdd2c2-a26d-4fd4-9860-8f7340554ada">
-  <img width="700" alt="Annotate settings window" src="https://github.com/user-attachments/assets/10958639-d83e-40c6-876b-c975003dec6f" />
+  <img width="700" alt="Annotate 设置窗口" src="https://github.com/user-attachments/assets/10958639-d83e-40c6-876b-c975003dec6f" />
 </picture>
 
-## 🔄 Auto-Updates
+## 🔄 自动更新
 
-Annotate includes automatic update checking powered by [Sparkle](https://sparkle-project.org/):
+Annotate 内置由 [Sparkle](https://sparkle-project.org/) 提供的自动更新检查：
 
-- **Automatic Checks**: The app checks for updates once per day.
-- **Manual Check**: Select **Check for Updates...** from the menu bar or use the About window.
-- **Secure Updates**: All updates are cryptographically signed and verified before installation.
+- **自动检查**：应用每天检查一次更新。
+- **手动检查**：从菜单栏选择 **检查更新…**，或使用“关于”窗口。
+- **安全更新**：所有更新在安装前都会经过加密签名和验证。
 
-Updates are downloaded and installed seamlessly in the background. You'll be notified when a new version is available, with release notes and the option to install immediately or later.
+更新会在后台自动下载并安装。有新版本时你会收到通知，其中包含更新说明，可以选择立即安装或稍后安装。

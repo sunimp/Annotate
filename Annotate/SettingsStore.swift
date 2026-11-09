@@ -149,6 +149,11 @@ extension SettingKey<ToolbarLayout> {
     static var toolbarLayout: Self { .rawValue("ToolbarLayout", default: .horizontal) }
 }
 
+extension SettingKey<OverlayScope> {
+    /// Which displays open and close together when the overlay is toggled.
+    static var overlayScope: Self { .rawValue("OverlayScope", default: .pointerScreen) }
+}
+
 extension SettingKey<RectangleStyle> {
     /// The fill the Redact tool gives new rectangles. Never `.outline`: a stored outline falls
     /// back to the solid default so a redaction always hides.
