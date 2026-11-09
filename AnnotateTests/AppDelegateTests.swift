@@ -4,35 +4,31 @@ import XCTest
 @testable import Annotate
 
 @MainActor
-final class AppDelegateTests: XCTestCase, Sendable {
+final class AppDelegateTests: XCTestCase {
     var appDelegate: AppDelegate!
     var testDefaults: UserDefaults!
     private var launchedDelegates: [AppDelegate] = []
 
-    nonisolated override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
 
-        MainActor.assumeIsolated {
-            TestWindows.recordOpenWindows()
-            testDefaults = TestUserDefaults.create()
-            BoardManager.shared = BoardManager(userDefaults: testDefaults)
-            ShortcutManager.shared = ShortcutManager(userDefaults: testDefaults)
+        TestWindows.recordOpenWindows()
+        testDefaults = TestUserDefaults.create()
+        BoardManager.shared = BoardManager(userDefaults: testDefaults)
+        ShortcutManager.shared = ShortcutManager(userDefaults: testDefaults)
 
-            appDelegate = launchAppDelegate()
-        }
+        appDelegate = launchAppDelegate()
     }
 
-    nonisolated override func tearDown() {
-        MainActor.assumeIsolated {
-            SettingsWindowManager.shared.settingsWindow?.close()
-            appDelegate.overlayKeyWindowOverride = nil
-            launchedDelegates.forEach { $0.tearDownAfterLaunch() }
-            launchedDelegates = []
-            appDelegate = nil
-            assertNoLeakedWindows()
-        }
+    override func tearDown() async throws {
+        SettingsWindowManager.shared.settingsWindow?.close()
+        appDelegate.overlayKeyWindowOverride = nil
+        launchedDelegates.forEach { $0.tearDownAfterLaunch() }
+        launchedDelegates = []
+        appDelegate = nil
+        assertNoLeakedWindows()
         TestUserDefaults.removeSuite()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     /// Every delegate a test launches goes through here so tearDown can dismantle it. Launching
@@ -250,6 +246,88 @@ final class AppDelegateTests: XCTestCase, Sendable {
             type: .keyDown, keyCode: 18, characters: "1", windowNumber: pointerOverlay.windowNumber)))
         XCTAssertEqual(pointerOverlay.overlayView.currentLineWidth, firstWidth, "1 must pick the first width")
         pointerOverlay.cancelQuickPicker()
+    }
+
+    // MARK: - Keyboard focus follows the pointer back
+
+    /// A click on another display can hand the keyboard to another app. When the pointer comes
+    /// back, the open overlay takes the keyboard again so letter shortcuts keep working.
+    func testPointerEnteringAnOpenOverlayTakesTheKeyboardBack() throws {
+        let screen = try XCTUnwrap(NSScreen.main)
+        let overlay = replaceOverlayWithKeyRequestRecorder(on: screen)
+        overlay.orderFront(nil)
+        overlay.askedToBecomeKey = false
+
+        let entered = try XCTUnwrap(NSEvent.enterExitEvent(
+            with: .mouseEntered, location: NSPoint(x: 10, y: 10), modifierFlags: [], timestamp: 0,
+            windowNumber: overlay.windowNumber, context: nil, eventNumber: 0, trackingNumber: 0,
+            userData: nil))
+        // Whether AppKit grants key status depends on the test host, so check the request.
+        try XCTSkipIf(overlay.isKeyWindow, "The test host made the overlay key on its own")
+        overlay.overlayView.mouseEntered(with: entered)
+        XCTAssertTrue(overlay.askedToBecomeKey, "The pointer coming back must reclaim the keyboard")
+
+        // Always-On is read-only and click-through: it must never take the keyboard.
+        overlay.askedToBecomeKey = false
+        overlay.overlayView.isReadOnlyMode = true
+        XCTAssertFalse(overlay.shouldReclaimKeyOnPointerEntry)
+        overlay.overlayView.mouseEntered(with: entered)
+        XCTAssertFalse(overlay.askedToBecomeKey)
+        overlay.overlayView.isReadOnlyMode = false
+
+        // A hidden overlay stays out of the way.
+        overlay.orderOut(nil)
+        XCTAssertFalse(overlay.shouldReclaimKeyOnPointerEntry)
+    }
+
+    // MARK: - Annotate On (overlay scope)
+
+    func testOverlayScopeDefaultsToTheScreenUnderThePointer() {
+        XCTAssertEqual(SettingsStore(defaults: testDefaults)[.overlayScope], .pointerScreen)
+    }
+
+    /// The default opens one display and leaves the other alone. Needs a second display.
+    func testPointerScreenScopeOpensOnlyTheDisplayUnderThePointer() throws {
+        let screens = NSScreen.screens
+        try XCTSkipUnless(screens.count > 1, "Needs a second display")
+        defer { appDelegate.pointerLocationOverride = nil }
+        appDelegate.pointerLocationOverride = NSPoint(x: screens[1].frame.midX, y: screens[1].frame.midY)
+
+        appDelegate.toggleOverlay()
+        XCTAssertEqual(appDelegate.overlayWindows[screens[1]]?.isVisible, true)
+        XCTAssertEqual(appDelegate.overlayWindows[screens[0]]?.isVisible, false)
+
+        appDelegate.toggleOverlay()
+        XCTAssertFalse(appDelegate.overlayWindows.values.contains(where: \.isVisible))
+    }
+
+    /// All Screens opens and closes every display together, with one toolbar on the display
+    /// the overlay opened from. Needs a second display.
+    func testAllScreensScopeOpensEveryDisplayWithOneToolbar() throws {
+        let screens = NSScreen.screens
+        try XCTSkipUnless(screens.count > 1, "Needs a second display")
+        SettingsStore(defaults: testDefaults)[.overlayScope] = .allScreens
+        defer { appDelegate.pointerLocationOverride = nil }
+        appDelegate.pointerLocationOverride = NSPoint(x: screens[1].frame.midX, y: screens[1].frame.midY)
+
+        appDelegate.toggleOverlay()
+        let overlays = screens.compactMap { appDelegate.overlayWindows[$0] }
+        XCTAssertTrue(overlays.allSatisfy(\.isVisible), "Every display opens")
+        XCTAssertEqual(appDelegate.overlayWindows[screens[1]]?.toolbarPanel?.isAttached, true)
+        XCTAssertEqual(
+            overlays.filter { $0.toolbarPanel?.isAttached == true }.count, 1,
+            "Only the display the overlay opened from carries the toolbar")
+
+        // Closing from the other display closes them all.
+        appDelegate.pointerLocationOverride = NSPoint(x: screens[0].frame.midX, y: screens[0].frame.midY)
+        appDelegate.toggleOverlay()
+        XCTAssertFalse(overlays.contains(where: \.isVisible))
+
+        // Back on the default, the display under the pointer gets its own toolbar again.
+        SettingsStore(defaults: testDefaults)[.overlayScope] = .pointerScreen
+        appDelegate.toggleOverlay()
+        XCTAssertEqual(appDelegate.overlayWindows[screens[0]]?.toolbarPanel?.isAttached, true)
+        appDelegate.toggleOverlay()
     }
 
     /// Swaps the launched overlay on `screen` for one that records key requests. tearDown closes

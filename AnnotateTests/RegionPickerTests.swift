@@ -9,8 +9,8 @@ final class RegionPickerTests: XCTestCase {
     private var picked: [CGRect] = []
     private var cancels = 0
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         picker = RegionPicker(frame: bounds)
         picked = []
         cancels = 0
@@ -18,9 +18,9 @@ final class RegionPickerTests: XCTestCase {
         picker.onCancel = { [unowned self] in self.cancels += 1 }
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         picker = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     private func chord(_ key: String, keyCode: UInt16, modifiers: NSEvent.ModifierFlags = []) -> KeyChord {

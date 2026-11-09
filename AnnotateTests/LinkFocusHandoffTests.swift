@@ -33,8 +33,8 @@ final class LinkFocusHandoffTests: XCTestCase {
     /// Stands in for the app the user was in. The handoff only reads its process identifier.
     private let previousApp = NSRunningApplication.current
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         workspaceCenter = NotificationCenter()
         appCenter = NotificationCenter()
         scheduler = ManualScheduler()
@@ -44,12 +44,12 @@ final class LinkFocusHandoffTests: XCTestCase {
         handoff = makeHandoff(ownProcessIdentifier: -1)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         handoff = nil
         scheduler = nil
         workspaceCenter = nil
         appCenter = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     private func makeHandoff(ownProcessIdentifier: pid_t) -> LinkFocusHandoff {

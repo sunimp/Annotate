@@ -9,15 +9,15 @@ final class LinkedClearTests: XCTestCase {
     var first: OverlayWindow!
     var second: OverlayWindow!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         TestWindows.recordOpenWindows()
         AppDelegate.shared = nil
         first = makeOverlay(x: 0)
         second = makeOverlay(x: 800)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         for window in [first, second] {
             window?.stopFadeLoop()
             window?.close()
@@ -25,7 +25,7 @@ final class LinkedClearTests: XCTestCase {
         first = nil
         second = nil
         assertNoLeakedWindows()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     private func makeOverlay(x: CGFloat) -> OverlayWindow {

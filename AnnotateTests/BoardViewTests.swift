@@ -3,28 +3,24 @@ import XCTest
 @testable import Annotate
 
 @MainActor
-final class BoardViewTests: XCTestCase, Sendable {
+final class BoardViewTests: XCTestCase {
     var boardView: BoardView!
     var testDefaults: UserDefaults!
 
-    nonisolated override func setUp() {
-        super.setUp()
-        MainActor.assumeIsolated {
-            // Unique suite so leftover BoardOpacity from other classes
-            // (or a prior 0.5 write on .standard) cannot make both colors identical.
-            testDefaults = TestUserDefaults.create()
-            BoardManager.shared = BoardManager(userDefaults: testDefaults)
-            boardView = BoardView(frame: NSRect(x: 0, y: 0, width: 500, height: 500))
-        }
+    override func setUp() async throws {
+        try await super.setUp()
+        // Unique suite so leftover BoardOpacity from other classes
+        // (or a prior 0.5 write on .standard) cannot make both colors identical.
+        testDefaults = TestUserDefaults.create()
+        BoardManager.shared = BoardManager(userDefaults: testDefaults)
+        boardView = BoardView(frame: NSRect(x: 0, y: 0, width: 500, height: 500))
     }
 
-    nonisolated override func tearDown() {
-        MainActor.assumeIsolated {
-            boardView = nil
-            BoardManager.shared = BoardManager()
-        }
+    override func tearDown() async throws {
+        boardView = nil
+        BoardManager.shared = BoardManager()
         TestUserDefaults.removeSuite()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testBoardViewInitialization() {

@@ -36,7 +36,7 @@ struct ReleaseAnimation {
 }
 
 @MainActor
-class CursorHighlightManager: @unchecked Sendable {
+class CursorHighlightManager {
     static var shared = CursorHighlightManager()
 
     private let settings: SettingsStore

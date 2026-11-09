@@ -2,9 +2,9 @@ import Cocoa
 import SwiftUI
 
 /// The floating toolbar lives in its own non-activating child panel of the overlay window.
-/// A panel is what makes the bar draggable without any hand-rolled hit testing: AppKit moves
-/// it for us through `isMovableByWindowBackground`, and `performDrag` covers the presses AppKit
-/// does not treat as background. It never becomes key, so every keystroke keeps going to the
+/// A panel is what makes the bar draggable without any hand-rolled hit testing: the window
+/// server moves it through `performDrag`, started from `mouseDown` for a press on the bar
+/// itself and from `sendEvent` for a press that began on a chip. It never becomes key, so every keystroke keeps going to the
 /// canvas, and it rides along with the overlay because a child window follows its parent's
 /// ordering and its moves.
 final class ToolbarPanel: NSPanel {
@@ -87,7 +87,11 @@ final class ToolbarPanel: NSPanel {
         backgroundColor = .clear
         isOpaque = false
         hasShadow = false
-        isMovableByWindowBackground = true
+        // One drag path only. With AppKit's background move on as well, the native move lags
+        // the pointer, `pointerHasSlidAlongTheBar` reads that lag as a slide, and a second
+        // `performDrag` from the original press fights the first, so the bar jitters.
+        // `mouseDown` and `carryChipDrag` start every drag through `performDrag` instead.
+        isMovableByWindowBackground = false
         hidesOnDeactivate = false
         isRestorable = false
         isReleasedWhenClosed = false
@@ -194,6 +198,7 @@ final class ToolbarPanel: NSPanel {
     /// press's original mouse-down, as `performDrag` asks for.
     private func startWindowDrag(with event: NSEvent) {
         hasStartedWindowDrag = true
+        loosenFromOverlayForDrag()
         windowDragger(self, event)
         // `performDrag` returns right away and may never send the mouse-up, so `sendEvent`
         // cannot be relied on to see the end of the gesture. Close it once the button is back
@@ -234,6 +239,7 @@ final class ToolbarPanel: NSPanel {
     /// did not choose. Safe to call more than once for the same gesture.
     private func endUserDrag() {
         stopWatchingForRelease()
+        rejoinOverlayAfterDrag()
         isUserDragging = false
         hasStartedWindowDrag = false
         pressEvent = nil
@@ -272,8 +278,37 @@ final class ToolbarPanel: NSPanel {
     }
 
     func detach() {
+        dragParent = nil
         parent?.removeChildWindow(self)
         orderOut(nil)
+    }
+
+    /// The overlay the bar left for the length of a drag, or nil when no drag holds it loose.
+    private var dragParent: OverlayWindow?
+
+    /// The window server moves a child window in step with its parent, and with a full-screen
+    /// overlay as the parent that dropped a drag of the bar to about 14 frames a second (seen in
+    /// a 60 fps screen recording). Leaving the window group for the drag lets the bar move on its
+    /// own; it stays ordered above the overlay at the same level, so nothing visible changes.
+    private func loosenFromOverlayForDrag() {
+        guard let overlay = parent as? OverlayWindow else { return }
+        dragParent = overlay
+        let wasPlacing = isPlacingProgrammatically
+        isPlacingProgrammatically = true
+        overlay.removeChildWindow(self)
+        order(.above, relativeTo: overlay.windowNumber)
+        isPlacingProgrammatically = wasPlacing
+    }
+
+    /// Joins the overlay's window group again where the drag left the bar.
+    private func rejoinOverlayAfterDrag() {
+        guard let overlay = dragParent else { return }
+        dragParent = nil
+        guard parent == nil, overlay.isVisible else { return }
+        let wasPlacing = isPlacingProgrammatically
+        isPlacingProgrammatically = true
+        overlay.addChildWindow(self, ordered: .above)
+        isPlacingProgrammatically = wasPlacing
     }
 
     func tearDown() {

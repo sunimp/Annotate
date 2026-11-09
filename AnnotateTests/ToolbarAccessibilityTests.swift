@@ -34,8 +34,8 @@ final class ToolbarAccessibilityTests: XCTestCase {
         ("toolbar.undo", "Undo", "Shortcut: ⌘Z")
     ]
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         TestWindows.recordOpenWindows()
         assistiveAppWasAttached = TestAccessibility.setAssistiveAppAttached(true)
         defaults = TestUserDefaults.create()
@@ -44,7 +44,7 @@ final class ToolbarAccessibilityTests: XCTestCase {
         ShortcutManager.shared = ShortcutManager(userDefaults: defaults)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         windows.forEach { $0.close() }
         windows = []
         AppDelegate.shared = nil
@@ -54,7 +54,7 @@ final class ToolbarAccessibilityTests: XCTestCase {
         defaults = nil
         TestAccessibility.setAssistiveAppAttached(assistiveAppWasAttached)
         assertNoLeakedWindows()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     private func makeOverlay(width: CGFloat = 1_200) -> OverlayWindow {

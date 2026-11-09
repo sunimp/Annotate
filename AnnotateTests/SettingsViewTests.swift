@@ -7,8 +7,8 @@ import XCTest
 final class SettingsViewTests: XCTestCase {
     var testDefaults: UserDefaults!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         SettingsStore.standard.removeValue(for: .clearDrawingsOnStart)
         SettingsStore.standard.removeValue(for: .hideDockIcon)
         testDefaults = SettingsStore.standard.defaults
@@ -16,12 +16,12 @@ final class SettingsViewTests: XCTestCase {
         SettingsStore.standard.removeValue(for: .textFontSize)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         SettingsStore.standard.removeValue(for: .clearDrawingsOnStart)
         SettingsStore.standard.removeValue(for: .hideDockIcon)
         SettingsStore.standard.removeValue(for: .textBackground)
         SettingsStore.standard.removeValue(for: .textFontSize)
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testSettingsViewInitialState() {

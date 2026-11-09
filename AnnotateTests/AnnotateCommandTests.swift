@@ -16,8 +16,8 @@ final class AnnotateCommandTests: XCTestCase {
     /// The detail text of each alert in `captureProblemAlerts`.
     var captureProblemDetails: [String] = []
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         TestWindows.recordOpenWindows()
         testDefaults = TestUserDefaults.create()
         BoardManager.shared = BoardManager(userDefaults: testDefaults)
@@ -32,7 +32,7 @@ final class AnnotateCommandTests: XCTestCase {
         appDelegate.pointerLocationOverride = NSPoint(x: screen.frame.midX, y: screen.frame.midY)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         appDelegate.overlayWindows.values.forEach { $0.stopFadeLoop() }
         appDelegate.tearDownAfterLaunch()
         appDelegate = nil
@@ -41,7 +41,7 @@ final class AnnotateCommandTests: XCTestCase {
         assertNoLeakedWindows()
         TestUserDefaults.removeSuite()
         testDefaults = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     @discardableResult

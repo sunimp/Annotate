@@ -15,8 +15,9 @@ class OverlayWindow: NSPanel {
     private var wasShiftPressedOnMouseDown = false
     private var isShiftConstraintActive = false
 
-    var fadeTimer: Timer?
-    let fadeInterval: TimeInterval = 1.0 / 60.0
+    /// Drives the fade at the refresh rate of the display the overlay is on, so a ProMotion
+    /// display fades at 120 Hz and nothing ticks between frames. Nil while nothing fades.
+    var fadeTimer: CADisplayLink?
     
     // Track the current feedback view to remove it when a new one appears
     private(set) var currentFeedbackView: NSView?
@@ -192,6 +193,12 @@ class OverlayWindow: NSPanel {
         }
     }
 
+    /// False on the other displays when the overlay opens on every display at once: one bar,
+    /// on the display the overlay opened from, is enough to drive them all.
+    var carriesToolbar = true {
+        didSet { if carriesToolbar != oldValue { updateToolbarVisibility() } }
+    }
+
     func updateToolbarVisibility() {
         guard let panel = toolbarPanel else { return }
         let oldFeedbackPadding = feedbackBottomPadding
@@ -199,7 +206,7 @@ class OverlayWindow: NSPanel {
         // Always-On is a read-only, click-through overlay, so it carries no toolbar. Hiding is
         // a detach rather than a hidden view: a parent that ignores mouse events does not make
         // its children click-through, so the bar has to leave the window group entirely.
-        let visible = persisted && overlayView?.isReadOnlyMode != true
+        let visible = persisted && carriesToolbar && overlayView?.isReadOnlyMode != true
         let changed = panel.isAttached != visible
         if visible {
             panel.attach(to: self)
@@ -436,13 +443,10 @@ class OverlayWindow: NSPanel {
     func startFadeLoop() {
         // A frozen fade draws the same frame every tick.
         guard fadeTimer == nil, overlayView?.isFadeFrozen != true else { return }
-        fadeTimer = Timer.scheduledTimer(
-            timeInterval: fadeInterval,
-            target: self,
-            selector: #selector(updateFade),
-            userInfo: nil,
-            repeats: true
-        )
+        let link = displayLink(target: self, selector: #selector(updateFade))
+        // `.common`, so the fade keeps going while a menu or a drag runs the loop in another mode.
+        link.add(to: .main, forMode: .common)
+        fadeTimer = link
     }
 
     func stopFadeLoop() {
@@ -460,6 +464,12 @@ class OverlayWindow: NSPanel {
     }
 
     override var canBecomeKey: Bool { true }
+
+    /// Whether the pointer entering this overlay should hand it the keyboard: it is open for
+    /// drawing, and some other window has the keyboard.
+    var shouldReclaimKeyOnPointerEntry: Bool {
+        isVisible && !isKeyWindow && overlayView?.isReadOnlyMode == false
+    }
 
     override var canBecomeMain: Bool { false }
 
@@ -916,7 +926,7 @@ class OverlayWindow: NSPanel {
         return true
     }
 
-    private func handleQuickPickerKeyDown(_ chord: KeyChord) -> Bool {
+    func handleQuickPickerKeyDown(_ chord: KeyChord) -> Bool {
         if let picker = quickPicker {
             if pickerCommitInFlight {
                 return true
@@ -945,7 +955,7 @@ class OverlayWindow: NSPanel {
 
     /// All editable overlay actions share exact key/modifier matching and the same focus guards.
     @discardableResult
-    private func handleOverlayShortcut(_ chord: KeyChord) -> Bool {
+    func handleOverlayShortcut(_ chord: KeyChord) -> Bool {
         guard !overlayView.isReadOnlyMode, let action = ShortcutManager.shared.action(for: chord),
             !isEditingAnnotationText || Self.firesWhileEditingText(action)
         else { return false }
@@ -2370,9 +2380,12 @@ class OverlayWindow: NSPanel {
                 context.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
                 view.animator().alphaValue = 0
             }, completionHandler: {
-                view.removeFromSuperview()
-                if self?.currentFeedbackView == view {
-                    self?.currentFeedbackView = nil
+                // AppKit runs the completion on the main thread; the closure type just doesn't say so.
+                MainActor.assumeIsolated {
+                    view.removeFromSuperview()
+                    if self?.currentFeedbackView == view {
+                        self?.currentFeedbackView = nil
+                    }
                 }
             })
         }
@@ -2389,88 +2402,6 @@ class OverlayWindow: NSPanel {
                     self?.currentFeedbackView = nil
                 }
             }
-        }
-    }
-    
-    // MARK: - Keyboard Commands for Copy/Paste/Cut/Duplicate
-    
-    override func performKeyEquivalent(with event: NSEvent) -> Bool {
-        guard let chord = KeyChord(event: event) else {
-            return super.performKeyEquivalent(with: event)
-        }
-        if let regionPicker {
-            return regionPicker.handleKey(chord)
-        }
-        if handleQuickPickerKeyDown(chord) || handleOverlayShortcut(chord) { return true }
-
-        // Selection commands accept any extra modifiers. Command-B accepts only Shift.
-        let selectionCommand = ["a", "c", "x", "v", "d"].first {
-            ShortcutBinding($0, modifiers: .command).matches(chord, ignoring: [.shift, .option, .control])
-        }
-        let isTextBackgroundCommand = ShortcutBinding("b", modifiers: .command).matches(chord, ignoring: .shift)
-
-        switch selectionCommand ?? (isTextBackgroundCommand ? "b" : nil) {
-        case "a":
-            // Defer to text field when editing text
-            if overlayView.activeTextField != nil {
-                return super.performKeyEquivalent(with: event)
-            }
-
-            let hasAnnotations = !overlayView.arrows.isEmpty || !overlayView.lines.isEmpty ||
-                                !overlayView.paths.isEmpty || !overlayView.highlightPaths.isEmpty ||
-                                !overlayView.rectangles.isEmpty || !overlayView.circles.isEmpty ||
-                                !overlayView.textAnnotations.isEmpty || !overlayView.counterAnnotations.isEmpty
-
-            if hasAnnotations {
-                if overlayView.currentTool != .select {
-                    AppDelegate.shared?.enableSelectMode(NSMenuItem())
-                }
-                overlayView.selectAllObjects()
-            }
-
-            return true
-
-        case "c":
-            guard overlayView.currentTool == .select else {
-                return super.performKeyEquivalent(with: event)
-            }
-            overlayView.copySelectedObjects()
-            return true
-
-        case "x":
-            guard overlayView.currentTool == .select else {
-                return super.performKeyEquivalent(with: event)
-            }
-            overlayView.cutSelectedObjects()
-            return true
-
-        case "v":
-            guard overlayView.currentTool == .select else {
-                return super.performKeyEquivalent(with: event)
-            }
-            overlayView.pasteObjects()
-            return true
-
-        case "d":
-            guard overlayView.currentTool == .select else {
-                return super.performKeyEquivalent(with: event)
-            }
-            overlayView.duplicateSelectedObjects()
-            return true
-
-        case "b":
-            // Command-B toggles the label background whenever the text tool is in play,
-            // with or without an active field. Bare "b" stays Toggle Board; that path runs
-            // in keyDown and only fires when no modifier is held.
-            guard overlayView.currentTool == .text || overlayView.activeTextField != nil else {
-                return super.performKeyEquivalent(with: event)
-            }
-            toggleTextBackground()
-            return true
-
-
-        default:
-            return super.performKeyEquivalent(with: event)
         }
     }
 }

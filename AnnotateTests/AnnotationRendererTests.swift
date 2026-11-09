@@ -9,22 +9,18 @@ final class AnnotationRendererTests: XCTestCase {
     private static let canvas = NSRect(x: 0, y: 0, width: 200, height: 200)
     private var originalBoardManager: BoardManager!
 
-    override nonisolated func setUp() {
-        super.setUp()
-        MainActor.assumeIsolated {
-            AppDelegate.shared = nil
-            // `OverlayView.renderer()` reads the board; keep it off the user's live defaults.
-            originalBoardManager = BoardManager.shared
-            BoardManager.shared = BoardManager(userDefaults: TestUserDefaults.create())
-        }
+    override func setUp() async throws {
+        try await super.setUp()
+        AppDelegate.shared = nil
+        // `OverlayView.renderer()` reads the board; keep it off the user's live defaults.
+        originalBoardManager = BoardManager.shared
+        BoardManager.shared = BoardManager(userDefaults: TestUserDefaults.create())
     }
 
-    override nonisolated func tearDown() {
-        MainActor.assumeIsolated {
-            BoardManager.shared = originalBoardManager
-        }
+    override func tearDown() async throws {
+        BoardManager.shared = originalBoardManager
         TestUserDefaults.removeSuite()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // MARK: - Helpers

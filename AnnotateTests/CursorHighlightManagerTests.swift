@@ -7,20 +7,20 @@ final class CursorHighlightManagerTests: XCTestCase {
     var testDefaults: UserDefaults!
     var manager: CursorHighlightManager!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         TestWindows.recordOpenWindows()
         testDefaults = TestUserDefaults.create()
         manager = CursorHighlightManager(userDefaults: testDefaults)
         AppDelegate.shared = nil
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         TestUserDefaults.removeSuite()
         manager = nil
         AppDelegate.shared = nil
         assertNoLeakedWindows()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // MARK: - cursorHighlightEnabled Tests

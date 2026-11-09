@@ -10,8 +10,8 @@ final class ToolbarTests: XCTestCase {
     private var window: OverlayWindow!
     private var installedStatusItem = false
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         TestWindows.recordOpenWindows()
         defaults = TestUserDefaults.create()
         appDelegate = AppDelegate(userDefaults: defaults)
@@ -26,7 +26,7 @@ final class ToolbarTests: XCTestCase {
         window.contentView?.layoutSubtreeIfNeeded()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         if installedStatusItem {
             NSStatusBar.system.removeStatusItem(appDelegate.statusItem)
         }
@@ -38,7 +38,7 @@ final class ToolbarTests: XCTestCase {
         TestUserDefaults.removeSuite()
         defaults = nil
         assertNoLeakedWindows()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testToolbarUsesRequiredPersistenceKeyAndIsVisibleByDefault() {
@@ -65,9 +65,9 @@ final class ToolbarTests: XCTestCase {
             "A key toolbar would steal the keystrokes that belong to the canvas")
         XCTAssertFalse(panel.canBecomeMain)
         XCTAssertTrue(panel.styleMask.contains(.nonactivatingPanel))
-        XCTAssertTrue(
+        XCTAssertFalse(
             panel.isMovableByWindowBackground,
-            "Dragging the bar is AppKit's job, not the overlay's")
+            "A native background move on top of `performDrag` makes two drags fight and the bar jitter")
         XCTAssertEqual(panel.level, window.level)
         // AppKit adds bits of its own once the panel is a child, so check what we asked for.
         XCTAssertTrue(panel.collectionBehavior.contains(.canJoinAllSpaces))

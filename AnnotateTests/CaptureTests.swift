@@ -317,7 +317,8 @@ final class CaptureTests: XCTestCase {
 
     func testPNGCarriesRetinaDPI() async throws {
         let image = CaptureTestImages.solid(width: 20, height: 10, Self.blue)
-        let png = try await XCTUnwrapAsync(await CaptureCompositor.encodePNG(image, scale: 2))
+        let encoded = await CaptureCompositor.encodePNG(image, scale: 2)
+        let png = try XCTUnwrap(encoded)
 
         let source = try XCTUnwrap(CGImageSourceCreateWithData(png as CFData, nil))
         let properties = try XCTUnwrap(CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [CFString: Any])

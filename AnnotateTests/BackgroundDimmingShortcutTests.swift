@@ -8,8 +8,8 @@ final class BackgroundDimmingShortcutTests: XCTestCase {
     private var originalCursorManager: CursorHighlightManager!
     private var originalShortcutManager: ShortcutManager!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         TestWindows.recordOpenWindows()
         let defaults = TestUserDefaults.create()
         originalCursorManager = CursorHighlightManager.shared
@@ -22,14 +22,14 @@ final class BackgroundDimmingShortcutTests: XCTestCase {
         window.overlayView.pickerUserDefaultsOverride = defaults
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         window.close()
         window = nil
         CursorHighlightManager.shared = originalCursorManager
         ShortcutManager.shared = originalShortcutManager
         TestUserDefaults.removeSuite()
         assertNoLeakedWindows()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testAssignedKeyTogglesDimmingAndClearedKeyDoesNothing() throws {

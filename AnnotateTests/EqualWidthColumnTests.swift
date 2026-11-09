@@ -10,14 +10,14 @@ final class EqualWidthColumnTests: XCTestCase {
         var byIndex: [Int: CGRect] = [:]
     }
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         TestWindows.recordOpenWindows()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         assertNoLeakedWindows()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testEverySegmentTakesTheWidestNaturalWidth() throws {

@@ -8,8 +8,8 @@ final class URLCommandTests: XCTestCase {
     var testDefaults: UserDefaults!
     var screen: NSScreen!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         TestWindows.recordOpenWindows()
         testDefaults = TestUserDefaults.create()
         BoardManager.shared = BoardManager(userDefaults: testDefaults)
@@ -21,7 +21,7 @@ final class URLCommandTests: XCTestCase {
         appDelegate.pointerLocationOverride = NSPoint(x: screen.frame.midX, y: screen.frame.midY)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         appDelegate.overlayWindows.values.forEach { $0.stopFadeLoop() }
         appDelegate.tearDownAfterLaunch()
         appDelegate = nil
@@ -29,7 +29,7 @@ final class URLCommandTests: XCTestCase {
         assertNoLeakedWindows()
         TestUserDefaults.removeSuite()
         testDefaults = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     private func launch() {

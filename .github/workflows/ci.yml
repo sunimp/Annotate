@@ -42,6 +42,9 @@ jobs:
       - name: Check SwiftLint custom rules
         run: ./scripts/ci/check_swiftlint_custom_rules.sh
 
+      - name: Check localization
+        run: ./scripts/ci/check_localization.sh
+
       - name: Install dependencies
         run: brew install xcodegen
 

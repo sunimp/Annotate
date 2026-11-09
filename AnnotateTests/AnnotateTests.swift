@@ -5,14 +5,6 @@ import XCTest
 @MainActor
 final class AnnotateTests: XCTestCase {
 
-    override func setUp() {
-        super.setUp()
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
-
     // MARK: - Array Extension Tests
 
     func testArrayChunking() {

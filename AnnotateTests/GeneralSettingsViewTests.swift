@@ -7,16 +7,16 @@ import XCTest
 final class GeneralSettingsViewTests: XCTestCase {
     var testDefaults: UserDefaults!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         testDefaults = TestUserDefaults.create()
         BoardManager.shared = BoardManager(userDefaults: testDefaults)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         TestUserDefaults.removeSuite()
         BoardManager.shared = BoardManager()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // MARK: - UserDefaults Binding Tests

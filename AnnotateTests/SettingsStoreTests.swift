@@ -11,17 +11,17 @@ final class SettingsStoreTests: XCTestCase {
     private var defaults: UserDefaults!
     private var settings: SettingsStore!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         defaults = TestUserDefaults.create()
         settings = SettingsStore(defaults: defaults)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         settings = nil
         defaults = nil
         TestUserDefaults.removeSuite()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // MARK: - Defaults
