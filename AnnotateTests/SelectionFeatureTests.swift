@@ -1211,6 +1211,42 @@ final class SelectionFeatureTests: XCTestCase {
         XCTAssertEqual(overlayView.textAnnotations[2], original[0])
     }
 
+    func testUndoingAMoveFindsItsArrowAfterTheListIsReordered() {
+        let (window, undoManager) = makeUndoWindow()
+        _ = window
+        overlayView.currentTool = .select
+        let alpha = Arrow(
+            startPoint: NSPoint(x: 100, y: 100),
+            endPoint: NSPoint(x: 200, y: 100),
+            color: .red,
+            lineWidth: 2,
+            creationTime: nil)
+        let bravo = Arrow(
+            startPoint: NSPoint(x: 100, y: 300),
+            endPoint: NSPoint(x: 200, y: 300),
+            color: .blue,
+            lineWidth: 2,
+            creationTime: nil)
+        overlayView.arrows = [alpha, bravo]
+
+        asOneStep(undoManager) {
+            let object = SelectedObject.arrow(index: 1)
+            let from = overlayView.getObjectPosition(object)!
+            overlayView.selectedObjects = [object]
+            overlayView.moveSelectedObjects(by: NSPoint(x: 50, y: 0))
+            overlayView.registerMoveUndo(object: object, from: from, to: overlayView.getObjectPosition(object)!)
+        }
+        asOneStep(undoManager) {
+            overlayView.selectedObjects = [.arrow(index: 0)]
+            overlayView.deleteSelectedObjects()
+        }
+
+        // Undoing the delete puts Alpha back at the end: [Bravo, Alpha].
+        undoManager.undo()
+        undoManager.undo()
+        XCTAssertEqual(overlayView.arrows, [bravo, alpha], "The move undoes on Bravo and leaves Alpha alone")
+    }
+
     func testUndoingAResizeFindsItsLabelAfterFadeCompaction() {
         let (window, undoManager) = makeUndoWindow()
         _ = window

@@ -209,7 +209,7 @@ class OverlayView: NSView, NSTextFieldDelegate {
         get { document.selectionDragOffset }
         _modify { yield &document.selectionDragOffset }
     }
-    var selectionOriginalData: [SelectedObject: Any] {
+    var selectionOriginalData: [SelectedObject: ObjectPosition] {
         get { document.selectionOriginalData }
         _modify { yield &document.selectionOriginalData }
     }
@@ -662,10 +662,12 @@ class OverlayView: NSView, NSTextFieldDelegate {
                     target.registerUndo(action: .addText(annotation))
                 }
             }
-        case .moveText(let index, let oldPosition, let newPosition):
+        case let .moveText(storedIndex, oldPosition, newPosition):
             manager?.registerUndo(withTarget: self) { target in
                 MainActor.assumeIsolated {
-                    if index < target.textAnnotations.count {
+                    if let index = Self.movedIndex(in: target.textAnnotations, stored: storedIndex, isMoved: {
+                        $0.position == newPosition
+                    }) {
                         target.textAnnotations[index].position = oldPosition
                         target.registerUndo(action: .moveText(index, newPosition, oldPosition))
                     }
@@ -682,35 +684,36 @@ class OverlayView: NSView, NSTextFieldDelegate {
                     target.registerUndo(action: .resizeText(to, from))
                 }
             }
-        case .moveArrow(let index, let fromStart, let fromEnd, let toStart, let toEnd):
+        case let .moveArrow(storedIndex, fromStart, fromEnd, toStart, toEnd):
             manager?.registerUndo(withTarget: self) { target in
                 MainActor.assumeIsolated {
-                    if index < target.arrows.count {
+                    if let index = Self.movedIndex(in: target.arrows, stored: storedIndex, isMoved: {
+                        $0.startPoint == toStart && $0.endPoint == toEnd
+                    }) {
                         target.arrows[index].startPoint = fromStart
                         target.arrows[index].endPoint = fromEnd
                         target.registerUndo(action: .moveArrow(index, toStart, toEnd, fromStart, fromEnd))
                     }
                 }
             }
-        case .moveLine(let index, let fromStart, let fromEnd, let toStart, let toEnd):
+        case let .moveLine(storedIndex, fromStart, fromEnd, toStart, toEnd):
             manager?.registerUndo(withTarget: self) { target in
                 MainActor.assumeIsolated {
-                    if index < target.lines.count {
+                    if let index = Self.movedIndex(in: target.lines, stored: storedIndex, isMoved: {
+                        $0.startPoint == toStart && $0.endPoint == toEnd
+                    }) {
                         target.lines[index].startPoint = fromStart
                         target.lines[index].endPoint = fromEnd
                         target.registerUndo(action: .moveLine(index, toStart, toEnd, fromStart, fromEnd))
                     }
                 }
             }
-        case .moveRectangle(let storedIndex, let fromStart, let fromEnd, let toStart, let toEnd):
+        case let .moveRectangle(storedIndex, fromStart, fromEnd, toStart, toEnd):
             manager?.registerUndo(withTarget: self) { target in
                 MainActor.assumeIsolated {
-                    // Fade Mode compaction can shift indices, so confirm the rectangle is still
-                    // where the move left it rather than moving whatever now sits at the index.
-                    let isMovedRectangle = { (rect: Rectangle) in rect.startPoint == toStart && rect.endPoint == toEnd }
-                    let index = storedIndex < target.rectangles.count && isMovedRectangle(target.rectangles[storedIndex])
-                        ? storedIndex : target.rectangles.lastIndex(where: isMovedRectangle)
-                    if let index {
+                    if let index = Self.movedIndex(in: target.rectangles, stored: storedIndex, isMoved: {
+                        $0.startPoint == toStart && $0.endPoint == toEnd
+                    }) {
                         target.rectangles[index].startPoint = fromStart
                         target.rectangles[index].endPoint = fromEnd
                         target.rectangles[index].sample = nil
@@ -718,42 +721,48 @@ class OverlayView: NSView, NSTextFieldDelegate {
                     }
                 }
             }
-        case .moveCircle(let index, let fromStart, let fromEnd, let toStart, let toEnd):
+        case let .moveCircle(storedIndex, fromStart, fromEnd, toStart, toEnd):
             manager?.registerUndo(withTarget: self) { target in
                 MainActor.assumeIsolated {
-                    if index < target.circles.count {
+                    if let index = Self.movedIndex(in: target.circles, stored: storedIndex, isMoved: {
+                        $0.startPoint == toStart && $0.endPoint == toEnd
+                    }) {
                         target.circles[index].startPoint = fromStart
                         target.circles[index].endPoint = fromEnd
                         target.registerUndo(action: .moveCircle(index, toStart, toEnd, fromStart, fromEnd))
                     }
                 }
             }
-        case .movePath(let index, let delta):
+        case let .movePath(storedIndex, from, to):
             manager?.registerUndo(withTarget: self) { target in
                 MainActor.assumeIsolated {
-                    if index < target.paths.count {
-                        // Undo: move back by negative delta
-                        Self.translate(&target.paths[index], by: NSPoint(x: -delta.x, y: -delta.y))
+                    if let index = Self.movedIndex(in: target.paths, stored: storedIndex, isMoved: {
+                        $0.points.first?.point == to
+                    }) {
+                        Self.translate(&target.paths[index], by: NSPoint(x: from.x - to.x, y: from.y - to.y))
                         target.rebuildPathGeometry(&target.paths[index])
-                        target.registerUndo(action: .movePath(index, NSPoint(x: -delta.x, y: -delta.y)))
+                        target.registerUndo(action: .movePath(index, to, from))
                     }
                 }
             }
-        case .moveHighlight(let index, let delta):
+        case let .moveHighlight(storedIndex, from, to):
             manager?.registerUndo(withTarget: self) { target in
                 MainActor.assumeIsolated {
-                    if index < target.highlightPaths.count {
-                        // Undo: move back by negative delta
-                        Self.translate(&target.highlightPaths[index], by: NSPoint(x: -delta.x, y: -delta.y))
+                    if let index = Self.movedIndex(in: target.highlightPaths, stored: storedIndex, isMoved: {
+                        $0.points.first?.point == to
+                    }) {
+                        Self.translate(&target.highlightPaths[index], by: NSPoint(x: from.x - to.x, y: from.y - to.y))
                         target.rebuildPathGeometry(&target.highlightPaths[index])
-                        target.registerUndo(action: .moveHighlight(index, NSPoint(x: -delta.x, y: -delta.y)))
+                        target.registerUndo(action: .moveHighlight(index, to, from))
                     }
                 }
             }
-        case .moveCounter(let index, let from, let to):
+        case let .moveCounter(storedIndex, from, to):
             manager?.registerUndo(withTarget: self) { target in
                 MainActor.assumeIsolated {
-                    if index < target.counterAnnotations.count {
+                    if let index = Self.movedIndex(in: target.counterAnnotations, stored: storedIndex, isMoved: {
+                        $0.position == to
+                    }) {
                         target.counterAnnotations[index].position = from
                         target.registerUndo(action: .moveCounter(index, to, from))
                     }
@@ -777,22 +786,19 @@ class OverlayView: NSView, NSTextFieldDelegate {
                     target.registerUndo(action: .addCounter(counter))
                 }
             }
-        case .clearAll(
-            let paths, let arrows, let lines, let highlights, let rectangles, let circles,
-            let textAnnotations,
-            let counterAnnotations):
+        case .clearAll(let cleared):
             manager?.registerUndo(withTarget: self) { target in
                 MainActor.assumeIsolated {
-                    target.paths = paths
-                    target.arrows = arrows
-                    target.lines = lines
-                    target.highlightPaths = highlights
-                    target.rectangles = rectangles
-                    target.circles = circles
-                    target.textAnnotations = textAnnotations
-                    target.counterAnnotations = counterAnnotations
+                    target.paths = cleared.paths
+                    target.arrows = cleared.arrows
+                    target.lines = cleared.lines
+                    target.highlightPaths = cleared.highlights
+                    target.rectangles = cleared.rectangles
+                    target.circles = cleared.circles
+                    target.textAnnotations = cleared.textAnnotations
+                    target.counterAnnotations = cleared.counterAnnotations
                     target.nextCounterNumber =
-                        counterAnnotations.map { $0.number }.max().map { $0 + 1 } ?? 1
+                        cleared.counterAnnotations.map { $0.number }.max().map { $0 + 1 } ?? 1
                     // Redo clears through the same path as Clear All, so the Undo after it has
                     // what Redo removed to restore.
                     target.undoManager?.registerUndo(withTarget: target) { target in
@@ -806,45 +812,37 @@ class OverlayView: NSView, NSTextFieldDelegate {
         case .cutObjects(_):
             // Cut undo is handled by individual remove actions for each cut object
             break
-        case .eraseAnnotations(
-            let paths, let arrows, let lines, let highlights, let rectangles, let circles,
-            let textAnnotations, let counterAnnotations):
+        case .eraseAnnotations(let erased):
             // Reciprocal undo pattern: eraseAnnotations ↔ restoreAnnotations
             manager?.registerUndo(withTarget: self) { target in
                 MainActor.assumeIsolated {
-                    target.paths.append(contentsOf: paths)
-                    target.arrows.append(contentsOf: arrows)
-                    target.lines.append(contentsOf: lines)
-                    target.highlightPaths.append(contentsOf: highlights)
-                    target.rectangles.append(contentsOf: rectangles)
-                    target.circles.append(contentsOf: circles)
-                    target.textAnnotations.append(contentsOf: textAnnotations)
-                    target.counterAnnotations.append(contentsOf: counterAnnotations)
+                    target.paths.append(contentsOf: erased.paths)
+                    target.arrows.append(contentsOf: erased.arrows)
+                    target.lines.append(contentsOf: erased.lines)
+                    target.highlightPaths.append(contentsOf: erased.highlights)
+                    target.rectangles.append(contentsOf: erased.rectangles)
+                    target.circles.append(contentsOf: erased.circles)
+                    target.textAnnotations.append(contentsOf: erased.textAnnotations)
+                    target.counterAnnotations.append(contentsOf: erased.counterAnnotations)
                     target.nextCounterNumber =
                         target.counterAnnotations.map { $0.number }.max().map { $0 + 1 } ?? 1
-                    target.registerUndo(action: .restoreAnnotations(
-                        paths, arrows, lines, highlights, rectangles, circles, textAnnotations, counterAnnotations
-                    ))
+                    target.registerUndo(action: .restoreAnnotations(erased))
                 }
             }
-        case .restoreAnnotations(
-            let paths, let arrows, let lines, let highlights, let rectangles, let circles,
-            let textAnnotations, let counterAnnotations):
+        case .restoreAnnotations(let restored):
             manager?.registerUndo(withTarget: self) { target in
                 MainActor.assumeIsolated {
-                    target.paths.removeAll { item in paths.contains(item) }
-                    target.arrows.removeAll { item in arrows.contains(item) }
-                    target.lines.removeAll { item in lines.contains(item) }
-                    target.highlightPaths.removeAll { item in highlights.contains(item) }
-                    target.rectangles.removeAll { item in rectangles.contains(item) }
-                    target.circles.removeAll { item in circles.contains(item) }
-                    target.textAnnotations.removeAll { item in textAnnotations.contains(item) }
-                    target.counterAnnotations.removeAll { item in counterAnnotations.contains(item) }
+                    target.paths.removeAll { restored.paths.contains($0) }
+                    target.arrows.removeAll { restored.arrows.contains($0) }
+                    target.lines.removeAll { restored.lines.contains($0) }
+                    target.highlightPaths.removeAll { restored.highlights.contains($0) }
+                    target.rectangles.removeAll { restored.rectangles.contains($0) }
+                    target.circles.removeAll { restored.circles.contains($0) }
+                    target.textAnnotations.removeAll { restored.textAnnotations.contains($0) }
+                    target.counterAnnotations.removeAll { restored.counterAnnotations.contains($0) }
                     target.nextCounterNumber =
                         target.counterAnnotations.map { $0.number }.max().map { $0 + 1 } ?? 1
-                    target.registerUndo(action: .eraseAnnotations(
-                        paths, arrows, lines, highlights, rectangles, circles, textAnnotations, counterAnnotations
-                    ))
+                    target.registerUndo(action: .eraseAnnotations(restored))
                 }
             }
         }
@@ -946,6 +944,14 @@ class OverlayView: NSView, NSTextFieldDelegate {
     }
 
     /// Moves every point in one write, so a long stroke redraws once rather than per point.
+    /// Where a move's undo finds its object. Deletes, undo, and Fade Mode compaction all shift
+    /// indices, so the stored index counts only while the item there still sits where the move
+    /// left it; otherwise the newest item that does. Nil when the object is gone.
+    static func movedIndex<Item>(in items: [Item], stored: Int, isMoved: (Item) -> Bool) -> Int? {
+        if items.indices.contains(stored), isMoved(items[stored]) { return stored }
+        return items.lastIndex(where: isMoved)
+    }
+
     private static func translate(_ path: inout DrawingPath, by delta: NSPoint) {
         for i in path.points.indices {
             path.points[i].point.x += delta.x
@@ -1442,7 +1448,7 @@ class OverlayView: NSView, NSTextFieldDelegate {
             return indexMap[oldIndex].map(make)
         })
 
-        var remappedOriginal: [SelectedObject: Any] = [:]
+        var remappedOriginal: [SelectedObject: ObjectPosition] = [:]
         for (object, data) in selectionOriginalData {
             if let oldIndex = extractIndex(object) {
                 if let newIndex = indexMap[oldIndex] {
@@ -1702,29 +1708,22 @@ class OverlayView: NSView, NSTextFieldDelegate {
     /// Empties the canvas as one undoable step, even when it is already empty, so a Redo that
     /// clears again always leaves an Undo step behind.
     private func clearContents() {
-        let oldPaths = paths
-        let oldArrows = arrows
-        let oldLines = lines
-        let oldHighlights = highlightPaths
-        // Undo resamples instead of restoring an old capture.
-        let oldRectangles = rectangles.map { rectangle -> Rectangle in
-            var rectangle = rectangle
-            rectangle.sample = nil
-            return rectangle
-        }
-        let oldCircles = circles
-        let oldTextAnnotations = textAnnotations
-        let oldCounterAnnotations = counterAnnotations
         registerUndo(
             action: .clearAll(
-                oldPaths,
-                oldArrows,
-                oldLines,
-                oldHighlights,
-                oldRectangles,
-                oldCircles,
-                oldTextAnnotations,
-                oldCounterAnnotations))
+                AnnotationSnapshot(
+                    paths: paths,
+                    arrows: arrows,
+                    lines: lines,
+                    highlights: highlightPaths,
+                    // Undo resamples instead of restoring an old capture.
+                    rectangles: rectangles.map { rectangle in
+                        var rectangle = rectangle
+                        rectangle.sample = nil
+                        return rectangle
+                    },
+                    circles: circles,
+                    textAnnotations: textAnnotations,
+                    counterAnnotations: counterAnnotations)))
 
         paths.removeAll()
         arrows.removeAll()
@@ -3070,19 +3069,12 @@ class OverlayView: NSView, NSTextFieldDelegate {
     // MARK: - Eraser Logic
 
     func eraseAtPoint(_ point: NSPoint) {
-        var deletedPaths: [DrawingPath] = []
-        var deletedArrows: [Arrow] = []
-        var deletedLines: [Line] = []
-        var deletedHighlights: [DrawingPath] = []
-        var deletedRectangles: [Rectangle] = []
-        var deletedCircles: [Circle] = []
-        var deletedTextAnnotations: [TextAnnotation] = []
-        var deletedCounters: [CounterAnnotation] = []
+        var deleted = AnnotationSnapshot()
 
         // Check pen paths
         for (index, path) in paths.enumerated().reversed() {
             if pathIntersectsPoint(path, tool: .pen, point: point, radius: eraserRadius) {
-                deletedPaths.append(path)
+                deleted.paths.append(path)
                 paths.remove(at: index)
             }
         }
@@ -3090,7 +3082,7 @@ class OverlayView: NSView, NSTextFieldDelegate {
         // Check highlighter paths
         for (index, path) in highlightPaths.enumerated().reversed() {
             if pathIntersectsPoint(path, tool: .highlighter, point: point, radius: eraserRadius) {
-                deletedHighlights.append(path)
+                deleted.highlights.append(path)
                 highlightPaths.remove(at: index)
             }
         }
@@ -3098,7 +3090,7 @@ class OverlayView: NSView, NSTextFieldDelegate {
         // Check arrows
         for (index, arrow) in arrows.enumerated().reversed() {
             if lineIntersectsPoint(arrow.startPoint, arrow.endPoint, point: point, radius: eraserRadius) {
-                deletedArrows.append(arrow)
+                deleted.arrows.append(arrow)
                 arrows.remove(at: index)
             }
         }
@@ -3106,7 +3098,7 @@ class OverlayView: NSView, NSTextFieldDelegate {
         // Check lines
         for (index, line) in lines.enumerated().reversed() {
             if lineIntersectsPoint(line.startPoint, line.endPoint, point: point, radius: eraserRadius) {
-                deletedLines.append(line)
+                deleted.lines.append(line)
                 lines.remove(at: index)
             }
         }
@@ -3117,7 +3109,7 @@ class OverlayView: NSView, NSTextFieldDelegate {
                 // Undo resamples instead of restoring an old capture.
                 var erased = rectangle
                 erased.sample = nil
-                deletedRectangles.append(erased)
+                deleted.rectangles.append(erased)
                 rectangles.remove(at: index)
             }
         }
@@ -3125,7 +3117,7 @@ class OverlayView: NSView, NSTextFieldDelegate {
         // Check circles
         for (index, circle) in circles.enumerated().reversed() {
             if circleIntersectsPoint(circle, point: point, radius: eraserRadius) {
-                deletedCircles.append(circle)
+                deleted.circles.append(circle)
                 circles.remove(at: index)
             }
         }
@@ -3133,7 +3125,7 @@ class OverlayView: NSView, NSTextFieldDelegate {
         // Check text annotations
         for (index, text) in textAnnotations.enumerated().reversed() {
             if textIntersectsPoint(text, point: point, radius: eraserRadius) {
-                deletedTextAnnotations.append(text)
+                deleted.textAnnotations.append(text)
                 textAnnotations.remove(at: index)
             }
         }
@@ -3141,20 +3133,14 @@ class OverlayView: NSView, NSTextFieldDelegate {
         // Check counter annotations
         for (index, counter) in counterAnnotations.enumerated().reversed() {
             if counterIntersectsPoint(counter, point: point, radius: eraserRadius) {
-                deletedCounters.append(counter)
+                deleted.counterAnnotations.append(counter)
                 counterAnnotations.remove(at: index)
             }
         }
 
         // Register undo only if something was deleted
-        if !deletedPaths.isEmpty || !deletedArrows.isEmpty || !deletedLines.isEmpty ||
-            !deletedHighlights.isEmpty || !deletedRectangles.isEmpty || !deletedCircles.isEmpty ||
-            !deletedTextAnnotations.isEmpty || !deletedCounters.isEmpty {
-
-            registerUndo(action: .eraseAnnotations(
-                deletedPaths, deletedArrows, deletedLines, deletedHighlights,
-                deletedRectangles, deletedCircles, deletedTextAnnotations, deletedCounters
-            ))
+        if !deleted.isEmpty {
+            registerUndo(action: .eraseAnnotations(deleted))
         }
     }
 
@@ -3308,94 +3294,60 @@ class OverlayView: NSView, NSTextFieldDelegate {
         }
     }
     
-    func getObjectPosition(_ object: SelectedObject) -> Any? {
+    func getObjectPosition(_ object: SelectedObject) -> ObjectPosition? {
         switch object {
         case .arrow(let index):
             guard index < arrows.count else { return nil }
-            return (arrows[index].startPoint, arrows[index].endPoint)
+            return .endpoints(arrows[index].startPoint, arrows[index].endPoint)
         case .line(let index):
             guard index < lines.count else { return nil }
-            return (lines[index].startPoint, lines[index].endPoint)
+            return .endpoints(lines[index].startPoint, lines[index].endPoint)
         case .rectangle(let index):
             guard index < rectangles.count else { return nil }
-            return (rectangles[index].startPoint, rectangles[index].endPoint)
+            return .endpoints(rectangles[index].startPoint, rectangles[index].endPoint)
         case .circle(let index):
             guard index < circles.count else { return nil }
-            return (circles[index].startPoint, circles[index].endPoint)
+            return .endpoints(circles[index].startPoint, circles[index].endPoint)
         case .text(let index):
             guard index < textAnnotations.count else { return nil }
-            return textAnnotations[index].position
+            return .point(textAnnotations[index].position)
         case .counter(let index):
             guard index < counterAnnotations.count else { return nil }
-            return counterAnnotations[index].position
+            return .point(counterAnnotations[index].position)
         case .path(let index):
-            guard index < paths.count else { return nil }
-            return paths[index].points.map { $0.point }
+            guard index < paths.count, let first = paths[index].points.first else { return nil }
+            return .point(first.point)
         case .highlight(let index):
-            guard index < highlightPaths.count else { return nil }
-            return highlightPaths[index].points.map { $0.point }
+            guard index < highlightPaths.count, let first = highlightPaths[index].points.first else { return nil }
+            return .point(first.point)
         case .none:
             return nil
         }
     }
-    
-    func registerMoveUndo(object: SelectedObject, from oldPos: Any, to newPos: Any) {
-        switch object {
-        case .arrow(let index):
-            if let oldPositions = oldPos as? (NSPoint, NSPoint),
-               let newPositions = newPos as? (NSPoint, NSPoint) {
-                registerUndo(action: .moveArrow(index, oldPositions.0, oldPositions.1, newPositions.0, newPositions.1))
-            }
-        case .line(let index):
-            if let oldPositions = oldPos as? (NSPoint, NSPoint),
-               let newPositions = newPos as? (NSPoint, NSPoint) {
-                registerUndo(action: .moveLine(index, oldPositions.0, oldPositions.1, newPositions.0, newPositions.1))
-            }
-        case .rectangle(let index):
-            if let oldPositions = oldPos as? (NSPoint, NSPoint),
-               let newPositions = newPos as? (NSPoint, NSPoint) {
-                registerUndo(action: .moveRectangle(index, oldPositions.0, oldPositions.1, newPositions.0, newPositions.1))
-            }
-        case .circle(let index):
-            if let oldPositions = oldPos as? (NSPoint, NSPoint),
-               let newPositions = newPos as? (NSPoint, NSPoint) {
-                registerUndo(action: .moveCircle(index, oldPositions.0, oldPositions.1, newPositions.0, newPositions.1))
-            }
-        case .text(let index):
-            if let oldPosition = oldPos as? NSPoint,
-               let newPosition = newPos as? NSPoint {
-                registerUndo(action: .moveText(index, oldPosition, newPosition))
-            }
-        case .counter(let index):
-            if let oldPosition = oldPos as? NSPoint,
-               let newPosition = newPos as? NSPoint {
-                registerUndo(action: .moveCounter(index, oldPosition, newPosition))
-            }
-        case .path(let index):
-            if let oldPoints = oldPos as? [NSPoint],
-               let newPoints = newPos as? [NSPoint],
-               oldPoints.count == newPoints.count && oldPoints.count > 0 {
-                let delta = NSPoint(
-                    x: newPoints[0].x - oldPoints[0].x,
-                    y: newPoints[0].y - oldPoints[0].y
-                )
-                registerUndo(action: .movePath(index, delta))
-            }
-        case .highlight(let index):
-            if let oldPoints = oldPos as? [NSPoint],
-               let newPoints = newPos as? [NSPoint],
-               oldPoints.count == newPoints.count && oldPoints.count > 0 {
-                let delta = NSPoint(
-                    x: newPoints[0].x - oldPoints[0].x,
-                    y: newPoints[0].y - oldPoints[0].y
-                )
-                registerUndo(action: .moveHighlight(index, delta))
-            }
-        case .none:
-            break
+
+    func registerMoveUndo(object: SelectedObject, from oldPos: ObjectPosition, to newPos: ObjectPosition) {
+        switch (object, oldPos, newPos) {
+        case let (.arrow(index), .endpoints(fromStart, fromEnd), .endpoints(toStart, toEnd)):
+            registerUndo(action: .moveArrow(index, fromStart, fromEnd, toStart, toEnd))
+        case let (.line(index), .endpoints(fromStart, fromEnd), .endpoints(toStart, toEnd)):
+            registerUndo(action: .moveLine(index, fromStart, fromEnd, toStart, toEnd))
+        case let (.rectangle(index), .endpoints(fromStart, fromEnd), .endpoints(toStart, toEnd)):
+            registerUndo(action: .moveRectangle(index, fromStart, fromEnd, toStart, toEnd))
+        case let (.circle(index), .endpoints(fromStart, fromEnd), .endpoints(toStart, toEnd)):
+            registerUndo(action: .moveCircle(index, fromStart, fromEnd, toStart, toEnd))
+        case let (.text(index), .point(from), .point(to)):
+            registerUndo(action: .moveText(index, from, to))
+        case let (.counter(index), .point(from), .point(to)):
+            registerUndo(action: .moveCounter(index, from, to))
+        case let (.path(index), .point(from), .point(to)):
+            registerUndo(action: .movePath(index, from, to))
+        case let (.highlight(index), .point(from), .point(to)):
+            registerUndo(action: .moveHighlight(index, from, to))
+        default:
+            assertionFailure("Position \(oldPos) doesn't fit \(object)")
         }
     }
-    
+
     // MARK: - Selection Visual Feedback
     
 }

@@ -808,7 +808,8 @@ final class RedactionTests: XCTestCase, Sendable {
         overlayView.rectangles = [moved]
         overlayView.registerMoveUndo(
             object: .rectangle(index: 0),
-            from: (original.startPoint, original.endPoint), to: (moved.startPoint, moved.endPoint))
+            from: .endpoints(original.startPoint, original.endPoint),
+            to: .endpoints(moved.startPoint, moved.endPoint))
 
         overlayView.undo()
         XCTAssertEqual(overlayView.rectangles[0].bounds, original.bounds)
@@ -1493,7 +1494,8 @@ final class RedactionTests: XCTestCase, Sendable {
         overlayView.rectangles = [outline, redaction]
         overlayView.registerMoveUndo(
             object: .rectangle(index: 0),
-            from: (NSPoint(x: 0, y: 0), NSPoint(x: 20, y: 20)), to: (outline.startPoint, outline.endPoint))
+            from: .endpoints(NSPoint(x: 0, y: 0), NSPoint(x: 20, y: 20)),
+            to: .endpoints(outline.startPoint, outline.endPoint))
         overlayView.compactExpiredAnnotations()
         XCTAssertEqual(overlayView.rectangles, [redaction], "The redaction now sits at the outline's index")
 

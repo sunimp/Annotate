@@ -132,6 +132,14 @@ enum SelectedObject: Equatable, Hashable {
     }
 }
 
+/// Where a selected object sits, recorded when a drag starts so its move can be undone.
+enum ObjectPosition: Equatable {
+    /// Start and end points of an arrow, line, rectangle, or circle.
+    case endpoints(NSPoint, NSPoint)
+    /// A label's or counter's position, or a stroke's first point.
+    case point(NSPoint)
+}
+
 /// The side handles on a single selected label. They only change the label's width: the
 /// text rewraps, the height follows the content, and the font size stays where it is.
 enum TextResizeHandle: CaseIterable, Hashable {
@@ -454,6 +462,23 @@ enum ClipboardItem {
     }
 }
 
+/// A set of committed annotations, one array per kind, as Clear All and the eraser remove them.
+struct AnnotationSnapshot: Equatable {
+    var paths: [DrawingPath] = []
+    var arrows: [Arrow] = []
+    var lines: [Line] = []
+    var highlights: [DrawingPath] = []
+    var rectangles: [Rectangle] = []
+    var circles: [Circle] = []
+    var textAnnotations: [TextAnnotation] = []
+    var counterAnnotations: [CounterAnnotation] = []
+
+    var isEmpty: Bool {
+        paths.isEmpty && arrows.isEmpty && lines.isEmpty && highlights.isEmpty && rectangles.isEmpty
+            && circles.isEmpty && textAnnotations.isEmpty && counterAnnotations.isEmpty
+    }
+}
+
 /// Describes actions that can be used for undo/redo operations.
 enum DrawingAction {
     case addPath(DrawingPath)
@@ -478,20 +503,14 @@ enum DrawingAction {
     case moveLine(Int, NSPoint, NSPoint, NSPoint, NSPoint)
     case moveRectangle(Int, NSPoint, NSPoint, NSPoint, NSPoint)
     case moveCircle(Int, NSPoint, NSPoint, NSPoint, NSPoint)
-    case movePath(Int, NSPoint)  // index, delta
-    case moveHighlight(Int, NSPoint)  // index, delta
+    case movePath(Int, NSPoint, NSPoint)  // index, first point before, first point after
+    case moveHighlight(Int, NSPoint, NSPoint)
     case moveCounter(Int, NSPoint, NSPoint)  // index, from, to
-    case clearAll(
-        [DrawingPath], [Arrow], [Line], [DrawingPath], [Rectangle], [Circle], [TextAnnotation],
-        [CounterAnnotation])
+    case clearAll(AnnotationSnapshot)
     case pasteObjects([SelectedObject])  // For undo: remove pasted objects
     case cutObjects([SelectedObject])  // For undo: restore cut objects
-    case eraseAnnotations(
-        [DrawingPath], [Arrow], [Line], [DrawingPath], [Rectangle], [Circle], [TextAnnotation],
-        [CounterAnnotation])  // Stores all deleted items for undo
-    case restoreAnnotations(
-        [DrawingPath], [Arrow], [Line], [DrawingPath], [Rectangle], [Circle], [TextAnnotation],
-        [CounterAnnotation])  // Reciprocal action for eraseAnnotations
+    case eraseAnnotations(AnnotationSnapshot)  // Stores all deleted items for undo
+    case restoreAnnotations(AnnotationSnapshot)  // Reciprocal action for eraseAnnotations
 }
 
 // Add to Models.swift

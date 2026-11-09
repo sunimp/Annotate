@@ -74,7 +74,7 @@ struct OverlayDocument {
 
     var selectedObjects: Set<SelectedObject> = []
     var selectionDragOffset: NSPoint?
-    var selectionOriginalData: [SelectedObject: Any] = [:]
+    var selectionOriginalData: [SelectedObject: ObjectPosition] = [:]
     var isDrawingSelectionRect: Bool = false
     var selectionRectStart: NSPoint?
     var selectionRectEnd: NSPoint?

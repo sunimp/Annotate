@@ -130,21 +130,20 @@ final class DrawingActionTests: XCTestCase {
         ]
         let counters = [CounterAnnotation(number: 1, position: .zero, color: .orange)]
 
-        let action = DrawingAction.clearAll(
-            paths, arrows, lines, highlights, rectangles, circles, texts, counters)
+        let snapshot = AnnotationSnapshot(
+            paths: paths,
+            arrows: arrows,
+            lines: lines,
+            highlights: highlights,
+            rectangles: rectangles,
+            circles: circles,
+            textAnnotations: texts,
+            counterAnnotations: counters)
+        let action = DrawingAction.clearAll(snapshot)
 
-        if case .clearAll(
-            let actionPaths, let actionArrows, let actionLines, let actionHighlights,
-            let actionRects, let actionCircles, let actionTexts, let actionCounters) = action
-        {
-            XCTAssertEqual(actionPaths, paths)
-            XCTAssertEqual(actionArrows, arrows)
-            XCTAssertEqual(actionLines, lines)
-            XCTAssertEqual(actionHighlights, highlights)
-            XCTAssertEqual(actionRects, rectangles)
-            XCTAssertEqual(actionCircles, circles)
-            XCTAssertEqual(actionTexts, texts)
-            XCTAssertEqual(actionCounters, counters)
+        if case .clearAll(let actionSnapshot) = action {
+            XCTAssertEqual(actionSnapshot, snapshot)
+            XCTAssertFalse(actionSnapshot.isEmpty)
         } else {
             XCTFail("Wrong action type")
         }
@@ -164,21 +163,20 @@ final class DrawingActionTests: XCTestCase {
         ]
         let counters = [CounterAnnotation(number: 1, position: .zero, color: .black)]
 
-        let action = DrawingAction.clearAll(
-            paths, arrows, lines, highlights, rectangles, circles, texts, counters)
+        let snapshot = AnnotationSnapshot(
+            paths: paths,
+            arrows: arrows,
+            lines: lines,
+            highlights: highlights,
+            rectangles: rectangles,
+            circles: circles,
+            textAnnotations: texts,
+            counterAnnotations: counters)
+        let action = DrawingAction.clearAll(snapshot)
 
-        if case .clearAll(
-            let actionPaths, let actionArrows, let actionLines, let actionHighlights,
-            let actionRects, let actionCircles, let actionTexts, let actionCounters) = action
-        {
-            XCTAssertEqual(actionPaths, paths)
-            XCTAssertEqual(actionArrows, arrows)
-            XCTAssertEqual(actionLines, lines)
-            XCTAssertEqual(actionHighlights, highlights)
-            XCTAssertEqual(actionRects, rectangles)
-            XCTAssertEqual(actionCircles, circles)
-            XCTAssertEqual(actionTexts, texts)
-            XCTAssertEqual(actionCounters, counters)
+        if case .clearAll(let actionSnapshot) = action {
+            XCTAssertEqual(actionSnapshot, snapshot)
+            XCTAssertFalse(actionSnapshot.isEmpty)
         } else {
             XCTFail("Wrong action type")
         }
@@ -198,21 +196,20 @@ final class DrawingActionTests: XCTestCase {
         ]
         let counters = [CounterAnnotation(number: 1, position: .zero, color: .orange)]
 
-        let action = DrawingAction.eraseAnnotations(
-            paths, arrows, lines, highlights, rectangles, circles, texts, counters)
+        let snapshot = AnnotationSnapshot(
+            paths: paths,
+            arrows: arrows,
+            lines: lines,
+            highlights: highlights,
+            rectangles: rectangles,
+            circles: circles,
+            textAnnotations: texts,
+            counterAnnotations: counters)
+        let action = DrawingAction.eraseAnnotations(snapshot)
 
-        if case .eraseAnnotations(
-            let actionPaths, let actionArrows, let actionLines, let actionHighlights,
-            let actionRects, let actionCircles, let actionTexts, let actionCounters) = action
-        {
-            XCTAssertEqual(actionPaths, paths)
-            XCTAssertEqual(actionArrows, arrows)
-            XCTAssertEqual(actionLines, lines)
-            XCTAssertEqual(actionHighlights, highlights)
-            XCTAssertEqual(actionRects, rectangles)
-            XCTAssertEqual(actionCircles, circles)
-            XCTAssertEqual(actionTexts, texts)
-            XCTAssertEqual(actionCounters, counters)
+        if case .eraseAnnotations(let actionSnapshot) = action {
+            XCTAssertEqual(actionSnapshot, snapshot)
+            XCTAssertFalse(actionSnapshot.isEmpty)
         } else {
             XCTFail("Wrong action type")
         }
