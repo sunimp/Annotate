@@ -185,7 +185,7 @@ extension AppDelegate {
                 return
             }
             guard let overlay, overlay.isVisible else { return }
-            overlay.showToggleFeedback("Saved \(file.lastPathComponent)", icon: "📸")
+            overlay.showToggleFeedback(String(localized: "Saved \(file.lastPathComponent)"), icon: "📸")
         } else if result.copiedToClipboard {
             reportCaptureProblem(.saveFailed(error: result.failure(of: .file)), on: overlay)
         }
@@ -210,8 +210,8 @@ extension AppDelegate {
         let showsNotice = overlay?.isVisible == true && !settings[.hideToolFeedback]
         overlay?.showToggleFeedback(
             isPrivacyPromptOnScreen()
-                ? "Screen Recording is off. Answer the macOS prompt"
-                : "Screen Recording is off. Opening Settings…",
+                ? String(localized: "Screen Recording is off. Answer the macOS prompt")
+                : String(localized: "Screen Recording is off. Opening Settings…"),
             icon: "🔒")
         DispatchQueue.main.asyncAfter(deadline: .now() + (showsNotice ? screenRecordingNoticeDelay : 0)) {
             [weak self] in
@@ -286,21 +286,25 @@ struct CaptureProblem: Equatable {
     let icon: String
     let detail: String
 
-    static let failed = CaptureProblem(
-        title: "Capture Failed", icon: "⚠️", detail: "Annotate couldn't finish the capture. Try again in a moment.")
+    static var failed: CaptureProblem {
+        CaptureProblem(
+            title: String(localized: "Capture Failed"),
+            icon: "⚠️",
+            detail: String(localized: "Annotate couldn't finish the capture. Try again in a moment."))
+    }
 
     static func copyFailed(savedAs file: URL, error: Error) -> CaptureProblem {
         CaptureProblem(
-            title: "Couldn't Copy. Saved \(file.lastPathComponent)",
+            title: String(localized: "Couldn't Copy. Saved \(file.lastPathComponent)"),
             icon: "⚠️",
-            detail: "The image was saved, but Annotate couldn't copy it to the clipboard. \(error.localizedDescription)")
+            detail: String(localized: "The image was saved, but Annotate couldn't copy it to the clipboard. \(error.localizedDescription)"))
     }
 
     static func saveFailed(error: Error?) -> CaptureProblem {
         CaptureProblem(
-            title: "Couldn't Save. Copied to Clipboard",
+            title: String(localized: "Couldn't Save. Copied to Clipboard"),
             icon: "📋",
-            detail: ["The image is on the clipboard, but Annotate couldn't save it.", error?.localizedDescription]
+            detail: [String(localized: "The image is on the clipboard, but Annotate couldn't save it."), error?.localizedDescription]
                 .compactMap { $0 }
                 .joined(separator: " "))
     }

@@ -203,6 +203,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
         return window
     }
 
+    // The status items whose titles change. Found by identifier, since titles are localized.
+    static let currentToolItemID = NSUserInterfaceItemIdentifier("statusMenu.currentTool")
+    static let drawingModeItemID = NSUserInterfaceItemIdentifier("statusMenu.drawingMode")
+    static let overlayModeItemID = NSUserInterfaceItemIdentifier("statusMenu.overlayMode")
+
     func setupStatusBarItem() {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
 
@@ -213,14 +218,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
             menu.delegate = self
 
             let colorItem = NSMenuItem(
-                title: "Color…",
+                title: String(localized: "Color…"),
                 action: #selector(showColorPicker(_:)),
                 keyEquivalent: ShortcutManager.shared.getShortcut(for: .colorPicker))
             colorItem.keyEquivalentModifierMask = []
             menu.addItem(colorItem)
 
             let lineWidthItem = NSMenuItem(
-                title: "Line Width…",
+                title: String(localized: "Line Width…"),
                 action: #selector(showLineWidthPicker(_:)),
                 keyEquivalent: ShortcutManager.shared.getShortcut(for: .lineWidthPicker))
             lineWidthItem.keyEquivalentModifierMask = []
@@ -229,85 +234,86 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
             menu.addItem(NSMenuItem.separator())
 
             let currentToolItem = NSMenuItem(
-                title: "Current Tool: Pen",
+                title: String(localized: "Current Tool: \(ToolType.pen.displayName)"),
                 action: nil,
                 keyEquivalent: ""
             )
+            currentToolItem.identifier = Self.currentToolItemID
             currentToolItem.isEnabled = false
             menu.addItem(currentToolItem)
 
             let arrowModeItem = NSMenuItem(
-                title: "Arrow",
+                title: String(localized: "Arrow"),
                 action: #selector(enableArrowMode(_:)),
                 keyEquivalent: ShortcutManager.shared.getShortcut(for: .arrow))
             arrowModeItem.keyEquivalentModifierMask = []
             menu.addItem(arrowModeItem)
 
             let lineModeItem = NSMenuItem(
-                title: "Line",
+                title: String(localized: "Line"),
                 action: #selector(enableLineMode(_:)),
                 keyEquivalent: ShortcutManager.shared.getShortcut(for: .line))
             lineModeItem.keyEquivalentModifierMask = []
             menu.addItem(lineModeItem)
 
             let penModeItem = NSMenuItem(
-                title: "Pen",
+                title: String(localized: "Pen"),
                 action: #selector(enablePenMode(_:)),
                 keyEquivalent: ShortcutManager.shared.getShortcut(for: .pen))
             penModeItem.keyEquivalentModifierMask = []
             menu.addItem(penModeItem)
 
             let highlighterModeItem = NSMenuItem(
-                title: "Highlighter",
+                title: String(localized: "Highlighter"),
                 action: #selector(enableHighlighterMode(_:)),
                 keyEquivalent: ShortcutManager.shared.getShortcut(for: .highlighter))
             highlighterModeItem.keyEquivalentModifierMask = []
             menu.addItem(highlighterModeItem)
 
             let rectangleModeItem = NSMenuItem(
-                title: "Rectangle",
+                title: String(localized: "Rectangle"),
                 action: #selector(enableRectangleMode(_:)),
                 keyEquivalent: ShortcutManager.shared.getShortcut(for: .rectangle))
             rectangleModeItem.keyEquivalentModifierMask = []
             menu.addItem(rectangleModeItem)
 
             let circleModeItem = NSMenuItem(
-                title: "Circle",
+                title: String(localized: "Circle"),
                 action: #selector(enableCircleMode(_:)),
                 keyEquivalent: ShortcutManager.shared.getShortcut(for: .circle))
             circleModeItem.keyEquivalentModifierMask = []
             menu.addItem(circleModeItem)
 
             let redactModeItem = NSMenuItem(
-                title: "Redact",
+                title: String(localized: "Redact"),
                 action: #selector(enableRedactMode(_:)),
                 keyEquivalent: ShortcutManager.shared.getShortcut(for: .redact))
             redactModeItem.keyEquivalentModifierMask = []
             menu.addItem(redactModeItem)
 
             let counterModeItem = NSMenuItem(
-                title: "Counter",
+                title: String(localized: "Counter"),
                 action: #selector(enableCounterMode(_:)),
                 keyEquivalent: ShortcutManager.shared.getShortcut(for: .counter))
             counterModeItem.keyEquivalentModifierMask = []
             menu.addItem(counterModeItem)
 
             let textModeItem = NSMenuItem(
-                title: "Text",
+                title: String(localized: "Text"),
                 action: #selector(enableTextMode(_:)),
                 keyEquivalent: ShortcutManager.shared.getShortcut(for: .text))
             textModeItem.keyEquivalentModifierMask = []
             menu.addItem(textModeItem)
             
             let selectModeItem = NSMenuItem(
-                title: "Select",
+                title: String(localized: "Select"),
                 action: #selector(enableSelectMode(_:)),
                 keyEquivalent: ShortcutManager.shared.getShortcut(for: .select))
             selectModeItem.keyEquivalentModifierMask = []
             menu.addItem(selectModeItem)
 
             let eraserModeItem = NSMenuItem(
-                title: "Eraser",
+                title: String(localized: "Eraser"),
                 action: #selector(enableEraserMode(_:)),
                 keyEquivalent: ShortcutManager.shared.getShortcut(for: .eraser))
             eraserModeItem.keyEquivalentModifierMask = []
@@ -315,12 +321,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
 
             menu.addItem(NSMenuItem.separator())
 
-            let isDarkMode =
-                NSApp.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
-            let boardType = isDarkMode ? "Blackboard" : "Whiteboard"
-            let boardEnabled = settings[.enableBoard]
             let toggleBoardItem = NSMenuItem(
-                title: boardEnabled ? "Hide \(boardType)" : "Show \(boardType)",
+                title: Self.boardMenuTitle(
+                    isBlackboard: BoardManager.shared.currentBoardType == .blackboard,
+                    enabled: settings[.enableBoard]),
                 action: #selector(toggleBoardVisibility(_:)),
                 keyEquivalent: ShortcutManager.shared.getShortcut(for: .toggleBoard))
             toggleBoardItem.keyEquivalentModifierMask = []
@@ -328,7 +332,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
 
             let clickEffectsEnabled = CursorHighlightManager.shared.clickEffectsEnabled
             let toggleClickEffectsItem = NSMenuItem(
-                title: clickEffectsEnabled ? "Disable Cursor Highlight" : "Enable Cursor Highlight",
+                title: clickEffectsEnabled ? String(localized: "Disable Cursor Highlight") : String(localized: "Enable Cursor Highlight"),
                 action: #selector(toggleClickEffects(_:)),
                 keyEquivalent: ShortcutManager.shared.getShortcut(for: .toggleClickEffects))
             toggleClickEffectsItem.keyEquivalentModifierMask = []
@@ -338,15 +342,16 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
 
             let persistedFadeMode = settings[.fadeMode]
             let currentDrawingModeItem = NSMenuItem(
-                title: persistedFadeMode ? "Drawing Mode: Fade" : "Drawing Mode: Persist",
+                title: persistedFadeMode ? String(localized: "Drawing Mode: Fade") : String(localized: "Drawing Mode: Persist"),
                 action: nil,
                 keyEquivalent: ""
             )
+            currentDrawingModeItem.identifier = Self.drawingModeItemID
             currentDrawingModeItem.isEnabled = false
             menu.addItem(currentDrawingModeItem)
 
             let toggleDrawingModeItem = NSMenuItem(
-                title: persistedFadeMode ? "Persist" : "Fade",
+                title: persistedFadeMode ? String(localized: "Persist") : String(localized: "Fade"),
                 action: #selector(toggleFadeMode(_:)),
                 keyEquivalent: ""
             )
@@ -356,22 +361,23 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
             menu.addItem(NSMenuItem.separator())
             
             let currentOverlayModeItem = NSMenuItem(
-                title: alwaysOnMode ? "Overlay Mode: Always-On" : "Overlay Mode: Interactive",
+                title: alwaysOnMode ? String(localized: "Overlay Mode: Always-On") : String(localized: "Overlay Mode: Interactive"),
                 action: nil,
                 keyEquivalent: ""
             )
+            currentOverlayModeItem.identifier = Self.overlayModeItemID
             currentOverlayModeItem.isEnabled = false
             menu.addItem(currentOverlayModeItem)
             
             let toggleAlwaysOnModeItem = NSMenuItem(
-                title: alwaysOnMode ? "Exit Always-On Mode" : "Always-On Mode",
+                title: alwaysOnMode ? String(localized: "Exit Always-On Mode") : String(localized: "Always-On Mode"),
                 action: #selector(toggleAlwaysOnMode),
                 keyEquivalent: ""
             )
             menu.addItem(toggleAlwaysOnModeItem)
 
             let toolbarItem = NSMenuItem(
-                title: toolbarVisible ? "Hide Toolbar" : "Show Toolbar",
+                title: toolbarVisible ? String(localized: "Hide Toolbar") : String(localized: "Show Toolbar"),
                 action: #selector(toggleToolbar),
                 keyEquivalent: ""
             )
@@ -380,20 +386,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
             menu.addItem(NSMenuItem.separator())
 
             let clearAllItem = NSMenuItem(
-                title: "Clear All",
+                title: String(localized: "Clear All"),
                 action: #selector(clearAllAnnotations),
                 keyEquivalent: ""
             )
             menu.addItem(clearAllItem)
 
             let undoItem = NSMenuItem(
-                title: "Undo",
+                title: String(localized: "Undo"),
                 action: #selector(undo),
                 keyEquivalent: "z")
             menu.addItem(undoItem)
 
             let redoItem = NSMenuItem(
-                title: "Redo",
+                title: String(localized: "Redo"),
                 action: #selector(redo),
                 keyEquivalent: "Z")
             menu.addItem(redoItem)
@@ -402,26 +408,26 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
 
             menu.addItem(
                 NSMenuItem(
-                    title: "Capture Screen",
+                    title: String(localized: "Capture Screen"),
                     action: #selector(captureScreen),
                     keyEquivalent: ""))
             menu.addItem(
                 NSMenuItem(
-                    title: "Capture Area",
+                    title: String(localized: "Capture Area"),
                     action: #selector(captureArea),
                     keyEquivalent: ""))
 
             menu.addItem(NSMenuItem.separator())
 
             let settingsItem = NSMenuItem(
-                title: "Settings...",
+                title: String(localized: "Settings..."),
                 action: #selector(showSettings),
                 keyEquivalent: ",")
             settingsItem.keyEquivalentModifierMask = [.command]
             menu.addItem(settingsItem)
 
             let checkForUpdatesItem = NSMenuItem(
-                title: "Check for Updates...",
+                title: String(localized: "Check for Updates..."),
                 action: #selector(checkForUpdates),
                 keyEquivalent: "")
             menu.addItem(checkForUpdatesItem)
@@ -430,13 +436,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
 
             menu.addItem(
                 NSMenuItem(
-                    title: "Close",
+                    title: String(localized: "Close"),
                     action: #selector(closeOverlay),
                     keyEquivalent: "w"))
 
             menu.addItem(
                 NSMenuItem(
-                    title: "Quit", action: #selector(NSApplication.terminate(_:)),
+                    title: String(localized: "Quit"),
+                    action: #selector(NSApplication.terminate(_:)),
                     keyEquivalent: "q"))
 
             statusItem?.menu = menu
@@ -839,13 +846,22 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
     func updateBoardMenuItems() {
         guard let menu = statusItem?.menu else { return }
 
-        let boardType = BoardManager.shared.displayName
-        let boardEnabled = BoardManager.shared.isEnabled
-
         let toggleBoardItem = menu.items.first { $0.action == #selector(toggleBoardVisibility(_:)) }
 
         if let item = toggleBoardItem {
-            item.title = boardEnabled ? "Hide \(boardType)" : "Show \(boardType)"
+            item.title = Self.boardMenuTitle(
+                isBlackboard: BoardManager.shared.currentBoardType == .blackboard,
+                enabled: BoardManager.shared.isEnabled)
+        }
+    }
+
+    /// One whole phrase per board and state, so every language can order the words its own way.
+    static func boardMenuTitle(isBlackboard: Bool, enabled: Bool) -> String {
+        switch (isBlackboard, enabled) {
+        case (true, true): return String(localized: "Hide Blackboard")
+        case (true, false): return String(localized: "Show Blackboard")
+        case (false, true): return String(localized: "Hide Whiteboard")
+        case (false, false): return String(localized: "Show Whiteboard")
         }
     }
 
@@ -856,7 +872,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
         updateClickEffectsMenuItems()
 
         showToggleFeedback(
-            newState ? "Cursor Highlight On" : "Cursor Highlight Off",
+            newState ? String(localized: "Cursor Highlight On") : String(localized: "Cursor Highlight Off"),
             icon: newState ? "👆" : "🚫")
     }
 
@@ -871,31 +887,29 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
         guard let menu = statusItem?.menu else { return }
         if let item = menu.items.first(where: { $0.action == #selector(toggleClickEffects(_:)) }) {
             let isEnabled = CursorHighlightManager.shared.clickEffectsEnabled
-            item.title = isEnabled ? "Disable Cursor Highlight" : "Enable Cursor Highlight"
+            item.title = isEnabled ? String(localized: "Disable Cursor Highlight") : String(localized: "Enable Cursor Highlight")
         }
     }
 
     func updateAlwaysOnMenuItems() {
         guard let menu = statusItem?.menu else { return }
         
-        let currentOverlayModeItem = menu.items.first { 
-            $0.title.hasPrefix("Overlay Mode:")
-        }
+        let currentOverlayModeItem = menu.items.first { $0.identifier == Self.overlayModeItemID }
         if let item = currentOverlayModeItem {
-            item.title = alwaysOnMode ? "Overlay Mode: Always-On" : "Overlay Mode: Interactive"
+            item.title = alwaysOnMode ? String(localized: "Overlay Mode: Always-On") : String(localized: "Overlay Mode: Interactive")
         }
         
         let toggleAlwaysOnModeItem = menu.items.first { $0.action == #selector(toggleAlwaysOnMode) }
         if let item = toggleAlwaysOnModeItem {
-            item.title = alwaysOnMode ? "Exit Always-On Mode" : "Always-On Mode"
+            item.title = alwaysOnMode ? String(localized: "Exit Always-On Mode") : String(localized: "Always-On Mode")
         }
     }
     
     func updateCurrentToolMenuItem(to toolName: String) {
         guard let menu = statusItem?.menu else { return }
         
-        let currentToolItem = menu.items.first { $0.title.hasPrefix("Current Tool:") }
-        currentToolItem?.title = "Current Tool: \(toolName)"
+        let currentToolItem = menu.items.first { $0.identifier == Self.currentToolItemID }
+        currentToolItem?.title = String(localized: "Current Tool: \(toolName)")
     }
     
     private func configureWindowForNormalMode(_ overlayWindow: OverlayWindow) {
@@ -931,20 +945,18 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
     private func updateFadeModeMenuItems(isCurrentlyFadeMode: Bool) {
         guard let menu = statusItem?.menu else { return }
         
-        let currentDrawingModeItem = menu.items.first { 
-            $0.title.hasPrefix("Drawing Mode:") 
-        }
+        let currentDrawingModeItem = menu.items.first { $0.identifier == Self.drawingModeItemID }
         let toggleDrawingModeItem = menu.items.first { 
             $0.action == #selector(toggleFadeMode(_:)) 
         }
 
         currentDrawingModeItem?.title = isCurrentlyFadeMode
-            ? "Drawing Mode: Persist"
-            : "Drawing Mode: Fade"
+            ? String(localized: "Drawing Mode: Persist")
+            : String(localized: "Drawing Mode: Fade")
 
         toggleDrawingModeItem?.title = isCurrentlyFadeMode
-            ? "Fade"
-            : "Persist"
+            ? String(localized: "Fade")
+            : String(localized: "Persist")
     }
 
     func setupBoardObservers() {
@@ -1098,7 +1110,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
 
         updateFadeModeMenuItems(isCurrentlyFadeMode: !enabled)
 
-        showToggleFeedback(enabled ? "Fade Mode" : "Persist Mode", icon: enabled ? "⏳" : "📌")
+        showToggleFeedback(enabled ? String(localized: "Fade Mode") : String(localized: "Persist Mode"), icon: enabled ? "⏳" : "📌")
     }
 
     var toolbarVisible: Bool {
@@ -1113,7 +1125,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
         settings[.toolbarVisible] = visible
         overlayWindows.values.forEach { $0.updateToolbarVisibility() }
         if let item = statusItem?.menu?.items.first(where: { $0.action == #selector(toggleToolbar) }) {
-            item.title = visible ? "Hide Toolbar" : "Show Toolbar"
+            item.title = visible ? String(localized: "Hide Toolbar") : String(localized: "Show Toolbar")
         }
     }
 
@@ -1185,7 +1197,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
         }
 
         for item in appMenu.items {
-            if item.title.hasPrefix("About") {
+            // The title is localized, so match the standard About action first.
+            if item.action == #selector(NSApplication.orderFrontStandardAboutPanel(_:))
+                || item.title.hasPrefix("About") {
                 item.target = self
                 item.action = #selector(showAbout)
                 break
@@ -1205,7 +1219,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
                 defer: false
             )
             aboutWindow?.contentViewController = hostingController
-            aboutWindow?.title = "About Annotate"
+            aboutWindow?.title = String(localized: "About Annotate")
             aboutWindow?.isReleasedWhenClosed = false
             aboutWindow?.delegate = self
         }

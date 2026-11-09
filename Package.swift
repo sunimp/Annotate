@@ -21,7 +21,10 @@ let package = Package(
             path: "Annotate",
             exclude: [
                 "Annotate.entitlements",
-                "Info.plist"
+                "Info.plist",
+                "InfoPlist.xcstrings",
+                // SwiftPM copies string catalogs without compiling them; the Xcode build does.
+                "Localizable.xcstrings",
             ],
             resources: [
                 .process("Assets.xcassets"),

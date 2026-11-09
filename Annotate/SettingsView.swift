@@ -14,7 +14,16 @@ enum SettingsPane: String, CaseIterable, Identifiable {
     var id: String { rawValue }
 
     /// Pane name shown in the sidebar, window title, and pane header.
-    var title: String { rawValue }
+    var title: String {
+        switch self {
+        case .general: String(localized: "General")
+        case .tools: String(localized: "Tools")
+        case .board: String(localized: "Board")
+        case .cursor: String(localized: "Cursor")
+        case .capture: String(localized: "Capture")
+        case .shortcuts: String(localized: "Shortcuts")
+        }
+    }
 
     /// SF Symbol shown in the sidebar icon tile.
     var symbol: String {
@@ -43,12 +52,12 @@ enum SettingsPane: String, CaseIterable, Identifiable {
     /// Secondary line under the pane title in `PaneHeader`.
     var subtitle: String {
         switch self {
-        case .general: "Activation shortcuts and application behavior"
-        case .tools: "Default sizes for text and counter annotations"
-        case .board: "Board background appearance and visibility"
-        case .cursor: "Cursor style, spotlight, and click effects"
-        case .capture: "Where screenshots go and Screen Recording access"
-        case .shortcuts: "Keyboard shortcuts for tools and utilities"
+        case .general: String(localized: "Activation shortcuts and application behavior")
+        case .tools: String(localized: "Default sizes for text and counter annotations")
+        case .board: String(localized: "Board background appearance and visibility")
+        case .cursor: String(localized: "Cursor style, spotlight, and click effects")
+        case .capture: String(localized: "Where screenshots go and Screen Recording access")
+        case .shortcuts: String(localized: "Keyboard shortcuts for tools and utilities")
         }
     }
 }

@@ -17,17 +17,17 @@ enum ToolType: String, CaseIterable, Sendable {
 
     var displayName: String {
         switch self {
-        case .pen: return "Pen"
-        case .highlighter: return "Highlighter"
-        case .arrow: return "Arrow"
-        case .line: return "Line"
-        case .rectangle: return "Rectangle"
-        case .circle: return "Circle"
-        case .redact: return "Redact"
-        case .text: return "Text"
-        case .counter: return "Counter"
-        case .eraser: return "Eraser"
-        case .select: return "Select"
+        case .pen: return String(localized: "Pen")
+        case .highlighter: return String(localized: "Highlighter")
+        case .arrow: return String(localized: "Arrow")
+        case .line: return String(localized: "Line")
+        case .rectangle: return String(localized: "Rectangle")
+        case .circle: return String(localized: "Circle")
+        case .redact: return String(localized: "Redact")
+        case .text: return String(localized: "Text")
+        case .counter: return String(localized: "Counter")
+        case .eraser: return String(localized: "Eraser")
+        case .select: return String(localized: "Select")
         }
     }
 
@@ -210,10 +210,10 @@ enum RectangleStyle: String, CaseIterable {
 
     var displayName: String {
         switch self {
-        case .outline: return "Outline"
-        case .solid: return "Solid"
-        case .pixelate: return "Pixelate"
-        case .blur: return "Blur"
+        case .outline: return String(localized: "Outline")
+        case .solid: return String(localized: "Solid")
+        case .pixelate: return String(localized: "Pixelate")
+        case .blur: return String(localized: "Blur")
         }
     }
 }
@@ -402,8 +402,8 @@ enum CounterStyle: String, CaseIterable {
 
     var displayName: String {
         switch self {
-        case .bordered: return "Bordered"
-        case .filled: return "Filled"
+        case .bordered: return String(localized: "Bordered")
+        case .filled: return String(localized: "Filled")
         }
     }
 }

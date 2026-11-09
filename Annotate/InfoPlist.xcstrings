@@ -1,0 +1,51 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "CFBundleName": {
+      "shouldTranslate": false
+    },
+    "NSScreenCaptureUsageDescription": {
+      "comment": "Screen Recording permission prompt",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capture Screen and Capture Area save what is on screen with your annotations, and Pixelate and Blur redactions read the pixels under the rectangle."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“Capturar pantalla” y “Capturar área” guardan lo que hay en pantalla junto con tus anotaciones, y las ocultaciones con Pixelar y Desenfocar leen los píxeles bajo el rectángulo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capturer l’écran et Capturer une zone enregistrent le contenu de l’écran avec vos annotations, et les masques Pixellisation et Flou lisent les pixels sous le rectangle."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“画面をキャプチャ”と“範囲をキャプチャ”は画面上の内容を注釈付きで保存し、“ピクセル化”と“ぼかし”の墨消しは長方形の下のピクセルを読み取ります。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“截取屏幕”和“截取区域”会存储屏幕内容及你的标注，“像素化”和“模糊”遮盖会读取矩形下方的像素。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「擷取螢幕」和「擷取區域」會將螢幕內容連同你的註解一併儲存，「像素化」和「模糊」遮蔽則會讀取矩形下方的像素。"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

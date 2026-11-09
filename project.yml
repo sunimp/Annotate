@@ -1,6 +1,7 @@
 name: Annotate
 options:
   bundleIdPrefix: com.epilande
+  developmentLanguage: en
   deploymentTarget:
     macOS: "14.0"
 
@@ -25,6 +26,8 @@ targets:
         CODE_SIGN_ENTITLEMENTS: Annotate/Annotate.entitlements
         SWIFT_VERSION: "5.0"
         MACOSX_DEPLOYMENT_TARGET: "14.0"
+        SWIFT_EMIT_LOC_STRINGS: true
+        LOCALIZATION_PREFERS_STRING_CATALOGS: true
         ENABLE_HARDENED_RUNTIME: true
         COMBINE_HIDPI_IMAGES: true
         GENERATE_INFOPLIST_FILE: false

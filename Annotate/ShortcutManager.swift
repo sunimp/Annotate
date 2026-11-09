@@ -48,7 +48,7 @@ struct ShortcutBinding: Equatable, Hashable {
 
     /// A `displayValue` as VoiceOver and prose should say it.
     static func spokenLabel(for displayValue: String) -> String {
-        displayValue.replacingOccurrences(of: spaceGlyph, with: "Space")
+        displayValue.replacingOccurrences(of: spaceGlyph, with: String(localized: "Space"))
     }
 
     var displayValue: String {
@@ -64,10 +64,10 @@ struct ShortcutBinding: Equatable, Hashable {
         case "\u{f701}": label = "↓"
         case "\u{f702}": label = "←"
         case "\u{f703}": label = "→"
-        case "\u{f729}": label = "Home"
-        case "\u{f72b}": label = "End"
-        case "\u{f72c}": label = "Page Up"
-        case "\u{f72d}": label = "Page Down"
+        case "\u{f729}": label = String(localized: "Home")
+        case "\u{f72b}": label = String(localized: "End")
+        case "\u{f72c}": label = String(localized: "Page Up")
+        case "\u{f72d}": label = String(localized: "Page Down")
         default:
             if let scalar = key.unicodeScalars.first, (0xf704...0xf726).contains(scalar.value) {
                 label = "F\(scalar.value - 0xf704 + 1)"
@@ -150,29 +150,29 @@ enum ShortcutKey: String, CaseIterable {
 
     var displayName: String {
         switch self {
-        case .pen: return "Pen"
-        case .arrow: return "Arrow"
-        case .line: return "Line"
-        case .highlighter: return "Highlighter"
-        case .rectangle: return "Rectangle"
-        case .circle: return "Circle"
-        case .redact: return "Redact"
-        case .counter: return "Counter"
-        case .text: return "Text"
-        case .select: return "Select"
-        case .eraser: return "Eraser"
-        case .colorPicker: return "Color Picker"
-        case .lineWidthPicker: return "Line Width"
-        case .toggleBoard: return "Toggle Board"
-        case .toggleClickEffects: return "Toggle Cursor Highlight"
-        case .toggleBackgroundDimming: return "Toggle Background Dimming"
-        case .toggleFade: return "Toggle Fade Mode"
-        case .toggleToolbar: return "Toggle Toolbar"
-        case .decreaseSize: return "Decrease Size"
-        case .increaseSize: return "Increase Size"
-        case .clearAll: return "Clear All"
-        case .captureScreen: return "Capture Screen"
-        case .captureArea: return "Capture Area"
+        case .pen: return String(localized: "Pen")
+        case .arrow: return String(localized: "Arrow")
+        case .line: return String(localized: "Line")
+        case .highlighter: return String(localized: "Highlighter")
+        case .rectangle: return String(localized: "Rectangle")
+        case .circle: return String(localized: "Circle")
+        case .redact: return String(localized: "Redact")
+        case .counter: return String(localized: "Counter")
+        case .text: return String(localized: "Text")
+        case .select: return String(localized: "Select")
+        case .eraser: return String(localized: "Eraser")
+        case .colorPicker: return String(localized: "Color Picker")
+        case .lineWidthPicker: return String(localized: "Line Width")
+        case .toggleBoard: return String(localized: "Toggle Board")
+        case .toggleClickEffects: return String(localized: "Toggle Cursor Highlight")
+        case .toggleBackgroundDimming: return String(localized: "Toggle Background Dimming")
+        case .toggleFade: return String(localized: "Toggle Fade Mode")
+        case .toggleToolbar: return String(localized: "Toggle Toolbar")
+        case .decreaseSize: return String(localized: "Decrease Size")
+        case .increaseSize: return String(localized: "Increase Size")
+        case .clearAll: return String(localized: "Clear All")
+        case .captureScreen: return String(localized: "Capture Screen")
+        case .captureArea: return String(localized: "Capture Area")
         }
     }
 }
@@ -183,10 +183,12 @@ class ShortcutManager: @unchecked Sendable {
 
     private let settings: SettingsStore
     private let globalShortcutProvider: @MainActor (KeyboardShortcuts.Name) -> KeyboardShortcuts.Shortcut?
-    private static let globalActions: [(name: KeyboardShortcuts.Name, label: String)] = [
-        (.toggleOverlay, "Activation Shortcut"),
-        (.toggleAlwaysOnMode, "Always-On Mode")
-    ]
+    private static var globalActions: [(name: KeyboardShortcuts.Name, label: String)] {
+        [
+            (.toggleOverlay, String(localized: "Activation Shortcut")),
+            (.toggleAlwaysOnMode, String(localized: "Always-On Mode"))
+        ]
+    }
 
     init(userDefaults: UserDefaults = SettingsStore.standard.defaults,
          globalShortcutProvider: @escaping @MainActor (KeyboardShortcuts.Name) -> KeyboardShortcuts.Shortcut? = KeyboardShortcuts.getShortcut) {

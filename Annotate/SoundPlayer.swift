@@ -28,15 +28,15 @@ enum SoundTheme: String, CaseIterable, Identifiable {
     var displayName: String {
         switch self {
         case .chalk:
-            return "Chalk"
+            return String(localized: "Chalk")
         case .paper:
-            return "Paper"
+            return String(localized: "Paper")
         case .marker:
-            return "Marker"
+            return String(localized: "Marker")
         case .pencil:
-            return "Pencil"
+            return String(localized: "Pencil")
         case .typewriter:
-            return "Typewriter"
+            return String(localized: "Typewriter")
         }
     }
 }

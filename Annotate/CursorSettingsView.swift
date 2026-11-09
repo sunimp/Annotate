@@ -48,7 +48,7 @@ struct CursorSettingsView: View {
 
                 if activeCursorStyle == .circle || activeCursorStyle == .crosshair {
                     SettingsSliderRow(
-                        title: "Cursor Size",
+                        title: String(localized: "Cursor Size"),
                         value: $activeCursorSize,
                         range: 8...24,
                         boundsText: { "\(Int($0))" }
@@ -63,8 +63,8 @@ struct CursorSettingsView: View {
                 SettingsHeader(
                     icon: "cursorarrow",
                     color: .purple,
-                    title: "Active Cursor",
-                    subtitle: "Cursor appearance when overlay is active"
+                    title: String(localized: "Active Cursor"),
+                    subtitle: String(localized: "Cursor appearance when overlay is active")
                 )
             }
 
@@ -79,7 +79,7 @@ struct CursorSettingsView: View {
 
                 if cursorHighlightEnabled {
                     SettingsSliderRow(
-                        title: "Spotlight Size",
+                        title: String(localized: "Spotlight Size"),
                         value: $spotlightSize,
                         range: 30...100,
                         boundsText: { "\(Int($0))" }
@@ -100,7 +100,7 @@ struct CursorSettingsView: View {
 
                     if spotlightDimmingEnabled {
                         SettingsSliderRow(
-                            title: "Dimming Amount",
+                            title: String(localized: "Dimming Amount"),
                             value: $spotlightDimmingOpacity,
                             range: 20...90,
                             boundsText: { "\(Int($0))%" }
@@ -139,7 +139,7 @@ struct CursorSettingsView: View {
 
                 if clickEffectsEnabled {
                     SettingsSliderRow(
-                        title: "Click Effect Size",
+                        title: String(localized: "Click Effect Size"),
                         value: $effectSize,
                         range: 30...100,
                         boundsText: { "\(Int($0))" }
@@ -172,8 +172,8 @@ struct CursorSettingsView: View {
                 SettingsHeader(
                     icon: "cursorarrow.motionlines",
                     color: .pink,
-                    title: "Cursor Highlight",
-                    subtitle: "Spotlight and click effects for presentations"
+                    title: String(localized: "Cursor Highlight"),
+                    subtitle: String(localized: "Spotlight and click effects for presentations")
                 )
             }
 
@@ -210,8 +210,8 @@ struct CursorSettingsView: View {
                     SettingsHeader(
                         icon: "cursorarrow.slash",
                         color: .blue,
-                        title: "Hide Cursor Effects In",
-                        subtitle: "Suppress effects while one of these apps is focused"
+                        title: String(localized: "Hide Cursor Effects In"),
+                        subtitle: String(localized: "Suppress effects while one of these apps is focused")
                     )
                 } footer: {
                     Text("Useful for virtual machines (such as UTM), games, and remote desktop clients that capture or lock the cursor.")
@@ -251,9 +251,9 @@ struct CursorSettingsView: View {
     /// Opens an `NSOpenPanel` restricted to application bundles (`.app`) so the user can select applications to exclude.
     private func addApplication() {
         let panel = NSOpenPanel()
-        panel.title = "Exclude Application"
-        panel.prompt = "Exclude"
-        panel.message = "Choose an application to suppress cursor spotlight and click effects in."
+        panel.title = String(localized: "Exclude Application")
+        panel.prompt = String(localized: "Exclude")
+        panel.message = String(localized: "Choose an application to suppress cursor spotlight and click effects in.")
         panel.canChooseFiles = true
         panel.canChooseDirectories = false
         panel.allowsMultipleSelection = true

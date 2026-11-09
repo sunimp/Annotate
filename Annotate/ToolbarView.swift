@@ -18,14 +18,14 @@ extension ToolbarAction {
     var accessibilityLabel: String {
         switch self {
         case .tool(let tool): return tool.displayName
-        case .colorPicker: return "Color"
+        case .colorPicker: return String(localized: "Color")
         // It opens the line width, font size, or counter size picker, depending on the tool.
-        case .widthPicker: return "Size"
-        case .toggleFade: return "Fade Mode"
+        case .widthPicker: return String(localized: "Size")
+        case .toggleFade: return String(localized: "Fade Mode")
         // Removes the newest item drawn with the current tool (the selection, with Select).
-        case .deleteLast: return "Delete Last"
-        case .clearAll: return "Clear All"
-        case .undo: return "Undo"
+        case .deleteLast: return String(localized: "Delete Last")
+        case .clearAll: return String(localized: "Clear All")
+        case .undo: return String(localized: "Undo")
         }
     }
 }
@@ -39,8 +39,8 @@ enum ToolbarLayout: String, CaseIterable {
 
     var displayName: String {
         switch self {
-        case .horizontal: return "Horizontal"
-        case .vertical: return "Vertical"
+        case .horizontal: return String(localized: "Horizontal")
+        case .vertical: return String(localized: "Vertical")
         }
     }
 }
@@ -208,7 +208,7 @@ struct ToolbarView: View {
                         }
                     }
             }
-            .accessibilityValue(model.fadeMode ? "On" : "Off")
+            .accessibilityValue(model.fadeMode ? String(localized: "On") : String(localized: "Off"))
         }
     }
 
@@ -321,7 +321,7 @@ struct ToolbarView: View {
     /// Empty for a cleared binding, so VoiceOver has no shortcut to announce.
     private func shortcutHint(for action: ToolbarAction) -> String {
         let keys = keycapText(for: action)
-        return keys.isEmpty ? "" : "Shortcut: \(ShortcutBinding.spokenLabel(for: keys))"
+        return keys.isEmpty ? "" : String(localized: "Shortcut: \(ShortcutBinding.spokenLabel(for: keys))")
     }
 }
 

@@ -42,23 +42,23 @@ struct ShortcutsSettingsView: View {
     static let builtInShortcuts: [BuiltInShortcut] = [
         BuiltInShortcut(
             keys: "Delete",
-            label: "Delete",
-            description: "Remove the selection, or the newest item drawn with the current tool"
+            label: String(localized: "Delete"),
+            description: String(localized: "Remove the selection, or the newest item drawn with the current tool")
         ),
         BuiltInShortcut(
             keys: "⌘Z",
-            label: "Undo",
-            description: "Undo the last action"
+            label: String(localized: "Undo"),
+            description: String(localized: "Undo the last action")
         ),
         BuiltInShortcut(
             keys: "⇧⌘Z",
-            label: "Redo",
-            description: "Redo the last undone action"
+            label: String(localized: "Redo"),
+            description: String(localized: "Redo the last undone action")
         ),
         BuiltInShortcut(
             keys: "Esc",
-            label: "Close Overlay",
-            description: "Hide the overlay, or dismiss an open picker or label first"
+            label: String(localized: "Close Overlay"),
+            description: String(localized: "Hide the overlay, or dismiss an open picker or label first")
         )
     ]
 
@@ -75,29 +75,29 @@ struct ShortcutsSettingsView: View {
             Section {
                 ShortcutSettingRow(
                     tool: .pen,
-                    label: "Pen",
-                    description: "Draw freeform pen strokes",
+                    label: String(localized: "Pen"),
+                    description: String(localized: "Draw freeform pen strokes"),
                     shortcuts: $shortcuts,
                     editingShortcut: $editingShortcut
                 )
                 ShortcutSettingRow(
                     tool: .arrow,
-                    label: "Arrow",
-                    description: "Draw directional arrows",
+                    label: String(localized: "Arrow"),
+                    description: String(localized: "Draw directional arrows"),
                     shortcuts: $shortcuts,
                     editingShortcut: $editingShortcut
                 )
                 ShortcutSettingRow(
                     tool: .line,
-                    label: "Line",
-                    description: "Draw straight lines",
+                    label: String(localized: "Line"),
+                    description: String(localized: "Draw straight lines"),
                     shortcuts: $shortcuts,
                     editingShortcut: $editingShortcut
                 )
                 ShortcutSettingRow(
                     tool: .highlighter,
-                    label: "Highlighter",
-                    description: "Highlight with transparency",
+                    label: String(localized: "Highlighter"),
+                    description: String(localized: "Highlight with transparency"),
                     shortcuts: $shortcuts,
                     editingShortcut: $editingShortcut
                 )
@@ -105,30 +105,30 @@ struct ShortcutsSettingsView: View {
                 SettingsHeader(
                     icon: "pencil.tip",
                     color: .blue,
-                    title: "Drawing Tools",
-                    subtitle: "Basic drawing and annotation shortcuts"
+                    title: String(localized: "Drawing Tools"),
+                    subtitle: String(localized: "Basic drawing and annotation shortcuts")
                 )
             }
 
             Section {
                 ShortcutSettingRow(
                     tool: .rectangle,
-                    label: "Rectangle",
-                    description: "Draw rectangular shapes",
+                    label: String(localized: "Rectangle"),
+                    description: String(localized: "Draw rectangular shapes"),
                     shortcuts: $shortcuts,
                     editingShortcut: $editingShortcut
                 )
                 ShortcutSettingRow(
                     tool: .circle,
-                    label: "Circle",
-                    description: "Draw circular shapes",
+                    label: String(localized: "Circle"),
+                    description: String(localized: "Draw circular shapes"),
                     shortcuts: $shortcuts,
                     editingShortcut: $editingShortcut
                 )
                 ShortcutSettingRow(
                     tool: .redact,
-                    label: "Redact",
-                    description: "Hide on-screen content behind a rectangle",
+                    label: String(localized: "Redact"),
+                    description: String(localized: "Hide on-screen content behind a rectangle"),
                     shortcuts: $shortcuts,
                     editingShortcut: $editingShortcut
                 )
@@ -136,37 +136,37 @@ struct ShortcutsSettingsView: View {
                 SettingsHeader(
                     icon: "square.on.circle",
                     color: .green,
-                    title: "Shapes",
-                    subtitle: "Geometric shape shortcuts"
+                    title: String(localized: "Shapes"),
+                    subtitle: String(localized: "Geometric shape shortcuts")
                 )
             }
 
             Section {
                 ShortcutSettingRow(
                     tool: .counter,
-                    label: "Counter",
-                    description: "Add numbered counters",
+                    label: String(localized: "Counter"),
+                    description: String(localized: "Add numbered counters"),
                     shortcuts: $shortcuts,
                     editingShortcut: $editingShortcut
                 )
                 ShortcutSettingRow(
                     tool: .text,
-                    label: "Text",
-                    description: "Add text annotations",
+                    label: String(localized: "Text"),
+                    description: String(localized: "Add text annotations"),
                     shortcuts: $shortcuts,
                     editingShortcut: $editingShortcut
                 )
                 ShortcutSettingRow(
                     tool: .select,
-                    label: "Select",
-                    description: "Select and edit annotations",
+                    label: String(localized: "Select"),
+                    description: String(localized: "Select and edit annotations"),
                     shortcuts: $shortcuts,
                     editingShortcut: $editingShortcut
                 )
                 ShortcutSettingRow(
                     tool: .eraser,
-                    label: "Eraser",
-                    description: "Remove annotations by dragging",
+                    label: String(localized: "Eraser"),
+                    description: String(localized: "Remove annotations by dragging"),
                     shortcuts: $shortcuts,
                     editingShortcut: $editingShortcut
                 )
@@ -174,93 +174,93 @@ struct ShortcutsSettingsView: View {
                 SettingsHeader(
                     icon: "wand.and.stars",
                     color: .purple,
-                    title: "Advanced Tools",
-                    subtitle: "Additional annotation features"
+                    title: String(localized: "Advanced Tools"),
+                    subtitle: String(localized: "Additional annotation features")
                 )
             }
 
             Section {
                 ShortcutSettingRow(
                     tool: .colorPicker,
-                    label: "Color Picker",
-                    description: "Choose annotation color",
+                    label: String(localized: "Color Picker"),
+                    description: String(localized: "Choose annotation color"),
                     shortcuts: $shortcuts,
                     editingShortcut: $editingShortcut
                 )
                 ShortcutSettingRow(
                     tool: .lineWidthPicker,
-                    label: "Line Width",
-                    description: "Adjust stroke width",
+                    label: String(localized: "Line Width"),
+                    description: String(localized: "Adjust stroke width"),
                     shortcuts: $shortcuts,
                     editingShortcut: $editingShortcut
                 )
                 ShortcutSettingRow(
                     tool: .toggleBoard,
-                    label: "Toggle Board",
-                    description: "Show or hide board background",
+                    label: String(localized: "Toggle Board"),
+                    description: String(localized: "Show or hide board background"),
                     shortcuts: $shortcuts,
                     editingShortcut: $editingShortcut
                 )
                 ShortcutSettingRow(
                     tool: .toggleClickEffects,
-                    label: "Toggle Cursor Highlight",
-                    description: "Enable or disable cursor visual feedback",
+                    label: String(localized: "Toggle Cursor Highlight"),
+                    description: String(localized: "Enable or disable cursor visual feedback"),
                     shortcuts: $shortcuts,
                     editingShortcut: $editingShortcut
                 )
                 ShortcutSettingRow(
                     tool: .toggleBackgroundDimming,
-                    label: "Toggle Background Dimming",
-                    description: "Toggle dimming while annotating; enables the spotlight if needed",
+                    label: String(localized: "Toggle Background Dimming"),
+                    description: String(localized: "Toggle dimming while annotating; enables the spotlight if needed"),
                     shortcuts: $shortcuts,
                     editingShortcut: $editingShortcut
                 )
                 ShortcutSettingRow(
                     tool: .toggleFade,
                     label: ShortcutKey.toggleFade.displayName,
-                    description: "Switch between fade and persist",
+                    description: String(localized: "Switch between fade and persist"),
                     shortcuts: $shortcuts,
                     editingShortcut: $editingShortcut
                 )
                 ShortcutSettingRow(
                     tool: .toggleToolbar,
                     label: ShortcutKey.toggleToolbar.displayName,
-                    description: "Show or hide the floating toolbar",
+                    description: String(localized: "Show or hide the floating toolbar"),
                     shortcuts: $shortcuts,
                     editingShortcut: $editingShortcut
                 )
                 ShortcutSettingRow(
                     tool: .decreaseSize,
                     label: ShortcutKey.decreaseSize.displayName,
-                    description: "Step stroke width, text size, or counter size down",
+                    description: String(localized: "Step stroke width, text size, or counter size down"),
                     shortcuts: $shortcuts,
                     editingShortcut: $editingShortcut
                 )
                 ShortcutSettingRow(
                     tool: .increaseSize,
                     label: ShortcutKey.increaseSize.displayName,
-                    description: "Step stroke width, text size, or counter size up",
+                    description: String(localized: "Step stroke width, text size, or counter size up"),
                     shortcuts: $shortcuts,
                     editingShortcut: $editingShortcut
                 )
                 ShortcutSettingRow(
                     tool: .clearAll,
                     label: ShortcutKey.clearAll.displayName,
-                    description: "Remove every annotation",
+                    description: String(localized: "Remove every annotation"),
                     shortcuts: $shortcuts,
                     editingShortcut: $editingShortcut
                 )
                 ShortcutSettingRow(
                     tool: .captureScreen,
                     label: ShortcutKey.captureScreen.displayName,
-                    description: "Save the display with its annotations and copy it",
+                    description: String(localized: "Save the display with its annotations and copy it"),
                     shortcuts: $shortcuts,
                     editingShortcut: $editingShortcut
                 )
                 ShortcutSettingRow(
                     tool: .captureArea,
                     label: ShortcutKey.captureArea.displayName,
-                    description: "Drag out part of the display to save and copy",
+                    description: String(localized: "Drag out part of the display to save and copy"),
                     shortcuts: $shortcuts,
                     editingShortcut: $editingShortcut
                 )
@@ -268,8 +268,8 @@ struct ShortcutsSettingsView: View {
                 SettingsHeader(
                     icon: "slider.horizontal.3",
                     color: .orange,
-                    title: "Utilities",
-                    subtitle: "Pickers, sizes, and overlay controls"
+                    title: String(localized: "Utilities"),
+                    subtitle: String(localized: "Pickers, sizes, and overlay controls")
                 )
             }
 
@@ -281,8 +281,8 @@ struct ShortcutsSettingsView: View {
                 SettingsHeader(
                     icon: "lock",
                     color: .gray,
-                    title: "Built-in Shortcuts",
-                    subtitle: "Fixed editing and dismissal keys"
+                    title: String(localized: "Built-in Shortcuts"),
+                    subtitle: String(localized: "Fixed editing and dismissal keys")
                 )
             }
 
@@ -342,7 +342,7 @@ struct ShortcutSettingRow: View {
                     .frame(minWidth: 60)
                 } else {
                     Button(action: { editingShortcut = tool }) {
-                        Text(keycap: shortcut.isEmpty ? "Not Set" : shortcut)
+                        Text(keycap: shortcut.isEmpty ? String(localized: "Not Set") : shortcut)
                             .font(.body.weight(.medium).monospaced())
                             .foregroundStyle(.primary)
                             .frame(minWidth: 32)
@@ -352,7 +352,7 @@ struct ShortcutSettingRow: View {
                     }
                     .buttonStyle(.plain)
                     .accessibilityLabel("Record \(label) shortcut")
-                    .accessibilityValue(shortcut.isEmpty ? "Not Set" : ShortcutBinding.spokenLabel(for: shortcut))
+                    .accessibilityValue(shortcut.isEmpty ? String(localized: "Not Set") : ShortcutBinding.spokenLabel(for: shortcut))
                     .accessibilityIdentifier("shortcut.\(tool.rawValue).record")
                     .opacity(isHoveringKey ? 0.8 : 1.0)
                     .onHover { isHoveringKey = $0 }

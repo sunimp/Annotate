@@ -59,8 +59,8 @@ struct GeneralSettingsView: View {
                 SettingsHeader(
                     icon: "keyboard",
                     color: .gray,
-                    title: "Keyboard Shortcuts",
-                    subtitle: "Set keyboard shortcuts to activate Annotate and jump to specific modes"
+                    title: String(localized: "Keyboard Shortcuts"),
+                    subtitle: String(localized: "Set keyboard shortcuts to activate Annotate and jump to specific modes")
                 )
             }
 
@@ -159,14 +159,14 @@ struct GeneralSettingsView: View {
                 SettingsHeader(
                     icon: "macwindow",
                     color: .blue,
-                    title: "Application",
-                    subtitle: "Configure app launch and display options"
+                    title: String(localized: "Application"),
+                    subtitle: String(localized: "Configure app launch and display options")
                 )
             }
 
             Section {
                 SettingsSliderRow(
-                    title: "Fade Delay",
+                    title: String(localized: "Fade Delay"),
                     value: $fadeDelay,
                     range: fadeDelayRange,
                     step: 0.125,
@@ -180,8 +180,8 @@ struct GeneralSettingsView: View {
                 SettingsHeader(
                     icon: "timer",
                     color: .purple,
-                    title: "Fade Mode",
-                    subtitle: "How long annotations stay at full opacity before fading out"
+                    title: String(localized: "Fade Mode"),
+                    subtitle: String(localized: "How long annotations stay at full opacity before fading out")
                 )
             }
         }
@@ -200,7 +200,7 @@ enum GlobalShortcutRecordingHandler {
         else { return nil }
         // Recorder saves before invoking its callback. Restore the accepted binding on conflict.
         KeyboardShortcuts.setShortcut(previousShortcut, for: name)
-        return "This shortcut is already assigned to \(conflict). Change or clear it first."
+        return String(localized: "This shortcut is already assigned to \(conflict). Change or clear it first.")
     }
 }
 

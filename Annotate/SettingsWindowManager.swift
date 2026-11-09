@@ -61,7 +61,7 @@ final class SettingsWindowManager {
             defer: false
         )
 
-        window.title = "Annotate Settings"
+        window.title = String(localized: "Annotate Settings")
         window.titleVisibility = .hidden
         window.titlebarAppearsTransparent = true
         window.toolbar = NSToolbar()

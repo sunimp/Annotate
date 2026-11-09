@@ -28,7 +28,17 @@ enum PaletteColor: String, CaseIterable, Sendable {
     }
 
     var displayName: String {
-        rawValue.capitalized
+        switch self {
+        case .red: return String(localized: "Red")
+        case .orange: return String(localized: "Orange")
+        case .yellow: return String(localized: "Yellow")
+        case .green: return String(localized: "Green")
+        case .cyan: return String(localized: "Cyan")
+        case .indigo: return String(localized: "Indigo")
+        case .magenta: return String(localized: "Magenta")
+        case .white: return String(localized: "White")
+        case .black: return String(localized: "Black")
+        }
     }
 
     /// The entry `color` was picked from, matched as the color picker matches its selection.

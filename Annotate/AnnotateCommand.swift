@@ -126,14 +126,15 @@ enum AnnotateCommand: Hashable, Sendable {
             return alreadySet ? .noOp : .ran
         case .clear:
             guard appDelegate.clearVisibleOverlays() else { return .noOp }
-            appDelegate.showToggleFeedback("Cleared", icon: "🗑️")
+            appDelegate.showToggleFeedback(String(localized: "Cleared"), icon: "🗑️")
             return .ran
         // A switch already in the requested state still shows its HUD, which reports the state.
         case .toolbar(let target):
             let current = appDelegate.toolbarVisible
             let visible = target.resolve(current: current)
             appDelegate.setToolbarVisible(visible)
-            appDelegate.showToggleFeedback(visible ? "Toolbar On" : "Toolbar Off", icon: "🧰")
+            appDelegate.showToggleFeedback(
+                visible ? String(localized: "Toolbar On") : String(localized: "Toolbar Off"), icon: "🧰")
             return visible == current ? .noOp : .ran
         case .fade(let target):
             let current = appDelegate.fadeModeEnabled
@@ -147,7 +148,7 @@ enum AnnotateCommand: Hashable, Sendable {
             let enabled = target.resolve(current: current)
             appDelegate.setBoardEnabled(enabled)
             appDelegate.showToggleFeedback(
-                "\(board.displayName) \(enabled ? "On" : "Off")",
+                Self.boardFeedback(isBlackboard: board.currentBoardType == .blackboard, enabled: enabled),
                 icon: board.currentBoardType == .blackboard ? "⬛" : "⬜")
             return enabled == current ? .noOp : .ran
         case .capture(let scope):
@@ -184,6 +185,18 @@ enum CommandSwitch: String, CaseIterable, Sendable {
         case .on: return true
         case .off: return false
         case .toggle: return !current
+        }
+    }
+}
+
+extension AnnotateCommand {
+    /// One whole phrase per board and state, so every language can order the words its own way.
+    static func boardFeedback(isBlackboard: Bool, enabled: Bool) -> String {
+        switch (isBlackboard, enabled) {
+        case (true, true): return String(localized: "Blackboard On")
+        case (true, false): return String(localized: "Blackboard Off")
+        case (false, true): return String(localized: "Whiteboard On")
+        case (false, false): return String(localized: "Whiteboard Off")
         }
     }
 }
