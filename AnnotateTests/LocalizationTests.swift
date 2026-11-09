@@ -84,15 +84,16 @@ final class LocalizationTests: XCTestCase {
     func testChangingTheLanguagePostsOnceAndRestores() {
         let original = L10n.language
         defer { L10n.language = original }
-        var posts = 0
+        // `queue: nil` delivers synchronously on the posting (main) thread.
+        let posts = Counter()
         let observer = NotificationCenter.default.addObserver(
             forName: L10n.didChange, object: nil, queue: nil
-        ) { _ in posts += 1 }
+        ) { _ in posts.value += 1 }
         defer { NotificationCenter.default.removeObserver(observer) }
 
         L10n.language = original == .french ? .spanish : .french
         L10n.language = L10n.language
-        XCTAssertEqual(posts, 1, "Setting the same language again must not relabel everything")
+        XCTAssertEqual(posts.value, 1, "Setting the same language again must not relabel everything")
         XCTAssertEqual(L10n.locale.identifier, L10n.language.rawValue)
     }
 
@@ -104,4 +105,9 @@ final class LocalizationTests: XCTestCase {
         defaults.settings[.appLanguage] = .japanese
         XCTAssertEqual(defaults.settings[.appLanguage], .japanese)
     }
+}
+
+/// Counts notifications delivered synchronously on the main thread.
+private final class Counter: @unchecked Sendable {
+    var value = 0
 }

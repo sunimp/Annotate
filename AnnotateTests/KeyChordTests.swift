@@ -7,17 +7,17 @@ final class KeyChordTests: XCTestCase {
     private var defaults: UserDefaults!
     private var manager: ShortcutManager!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         defaults = TestUserDefaults.create()
         manager = ShortcutManager(userDefaults: defaults) { _ in nil }
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         manager = nil
         TestUserDefaults.removeSuite()
         defaults = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // MARK: - Construction

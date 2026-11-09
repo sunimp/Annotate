@@ -3,30 +3,26 @@ import XCTest
 @testable import Annotate
 
 @MainActor
-final class ShiftConstraintTests: XCTestCase, Sendable {
+final class ShiftConstraintTests: XCTestCase {
     var window: OverlayWindow!
 
-    nonisolated override func setUp() {
-        super.setUp()
-        MainActor.assumeIsolated {
-            TestWindows.recordOpenWindows()
-            let frame = NSRect(x: 0, y: 0, width: 800, height: 600)
-            window = OverlayWindow(
-                contentRect: frame,
-                styleMask: .borderless,
-                backing: .buffered,
-                defer: false
-            )
-        }
+    override func setUp() async throws {
+        try await super.setUp()
+        TestWindows.recordOpenWindows()
+        let frame = NSRect(x: 0, y: 0, width: 800, height: 600)
+        window = OverlayWindow(
+            contentRect: frame,
+            styleMask: .borderless,
+            backing: .buffered,
+            defer: false
+        )
     }
 
-    nonisolated override func tearDown() {
-        MainActor.assumeIsolated {
-            window.close()
-            window = nil
-            assertNoLeakedWindows()
-        }
-        super.tearDown()
+    override func tearDown() async throws {
+        window.close()
+        window = nil
+        assertNoLeakedWindows()
+        try await super.tearDown()
     }
 
     // MARK: - Helper Methods

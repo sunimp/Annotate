@@ -4,7 +4,7 @@ import XCTest
 @testable import Annotate
 
 @MainActor
-final class QuickPickerViewTests: XCTestCase, Sendable {
+final class QuickPickerViewTests: XCTestCase {
     func testLaddersMatchPickerContract() {
         XCTAssertEqual(QuickPickerView.widthOptions, [1, 2, 3, 5, 8, 12, 16, 24])
         XCTAssertEqual(QuickPickerView.fontSizeOptions, [12, 18, 24, 32, 44, 60, 80, 120])

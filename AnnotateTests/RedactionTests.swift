@@ -52,36 +52,32 @@ final class StubRedactionSampler: RedactionSampling {
 }
 
 @MainActor
-final class RedactionTests: XCTestCase, Sendable {
+final class RedactionTests: XCTestCase {
     var overlayView: OverlayView!
     var sampler: StubRedactionSampler!
     private var originalBoardManager: BoardManager!
 
-    nonisolated override func setUp() {
-        super.setUp()
-        MainActor.assumeIsolated {
-            TestWindows.recordOpenWindows()
-            AppDelegate.shared = nil
-            // Redaction rendering consults the board state; keep it off the user's live defaults.
-            originalBoardManager = BoardManager.shared
-            BoardManager.shared = BoardManager(userDefaults: TestUserDefaults.create())
-            overlayView = OverlayView(frame: NSRect(x: 0, y: 0, width: 200, height: 200))
-            overlayView.pickerUserDefaultsOverride = TestUserDefaults.create()
-            sampler = StubRedactionSampler()
-            overlayView.redactionSampler = sampler
-        }
+    override func setUp() async throws {
+        try await super.setUp()
+        TestWindows.recordOpenWindows()
+        AppDelegate.shared = nil
+        // Redaction rendering consults the board state; keep it off the user's live defaults.
+        originalBoardManager = BoardManager.shared
+        BoardManager.shared = BoardManager(userDefaults: TestUserDefaults.create())
+        overlayView = OverlayView(frame: NSRect(x: 0, y: 0, width: 200, height: 200))
+        overlayView.pickerUserDefaultsOverride = TestUserDefaults.create()
+        sampler = StubRedactionSampler()
+        overlayView.redactionSampler = sampler
     }
 
-    nonisolated override func tearDown() {
-        MainActor.assumeIsolated {
-            overlayView?.pickerUserDefaultsOverride = nil
-            overlayView = nil
-            sampler = nil
-            BoardManager.shared = originalBoardManager
-            assertNoLeakedWindows()
-        }
+    override func tearDown() async throws {
+        overlayView?.pickerUserDefaultsOverride = nil
+        overlayView = nil
+        sampler = nil
+        BoardManager.shared = originalBoardManager
+        assertNoLeakedWindows()
         TestUserDefaults.removeSuite()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // MARK: - Helpers

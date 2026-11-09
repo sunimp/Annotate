@@ -9,18 +9,18 @@ final class ShortcutBindingTests: XCTestCase {
     private var manager: ShortcutManager!
     private var globalShortcuts: [KeyboardShortcuts.Name: KeyboardShortcuts.Shortcut] = [:]
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         defaults = TestUserDefaults.create()
         globalShortcuts = [:]
         manager = ShortcutManager(userDefaults: defaults) { [weak self] in self?.globalShortcuts[$0] }
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         manager = nil
         TestUserDefaults.removeSuite()
         defaults = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testCustomStoredXLeavesRedactUnbound() {

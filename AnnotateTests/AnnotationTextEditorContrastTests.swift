@@ -3,37 +3,33 @@ import XCTest
 @testable import Annotate
 
 @MainActor
-final class AnnotationTextEditorContrastTests: XCTestCase, Sendable {
+final class AnnotationTextEditorContrastTests: XCTestCase {
     var overlayView: OverlayView!
     var previousAppearance: NSAppearance?
     let customDark = NSColor(calibratedRed: 0.12, green: 0.22, blue: 0.72, alpha: 1)
     let customLight = NSColor(calibratedRed: 0.95, green: 0.9, blue: 0.25, alpha: 1)
 
-    nonisolated override func setUp() {
-        super.setUp()
-        MainActor.assumeIsolated {
-            TestWindows.recordOpenWindows()
-            AppDelegate.shared = nil
-            previousAppearance = NSApp.appearance
-            BoardManager.shared = BoardManager(userDefaults: TestUserDefaults.create())
-            overlayView = OverlayView(frame: NSRect(x: 0, y: 0, width: 800, height: 600))
-            overlayView.pickerUserDefaultsOverride = TestUserDefaults.create()
-        }
+    override func setUp() async throws {
+        try await super.setUp()
+        TestWindows.recordOpenWindows()
+        AppDelegate.shared = nil
+        previousAppearance = NSApp.appearance
+        BoardManager.shared = BoardManager(userDefaults: TestUserDefaults.create())
+        overlayView = OverlayView(frame: NSRect(x: 0, y: 0, width: 800, height: 600))
+        overlayView.pickerUserDefaultsOverride = TestUserDefaults.create()
     }
 
-    nonisolated override func tearDown() {
-        MainActor.assumeIsolated {
-            overlayView?.activeTextField?.removeFromSuperview()
-            overlayView?.activeTextField = nil
-            overlayView?.pickerUserDefaultsOverride = nil
-            overlayView = nil
-            NSApp.appearance = previousAppearance
-            BoardManager.shared = BoardManager()
-            previousAppearance = nil
-            assertNoLeakedWindows()
-        }
+    override func tearDown() async throws {
+        overlayView?.activeTextField?.removeFromSuperview()
+        overlayView?.activeTextField = nil
+        overlayView?.pickerUserDefaultsOverride = nil
+        overlayView = nil
+        NSApp.appearance = previousAppearance
+        BoardManager.shared = BoardManager()
+        previousAppearance = nil
+        assertNoLeakedWindows()
         TestUserDefaults.removeSuite()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // MARK: - Contrast helper

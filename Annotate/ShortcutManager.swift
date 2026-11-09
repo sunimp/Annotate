@@ -178,7 +178,7 @@ enum ShortcutKey: String, CaseIterable {
 }
 
 @MainActor
-class ShortcutManager: @unchecked Sendable {
+class ShortcutManager {
     static var shared = ShortcutManager()
 
     private let settings: SettingsStore

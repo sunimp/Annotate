@@ -3,12 +3,10 @@ import XCTest
 @testable import Annotate
 
 @MainActor
-final class ShortcutManagerTests: XCTestCase, Sendable {
-    nonisolated override func setUp() {
-        super.setUp()
-        MainActor.assumeIsolated {
-            ShortcutManager.shared.resetAllToDefault()
-        }
+final class ShortcutManagerTests: XCTestCase {
+    override func setUp() async throws {
+        try await super.setUp()
+        ShortcutManager.shared.resetAllToDefault()
     }
 
     func testDefaultShortcuts() {

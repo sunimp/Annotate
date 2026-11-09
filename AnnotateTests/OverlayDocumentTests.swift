@@ -3,28 +3,24 @@ import XCTest
 @testable import Annotate
 
 @MainActor
-final class OverlayDocumentTests: XCTestCase, Sendable {
+final class OverlayDocumentTests: XCTestCase {
     var sampler: StubRedactionSampler!
     private var originalBoardManager: BoardManager!
 
-    nonisolated override func setUp() {
-        super.setUp()
-        MainActor.assumeIsolated {
-            AppDelegate.shared = nil
-            // Rendering consults the board state; keep it off the user's live defaults.
-            originalBoardManager = BoardManager.shared
-            BoardManager.shared = BoardManager(userDefaults: TestUserDefaults.create())
-            sampler = StubRedactionSampler()
-        }
+    override func setUp() async throws {
+        try await super.setUp()
+        AppDelegate.shared = nil
+        // Rendering consults the board state; keep it off the user's live defaults.
+        originalBoardManager = BoardManager.shared
+        BoardManager.shared = BoardManager(userDefaults: TestUserDefaults.create())
+        sampler = StubRedactionSampler()
     }
 
-    nonisolated override func tearDown() {
-        MainActor.assumeIsolated {
-            sampler = nil
-            BoardManager.shared = originalBoardManager
-        }
+    override func tearDown() async throws {
+        sampler = nil
+        BoardManager.shared = originalBoardManager
         TestUserDefaults.removeSuite()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // MARK: - Helpers

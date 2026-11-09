@@ -1,7 +1,7 @@
 import Cocoa
 
 @MainActor
-class BoardManager: @unchecked Sendable {
+class BoardManager {
     static var shared = BoardManager()
 
     private let settings: SettingsStore

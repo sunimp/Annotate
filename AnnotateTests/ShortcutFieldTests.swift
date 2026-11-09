@@ -7,16 +7,16 @@ import XCTest
 final class ShortcutFieldTests: XCTestCase {
     var testDefaults: UserDefaults!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         testDefaults = TestUserDefaults.create()
         ShortcutManager.shared.resetAllToDefault()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         TestUserDefaults.removeSuite()
         ShortcutManager.shared.resetAllToDefault()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // MARK: - Shortcut Recording Tests

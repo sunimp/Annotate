@@ -3,39 +3,35 @@ import XCTest
 @testable import Annotate
 
 @MainActor
-final class OverlayWindowTests: XCTestCase, Sendable {
+final class OverlayWindowTests: XCTestCase {
     var window: OverlayWindow!
     var originalMouseCoalescingEnabled = true
 
-    nonisolated override func setUp() {
-        super.setUp()
-        MainActor.assumeIsolated {
-            TestWindows.recordOpenWindows()
-            // A spy leaked from another suite would redirect pickerUserDefaults.
-            AppDelegate.shared = nil
-            originalMouseCoalescingEnabled = NSEvent.isMouseCoalescingEnabled
-            let frame = NSRect(x: 0, y: 0, width: 800, height: 600)
-            window = OverlayWindow(
-                contentRect: frame,
-                styleMask: .borderless,
-                backing: .buffered,
-                defer: false
-            )
-        }
+    override func setUp() async throws {
+        try await super.setUp()
+        TestWindows.recordOpenWindows()
+        // A spy leaked from another suite would redirect pickerUserDefaults.
+        AppDelegate.shared = nil
+        originalMouseCoalescingEnabled = NSEvent.isMouseCoalescingEnabled
+        let frame = NSRect(x: 0, y: 0, width: 800, height: 600)
+        window = OverlayWindow(
+            contentRect: frame,
+            styleMask: .borderless,
+            backing: .buffered,
+            defer: false
+        )
     }
 
-    nonisolated override func tearDown() {
-        MainActor.assumeIsolated {
-            window.cancelQuickPicker()
-            window.stopFadeLoop()
-            window.overlayView.pickerUserDefaultsOverride = nil
-            window.close()
-            window = nil
-            NSEvent.isMouseCoalescingEnabled = originalMouseCoalescingEnabled
-            assertNoLeakedWindows()
-        }
+    override func tearDown() async throws {
+        window.cancelQuickPicker()
+        window.stopFadeLoop()
+        window.overlayView.pickerUserDefaultsOverride = nil
+        window.close()
+        window = nil
+        NSEvent.isMouseCoalescingEnabled = originalMouseCoalescingEnabled
+        assertNoLeakedWindows()
         TestUserDefaults.removeSuite()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testWindowInitialization() {
@@ -210,7 +206,7 @@ final class OverlayWindowTests: XCTestCase, Sendable {
 
         window.startFadeLoop()
         XCTAssertNotNil(window.fadeTimer)
-        XCTAssertTrue(window.fadeTimer?.isValid ?? false)
+        XCTAssertEqual(window.fadeTimer?.isPaused, false)
 
         window.stopFadeLoop()
         XCTAssertNil(window.fadeTimer)
@@ -2046,30 +2042,26 @@ private final class TrackingOverlayView: OverlayView {
 }
 
 @MainActor
-final class TextBoxDragTests: XCTestCase, Sendable {
+final class TextBoxDragTests: XCTestCase {
     var window: OverlayWindow!
 
-    nonisolated override func setUp() {
-        super.setUp()
-        MainActor.assumeIsolated {
-            AppDelegate.shared = nil
-            window = OverlayWindow(
-                contentRect: NSRect(x: 0, y: 0, width: 800, height: 600),
-                styleMask: .borderless, backing: .buffered, defer: false)
-            window.overlayView.pickerUserDefaultsOverride = TestUserDefaults.create()
-            window.overlayView.fadeMode = false
-            window.overlayView.currentTool = .text
-        }
+    override func setUp() async throws {
+        try await super.setUp()
+        AppDelegate.shared = nil
+        window = OverlayWindow(
+            contentRect: NSRect(x: 0, y: 0, width: 800, height: 600),
+            styleMask: .borderless, backing: .buffered, defer: false)
+        window.overlayView.pickerUserDefaultsOverride = TestUserDefaults.create()
+        window.overlayView.fadeMode = false
+        window.overlayView.currentTool = .text
     }
 
-    nonisolated override func tearDown() {
-        MainActor.assumeIsolated {
-            window.overlayView.cancelTextAnnotation()
-            window.overlayView.pickerUserDefaultsOverride = nil
-            window = nil
-        }
+    override func tearDown() async throws {
+        window.overlayView.cancelTextAnnotation()
+        window.overlayView.pickerUserDefaultsOverride = nil
+        window = nil
         TestUserDefaults.removeSuite()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     private func mouse(_ type: NSEvent.EventType, _ x: CGFloat, _ y: CGFloat) throws -> NSEvent {
@@ -2292,37 +2284,33 @@ final class TextBoxDragTests: XCTestCase, Sendable {
 /// Side-handle drags driven through the window's mouse events, including gestures that get
 /// interrupted before their mouse-up.
 @MainActor
-final class TextResizeGestureTests: XCTestCase, Sendable {
+final class TextResizeGestureTests: XCTestCase {
     var window: OverlayWindow!
     private let longText = "Wrapping needs several words before a line ever breaks"
 
-    nonisolated override func setUp() {
-        super.setUp()
-        MainActor.assumeIsolated {
-            AppDelegate.shared = nil
-            window = OverlayWindow(
-                contentRect: NSRect(x: 0, y: 0, width: 800, height: 600),
-                styleMask: .borderless, backing: .buffered, defer: false)
-            window.overlayView.pickerUserDefaultsOverride = TestUserDefaults.create()
-            window.overlayView.fadeMode = false
-            window.overlayView.currentTool = .select
-            window.overlayView.textAnnotations = [
-                TextAnnotation(
-                    text: longText, position: NSPoint(x: 100, y: 400), color: .red, fontSize: 24),
-                TextAnnotation(
-                    text: "Bravo", position: NSPoint(x: 100, y: 150), color: .blue, fontSize: 24),
-            ]
-            window.overlayView.selectedObjects = [.text(index: 0)]
-        }
+    override func setUp() async throws {
+        try await super.setUp()
+        AppDelegate.shared = nil
+        window = OverlayWindow(
+            contentRect: NSRect(x: 0, y: 0, width: 800, height: 600),
+            styleMask: .borderless, backing: .buffered, defer: false)
+        window.overlayView.pickerUserDefaultsOverride = TestUserDefaults.create()
+        window.overlayView.fadeMode = false
+        window.overlayView.currentTool = .select
+        window.overlayView.textAnnotations = [
+            TextAnnotation(
+                text: longText, position: NSPoint(x: 100, y: 400), color: .red, fontSize: 24),
+            TextAnnotation(
+                text: "Bravo", position: NSPoint(x: 100, y: 150), color: .blue, fontSize: 24),
+        ]
+        window.overlayView.selectedObjects = [.text(index: 0)]
     }
 
-    nonisolated override func tearDown() {
-        MainActor.assumeIsolated {
-            window.overlayView.pickerUserDefaultsOverride = nil
-            window = nil
-        }
+    override func tearDown() async throws {
+        window.overlayView.pickerUserDefaultsOverride = nil
+        window = nil
         TestUserDefaults.removeSuite()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     private func mouse(_ type: NSEvent.EventType, _ point: NSPoint) throws -> NSEvent {

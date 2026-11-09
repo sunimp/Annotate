@@ -7,8 +7,8 @@ import Sparkle
 final class AboutViewTests: XCTestCase {
     nonisolated(unsafe) var mockUpdaterController: SPUStandardUpdaterController!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         mockUpdaterController = SPUStandardUpdaterController(
             startingUpdater: false,
             updaterDelegate: nil,
@@ -16,9 +16,9 @@ final class AboutViewTests: XCTestCase {
         )
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         mockUpdaterController = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // MARK: - Bundle Information Tests

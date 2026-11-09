@@ -6,14 +6,14 @@ import XCTest
 final class SoundPlayerTests: XCTestCase {
     private var testDefaults: UserDefaults!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         testDefaults = TestUserDefaults.create()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         TestUserDefaults.removeSuite()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testPreloadsEachDistinctSoundOnce() {

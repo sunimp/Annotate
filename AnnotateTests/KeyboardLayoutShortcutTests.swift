@@ -9,8 +9,8 @@ final class KeyboardLayoutShortcutTests: XCTestCase {
     private var originalAppDelegate: AppDelegate?
     private var originalShortcutManager: ShortcutManager!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         TestWindows.recordOpenWindows()
         let defaults = TestUserDefaults.create()
         originalAppDelegate = AppDelegate.shared
@@ -25,7 +25,7 @@ final class KeyboardLayoutShortcutTests: XCTestCase {
         window.undoManager?.groupsByEvent = false
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         window.close()
         window = nil
         AppDelegate.shared = originalAppDelegate
@@ -33,7 +33,7 @@ final class KeyboardLayoutShortcutTests: XCTestCase {
         appDelegate = nil
         TestUserDefaults.removeSuite()
         assertNoLeakedWindows()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testUndoFollowsQwertyAzertyAndQwertzCharacters() throws {

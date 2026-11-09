@@ -3,27 +3,23 @@ import XCTest
 @testable import Annotate
 
 @MainActor
-final class OverlayViewTests: XCTestCase, Sendable {
+final class OverlayViewTests: XCTestCase {
     var overlayView: OverlayView!
 
-    nonisolated override func setUp() {
-        super.setUp()
-        MainActor.assumeIsolated {
-            // A leaked AppDelegate.shared would redirect pickerUserDefaults into
-            // another suite's store and let commitTextField rewrite its windows.
-            AppDelegate.shared = nil
-            overlayView = OverlayView(frame: NSRect(x: 0, y: 0, width: 800, height: 600))
-            overlayView.pickerUserDefaultsOverride = TestUserDefaults.create()
-        }
+    override func setUp() async throws {
+        try await super.setUp()
+        // A leaked AppDelegate.shared would redirect pickerUserDefaults into
+        // another suite's store and let commitTextField rewrite its windows.
+        AppDelegate.shared = nil
+        overlayView = OverlayView(frame: NSRect(x: 0, y: 0, width: 800, height: 600))
+        overlayView.pickerUserDefaultsOverride = TestUserDefaults.create()
     }
 
-    nonisolated override func tearDown() {
-        MainActor.assumeIsolated {
-            overlayView?.pickerUserDefaultsOverride = nil
-            overlayView = nil
-        }
+    override func tearDown() async throws {
+        overlayView?.pickerUserDefaultsOverride = nil
+        overlayView = nil
         TestUserDefaults.removeSuite()
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testOverlayViewInitialization() {
@@ -1042,7 +1038,7 @@ final class OverlayViewTests: XCTestCase, Sendable {
     /// a fade boundary between seeding and rendering.
     private let fadeNow: CFTimeInterval = 1_000
 
-    /// One fade-loop tick, as `OverlayWindow.fadeInterval` schedules it.
+    /// One fade-loop tick at 60 Hz. The real loop follows the display refresh rate.
     private let fadeInterval: CFTimeInterval = 1.0 / 60.0
 
     /// Pins the overlay's fade clock `offset` seconds after `fadeNow`.
@@ -1162,6 +1158,27 @@ final class OverlayViewTests: XCTestCase, Sendable {
         XCTAssertEqual(renderedMaxAlpha(of: overlayView), 0, accuracy: 0.01)
         overlayView.compactExpiredAnnotations()
         XCTAssertTrue(overlayView.lines.isEmpty)
+    }
+
+    func testFadeTickRepaintsOnlyWhatIsFading() {
+        // Mid-hold: nothing changes alpha, so a tick has nothing to repaint.
+        seedFadingLine(age: overlayView.fadeDelay / 2)
+        XCTAssertTrue(overlayView.fadingBounds(at: fadeNow).isNull)
+
+        // Mid-fade: only the line's own strip, not the whole overlay.
+        seedFadingLine(age: overlayView.fadeDelay + overlayView.fadeOutDuration / 2)
+        let line = overlayView.lines[0]
+        let dirty = overlayView.fadingBounds(at: fadeNow)
+        XCTAssertTrue(dirty.contains(line.redrawBounds))
+        XCTAssertLessThan(dirty.height, overlayView.bounds.height / 2)
+
+        // Redactions never fade, so they never repaint on a tick.
+        overlayView.lines = []
+        var redaction = Rectangle(
+            startPoint: .zero, endPoint: NSPoint(x: 50, y: 50), color: .black, lineWidth: 2, style: .solid)
+        redaction.creationTime = fadeNow - overlayView.fadeDelay - overlayView.fadeOutDuration / 2
+        overlayView.rectangles = [redaction]
+        XCTAssertTrue(overlayView.fadingBounds(at: fadeNow).isNull)
     }
 
     func testFadeStartsAtFullStrengthAndNeverJumps() {

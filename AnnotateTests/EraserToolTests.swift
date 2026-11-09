@@ -12,21 +12,17 @@ class TestWindow: NSWindow {
 }
 
 @MainActor
-final class EraserToolTests: XCTestCase, Sendable {
+final class EraserToolTests: XCTestCase {
     var overlayView: OverlayView!
 
-    nonisolated override func setUp() {
-        super.setUp()
-        MainActor.assumeIsolated {
-            overlayView = OverlayView(frame: NSRect(x: 0, y: 0, width: 800, height: 600))
-        }
+    override func setUp() async throws {
+        try await super.setUp()
+        overlayView = OverlayView(frame: NSRect(x: 0, y: 0, width: 800, height: 600))
     }
 
-    nonisolated override func tearDown() {
-        MainActor.assumeIsolated {
-            overlayView = nil
-        }
-        super.tearDown()
+    override func tearDown() async throws {
+        overlayView = nil
+        try await super.tearDown()
     }
 
     // MARK: - Tool Selection Tests
