@@ -31,7 +31,7 @@ class BoardManager: @unchecked Sendable {
     }
 
     var displayName: String {
-        return currentBoardType == .blackboard ? String(localized: "Blackboard") : String(localized: "Whiteboard")
+        return currentBoardType == .blackboard ? L10n.string("Blackboard") : L10n.string("Whiteboard")
     }
 
     var opacity: Double {

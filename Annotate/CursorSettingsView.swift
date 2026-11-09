@@ -48,7 +48,7 @@ struct CursorSettingsView: View {
 
                 if activeCursorStyle == .circle || activeCursorStyle == .crosshair {
                     SettingsSliderRow(
-                        title: String(localized: "Cursor Size"),
+                        title: L10n.string("Cursor Size"),
                         value: $activeCursorSize,
                         range: 8...24,
                         boundsText: { "\(Int($0))" }
@@ -63,8 +63,8 @@ struct CursorSettingsView: View {
                 SettingsHeader(
                     icon: "cursorarrow",
                     color: .purple,
-                    title: String(localized: "Active Cursor"),
-                    subtitle: String(localized: "Cursor appearance when overlay is active")
+                    title: L10n.string("Active Cursor"),
+                    subtitle: L10n.string("Cursor appearance when overlay is active")
                 )
             }
 
@@ -79,7 +79,7 @@ struct CursorSettingsView: View {
 
                 if cursorHighlightEnabled {
                     SettingsSliderRow(
-                        title: String(localized: "Spotlight Size"),
+                        title: L10n.string("Spotlight Size"),
                         value: $spotlightSize,
                         range: 30...100,
                         boundsText: { "\(Int($0))" }
@@ -100,7 +100,7 @@ struct CursorSettingsView: View {
 
                     if spotlightDimmingEnabled {
                         SettingsSliderRow(
-                            title: String(localized: "Dimming Amount"),
+                            title: L10n.string("Dimming Amount"),
                             value: $spotlightDimmingOpacity,
                             range: 20...90,
                             boundsText: { "\(Int($0))%" }
@@ -139,7 +139,7 @@ struct CursorSettingsView: View {
 
                 if clickEffectsEnabled {
                     SettingsSliderRow(
-                        title: String(localized: "Click Effect Size"),
+                        title: L10n.string("Click Effect Size"),
                         value: $effectSize,
                         range: 30...100,
                         boundsText: { "\(Int($0))" }
@@ -172,8 +172,8 @@ struct CursorSettingsView: View {
                 SettingsHeader(
                     icon: "cursorarrow.motionlines",
                     color: .pink,
-                    title: String(localized: "Cursor Highlight"),
-                    subtitle: String(localized: "Spotlight and click effects for presentations")
+                    title: L10n.string("Cursor Highlight"),
+                    subtitle: L10n.string("Spotlight and click effects for presentations")
                 )
             }
 
@@ -210,8 +210,8 @@ struct CursorSettingsView: View {
                     SettingsHeader(
                         icon: "cursorarrow.slash",
                         color: .blue,
-                        title: String(localized: "Hide Cursor Effects In"),
-                        subtitle: String(localized: "Suppress effects while one of these apps is focused")
+                        title: L10n.string("Hide Cursor Effects In"),
+                        subtitle: L10n.string("Suppress effects while one of these apps is focused")
                     )
                 } footer: {
                     Text("Useful for virtual machines (such as UTM), games, and remote desktop clients that capture or lock the cursor.")
@@ -251,9 +251,9 @@ struct CursorSettingsView: View {
     /// Opens an `NSOpenPanel` restricted to application bundles (`.app`) so the user can select applications to exclude.
     private func addApplication() {
         let panel = NSOpenPanel()
-        panel.title = String(localized: "Exclude Application")
-        panel.prompt = String(localized: "Exclude")
-        panel.message = String(localized: "Choose an application to suppress cursor spotlight and click effects in.")
+        panel.title = L10n.string("Exclude Application")
+        panel.prompt = L10n.string("Exclude")
+        panel.message = L10n.string("Choose an application to suppress cursor spotlight and click effects in.")
         panel.canChooseFiles = true
         panel.canChooseDirectories = false
         panel.allowsMultipleSelection = true

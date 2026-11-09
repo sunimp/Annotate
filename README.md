@@ -43,7 +43,7 @@ Sometimes you need to emphasize a part of your screen or share ideas visually, a
 - ⚡ **Global Hotkey:** Toggle Annotate with a global shortcut.
 - 🤖 **Shortcuts Actions:** Open the overlay, pick a tool or color, clear, and switch the toolbar, Fade Mode, or board from the Shortcuts app.
 - 🔗 **URL Scheme:** Run the same commands from `annotate://` links in scripts, launchers, Stream Deck, or the browser.
-- 🌐 **Localized:** English, Simplified Chinese, Traditional Chinese, Japanese, Spanish, and French, following the macOS language setting.
+- 🌐 **Localized:** English, Simplified Chinese, Traditional Chinese, Japanese, Spanish, and French, following the macOS language by default, or switched in Settings → General → Language without relaunching.
 - 🔄 **Auto-Updates:** Automatic update checking with secure, cryptographically signed updates.
 
 ## 📦 Installation

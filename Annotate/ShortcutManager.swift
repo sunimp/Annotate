@@ -48,7 +48,7 @@ struct ShortcutBinding: Equatable, Hashable {
 
     /// A `displayValue` as VoiceOver and prose should say it.
     static func spokenLabel(for displayValue: String) -> String {
-        displayValue.replacingOccurrences(of: spaceGlyph, with: String(localized: "Space"))
+        displayValue.replacingOccurrences(of: spaceGlyph, with: L10n.string("Space"))
     }
 
     var displayValue: String {
@@ -64,10 +64,10 @@ struct ShortcutBinding: Equatable, Hashable {
         case "\u{f701}": label = "↓"
         case "\u{f702}": label = "←"
         case "\u{f703}": label = "→"
-        case "\u{f729}": label = String(localized: "Home")
-        case "\u{f72b}": label = String(localized: "End")
-        case "\u{f72c}": label = String(localized: "Page Up")
-        case "\u{f72d}": label = String(localized: "Page Down")
+        case "\u{f729}": label = L10n.string("Home")
+        case "\u{f72b}": label = L10n.string("End")
+        case "\u{f72c}": label = L10n.string("Page Up")
+        case "\u{f72d}": label = L10n.string("Page Down")
         default:
             if let scalar = key.unicodeScalars.first, (0xf704...0xf726).contains(scalar.value) {
                 label = "F\(scalar.value - 0xf704 + 1)"
@@ -150,29 +150,29 @@ enum ShortcutKey: String, CaseIterable {
 
     var displayName: String {
         switch self {
-        case .pen: return String(localized: "Pen")
-        case .arrow: return String(localized: "Arrow")
-        case .line: return String(localized: "Line")
-        case .highlighter: return String(localized: "Highlighter")
-        case .rectangle: return String(localized: "Rectangle")
-        case .circle: return String(localized: "Circle")
-        case .redact: return String(localized: "Redact")
-        case .counter: return String(localized: "Counter")
-        case .text: return String(localized: "Text")
-        case .select: return String(localized: "Select")
-        case .eraser: return String(localized: "Eraser")
-        case .colorPicker: return String(localized: "Color Picker")
-        case .lineWidthPicker: return String(localized: "Line Width")
-        case .toggleBoard: return String(localized: "Toggle Board")
-        case .toggleClickEffects: return String(localized: "Toggle Cursor Highlight")
-        case .toggleBackgroundDimming: return String(localized: "Toggle Background Dimming")
-        case .toggleFade: return String(localized: "Toggle Fade Mode")
-        case .toggleToolbar: return String(localized: "Toggle Toolbar")
-        case .decreaseSize: return String(localized: "Decrease Size")
-        case .increaseSize: return String(localized: "Increase Size")
-        case .clearAll: return String(localized: "Clear All")
-        case .captureScreen: return String(localized: "Capture Screen")
-        case .captureArea: return String(localized: "Capture Area")
+        case .pen: return L10n.string("Pen")
+        case .arrow: return L10n.string("Arrow")
+        case .line: return L10n.string("Line")
+        case .highlighter: return L10n.string("Highlighter")
+        case .rectangle: return L10n.string("Rectangle")
+        case .circle: return L10n.string("Circle")
+        case .redact: return L10n.string("Redact")
+        case .counter: return L10n.string("Counter")
+        case .text: return L10n.string("Text")
+        case .select: return L10n.string("Select")
+        case .eraser: return L10n.string("Eraser")
+        case .colorPicker: return L10n.string("Color Picker")
+        case .lineWidthPicker: return L10n.string("Line Width")
+        case .toggleBoard: return L10n.string("Toggle Board")
+        case .toggleClickEffects: return L10n.string("Toggle Cursor Highlight")
+        case .toggleBackgroundDimming: return L10n.string("Toggle Background Dimming")
+        case .toggleFade: return L10n.string("Toggle Fade Mode")
+        case .toggleToolbar: return L10n.string("Toggle Toolbar")
+        case .decreaseSize: return L10n.string("Decrease Size")
+        case .increaseSize: return L10n.string("Increase Size")
+        case .clearAll: return L10n.string("Clear All")
+        case .captureScreen: return L10n.string("Capture Screen")
+        case .captureArea: return L10n.string("Capture Area")
         }
     }
 }
@@ -185,8 +185,8 @@ class ShortcutManager: @unchecked Sendable {
     private let globalShortcutProvider: @MainActor (KeyboardShortcuts.Name) -> KeyboardShortcuts.Shortcut?
     private static var globalActions: [(name: KeyboardShortcuts.Name, label: String)] {
         [
-            (.toggleOverlay, String(localized: "Activation Shortcut")),
-            (.toggleAlwaysOnMode, String(localized: "Always-On Mode"))
+            (.toggleOverlay, L10n.string("Activation Shortcut")),
+            (.toggleAlwaysOnMode, L10n.string("Always-On Mode"))
         ]
     }
 

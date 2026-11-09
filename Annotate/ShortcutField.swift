@@ -32,16 +32,16 @@ enum ShortcutRecordingEventHandler {
         }
         if binding.isReserved {
             return ShortcutRecordingEventResult(editingShortcut: tool, consumesEvent: true,
-                error: String(localized: "This shortcut is reserved for a built-in action."))
+                error: L10n.string("This shortcut is reserved for a built-in action."))
         }
         let manager = manager ?? .shared
         if let conflict = manager.globalShortcutConflict(for: binding) {
             return ShortcutRecordingEventResult(editingShortcut: tool, consumesEvent: true,
-                error: String(localized: "This shortcut is assigned to \(conflict) in General Settings. Change it there first."))
+                error: L10n.string("This shortcut is assigned to \(conflict) in General Settings. Change it there first."))
         }
         guard manager.setShortcut(binding, for: tool) else {
             return ShortcutRecordingEventResult(editingShortcut: tool, consumesEvent: true,
-                error: String(localized: "This shortcut is already assigned. Clear it from the other action first."))
+                error: L10n.string("This shortcut is already assigned. Clear it from the other action first."))
         }
         return ShortcutRecordingEventResult(editingShortcut: nil, consumesEvent: true)
     }

@@ -61,12 +61,12 @@ final class SettingsWindowManager {
             defer: false
         )
 
-        window.title = String(localized: "Annotate Settings")
+        window.title = L10n.string("Annotate Settings")
         window.titleVisibility = .hidden
         window.titlebarAppearsTransparent = true
         window.toolbar = NSToolbar()
         window.toolbarStyle = .unified
-        window.contentView = NSHostingView(rootView: SettingsView(navigation: navigation))
+        window.contentView = NSHostingView(rootView: SettingsView(navigation: navigation).localizedEnvironment())
         window.center()
         window.isReleasedWhenClosed = false
         window.level = .normal

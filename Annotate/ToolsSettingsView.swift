@@ -29,31 +29,31 @@ struct ToolsSettingsView: View {
 
             Section {
                 SettingsSliderRow(
-                    title: String(localized: "Default Text Size"),
+                    title: L10n.string("Default Text Size"),
                     value: $defaultTextSize,
                     range: minTextSize...maxTextSize,
                     step: 1,
-                    valueText: { String(localized: "\(Int($0)) pt") },
-                    boundsText: { String(localized: "\(Int($0)) pt") }
+                    valueText: { L10n.string("\(Int($0)) pt") },
+                    boundsText: { L10n.string("\(Int($0)) pt") }
                 )
                 Toggle("Label background", isOn: $textBackgroundEnabled)
             } header: {
                 SettingsHeader(
                     icon: "textformat.size",
                     color: .orange,
-                    title: String(localized: "Text Tool"),
-                    subtitle: String(localized: "Adjust the default font size for text annotations")
+                    title: L10n.string("Text Tool"),
+                    subtitle: L10n.string("Adjust the default font size for text annotations")
                 )
             }
 
             Section {
                 SettingsSliderRow(
-                    title: String(localized: "Default Counter Size"),
+                    title: L10n.string("Default Counter Size"),
                     value: $defaultCounterSize,
                     range: minCounterSize...maxCounterSize,
                     step: 1,
-                    valueText: { String(localized: "\(Int($0)) pt") },
-                    boundsText: { String(localized: "\(Int($0)) pt") }
+                    valueText: { L10n.string("\(Int($0)) pt") },
+                    boundsText: { L10n.string("\(Int($0)) pt") }
                 )
                 Picker("Style", selection: $counterStyle) {
                     ForEach(CounterStyle.allCases, id: \.self) { style in
@@ -70,8 +70,8 @@ struct ToolsSettingsView: View {
                 SettingsHeader(
                     icon: "number.circle",
                     color: .green,
-                    title: String(localized: "Counter Tool"),
-                    subtitle: String(localized: "Adjust the default size and style for counter annotations")
+                    title: L10n.string("Counter Tool"),
+                    subtitle: L10n.string("Adjust the default size and style for counter annotations")
                 )
             }
 
@@ -92,8 +92,8 @@ struct ToolsSettingsView: View {
                 SettingsHeader(
                     icon: "eye.slash",
                     color: .gray,
-                    title: String(localized: "Redact Tool"),
-                    subtitle: String(localized: "Choose how redaction rectangles hide what is under them")
+                    title: L10n.string("Redact Tool"),
+                    subtitle: L10n.string("Choose how redaction rectangles hide what is under them")
                 )
             }
         }

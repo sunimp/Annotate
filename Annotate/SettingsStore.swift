@@ -126,6 +126,11 @@ extension SettingKey<DefaultToolOption> {
     static var defaultTool: Self { .rawValue("DefaultTool", default: .lastUsed) }
 }
 
+extension SettingKey<AppLanguage> {
+    /// The UI language. `.system` follows macOS; an unknown stored code reads as `.system`.
+    static var appLanguage: Self { .rawValue("AppLanguage", default: .system) }
+}
+
 extension SettingKey<ToolbarLayout> {
     static var toolbarLayout: Self { .rawValue("ToolbarLayout", default: .horizontal) }
 }

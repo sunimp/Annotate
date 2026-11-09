@@ -22,7 +22,7 @@ struct BoardSettingsView: View {
                 }
 
                 SettingsSliderRow(
-                    title: String(localized: "Board Opacity"),
+                    title: L10n.string("Board Opacity"),
                     value: $boardOpacity,
                     range: 0.1...1.0,
                     boundsText: { "\(Int($0 * 100))%" }
@@ -34,8 +34,8 @@ struct BoardSettingsView: View {
                 SettingsHeader(
                     icon: "rectangle.inset.filled",
                     color: .indigo,
-                    title: String(localized: "Board Settings"),
-                    subtitle: String(localized: "Customize board appearance and visibility")
+                    title: L10n.string("Board Settings"),
+                    subtitle: L10n.string("Customize board appearance and visibility")
                 )
             }
         }

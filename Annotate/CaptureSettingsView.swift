@@ -52,8 +52,8 @@ struct CaptureSettingsView: View {
                 SettingsHeader(
                     icon: "camera.viewfinder",
                     color: .teal,
-                    title: String(localized: "Capture"),
-                    subtitle: String(localized: "Save the display or an area with its annotations")
+                    title: L10n.string("Capture"),
+                    subtitle: L10n.string("Save the display or an area with its annotations")
                 )
             }
 
@@ -63,8 +63,8 @@ struct CaptureSettingsView: View {
                 SettingsHeader(
                     icon: "record.circle",
                     color: .red,
-                    title: String(localized: "Screen Recording"),
-                    subtitle: String(localized: "Needed to read what is on screen")
+                    title: L10n.string("Screen Recording"),
+                    subtitle: L10n.string("Needed to read what is on screen")
                 )
             }
         }
@@ -135,6 +135,6 @@ struct CaptureSettingsView: View {
     }
 
     static func folderErrorMessage(_ error: Error) -> String {
-        String(localized: "Couldn't create the folder. \(error.localizedDescription)")
+        L10n.string("Couldn't create the folder. \(error.localizedDescription)")
     }
 }

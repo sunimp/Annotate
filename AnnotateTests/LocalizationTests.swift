@@ -55,4 +55,53 @@ final class LocalizationTests: XCTestCase {
             }
         }
     }
+
+    func testEveryLanguageExceptSystemNamesAnLproj() throws {
+        for name in ["Localizable", "InfoPlist"] {
+            let languages = Set(try catalog(name).values.flatMap { entry in
+                ((entry["localizations"] as? [String: Any]) ?? [:]).keys
+            })
+            for language in AppLanguage.allCases where language != .system {
+                XCTAssertTrue(
+                    language == .english || languages.contains(language.rawValue),
+                    "\(name) has no \(language.rawValue) translations")
+            }
+        }
+        XCTAssertEqual(
+            Set(AppLanguage.allCases.map(\.rawValue)).subtracting(["system", "en"]),
+            Set(Self.languages))
+    }
+
+    func testFollowingTheSystemUsesTheAppBundle() {
+        XCTAssertEqual(L10n.resolveBundle(for: .system), .main)
+    }
+
+    func testAMissingLprojFallsBackToTheAppBundle() throws {
+        let empty = try XCTUnwrap(Bundle(path: NSTemporaryDirectory()))
+        XCTAssertEqual(L10n.resolveBundle(for: .japanese, in: empty), empty)
+    }
+
+    func testChangingTheLanguagePostsOnceAndRestores() {
+        let original = L10n.language
+        defer { L10n.language = original }
+        var posts = 0
+        let observer = NotificationCenter.default.addObserver(
+            forName: L10n.didChange, object: nil, queue: nil
+        ) { _ in posts += 1 }
+        defer { NotificationCenter.default.removeObserver(observer) }
+
+        L10n.language = original == .french ? .spanish : .french
+        L10n.language = L10n.language
+        XCTAssertEqual(posts, 1, "Setting the same language again must not relabel everything")
+        XCTAssertEqual(L10n.locale.identifier, L10n.language.rawValue)
+    }
+
+    func testTheLanguageSettingDefaultsToSystemAndRoundTrips() {
+        let defaults = TestUserDefaults.create()
+        defer { TestUserDefaults.removeSuite() }
+        XCTAssertEqual(AppLanguage(rawValue: "klingon"), nil)
+        XCTAssertEqual(defaults.settings[.appLanguage], .system, "Nothing stored follows the system")
+        defaults.settings[.appLanguage] = .japanese
+        XCTAssertEqual(defaults.settings[.appLanguage], .japanese)
+    }
 }

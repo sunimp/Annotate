@@ -9,10 +9,10 @@ enum ActiveCursorStyle: String, CaseIterable {
 
     var displayName: String {
         switch self {
-        case .none: return String(localized: "Default")
-        case .outline: return String(localized: "Outline")
-        case .circle: return String(localized: "Circle")
-        case .crosshair: return String(localized: "Crosshair")
+        case .none: return L10n.string("Default")
+        case .outline: return L10n.string("Outline")
+        case .circle: return L10n.string("Circle")
+        case .crosshair: return L10n.string("Crosshair")
         }
     }
 }

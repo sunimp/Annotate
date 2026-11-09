@@ -17,17 +17,17 @@ enum ToolType: String, CaseIterable, Sendable {
 
     var displayName: String {
         switch self {
-        case .pen: return String(localized: "Pen")
-        case .highlighter: return String(localized: "Highlighter")
-        case .arrow: return String(localized: "Arrow")
-        case .line: return String(localized: "Line")
-        case .rectangle: return String(localized: "Rectangle")
-        case .circle: return String(localized: "Circle")
-        case .redact: return String(localized: "Redact")
-        case .text: return String(localized: "Text")
-        case .counter: return String(localized: "Counter")
-        case .eraser: return String(localized: "Eraser")
-        case .select: return String(localized: "Select")
+        case .pen: return L10n.string("Pen")
+        case .highlighter: return L10n.string("Highlighter")
+        case .arrow: return L10n.string("Arrow")
+        case .line: return L10n.string("Line")
+        case .rectangle: return L10n.string("Rectangle")
+        case .circle: return L10n.string("Circle")
+        case .redact: return L10n.string("Redact")
+        case .text: return L10n.string("Text")
+        case .counter: return L10n.string("Counter")
+        case .eraser: return L10n.string("Eraser")
+        case .select: return L10n.string("Select")
         }
     }
 
@@ -210,10 +210,10 @@ enum RectangleStyle: String, CaseIterable {
 
     var displayName: String {
         switch self {
-        case .outline: return String(localized: "Outline")
-        case .solid: return String(localized: "Solid")
-        case .pixelate: return String(localized: "Pixelate")
-        case .blur: return String(localized: "Blur")
+        case .outline: return L10n.string("Outline")
+        case .solid: return L10n.string("Solid")
+        case .pixelate: return L10n.string("Pixelate")
+        case .blur: return L10n.string("Blur")
         }
     }
 }
@@ -402,8 +402,8 @@ enum CounterStyle: String, CaseIterable {
 
     var displayName: String {
         switch self {
-        case .bordered: return String(localized: "Bordered")
-        case .filled: return String(localized: "Filled")
+        case .bordered: return L10n.string("Bordered")
+        case .filled: return L10n.string("Filled")
         }
     }
 }

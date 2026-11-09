@@ -1795,7 +1795,7 @@ class OverlayWindow: NSPanel {
             overlayView.currentTool == .counter
         {
             overlayView.resetCounter()
-            showToggleFeedback(String(localized: "Counter Reset"), icon: "🔄")
+            showToggleFeedback(L10n.string("Counter Reset"), icon: "🔄")
             return
         }
 
@@ -2000,7 +2000,7 @@ class OverlayWindow: NSPanel {
     }
 
     private func showLineWidthFeedback(_ width: CGFloat) {
-        let text = String(localized: "Line Width: \(width, format: .number.precision(.fractionLength(2))) px")
+        let text = L10n.string("Line Width: \(width, format: .number.precision(.fractionLength(2))) px")
         showFeedback(text, lineColor: overlayView.currentColor, lineWidth: width)
     }
 
@@ -2062,11 +2062,11 @@ class OverlayWindow: NSPanel {
 
         runtimeOverlayWindows.forEach { $0.overlayView.currentTextAnnotation?.hasBackground = enabled }
 
-        showFeedback(enabled ? String(localized: "Label background on") : String(localized: "Label background off"))
+        showFeedback(enabled ? L10n.string("Label background on") : L10n.string("Label background off"))
     }
 
     private func showFontSizeFeedback(_ size: CGFloat) {
-        showFeedback(String(localized: "Font Size: \(size, format: .number.precision(.fractionLength(0))) pt"))
+        showFeedback(L10n.string("Font Size: \(size, format: .number.precision(.fractionLength(0))) pt"))
     }
 
     private func scrollWheelForCounterSize(with event: NSEvent) {
@@ -2089,7 +2089,7 @@ class OverlayWindow: NSPanel {
     }
 
     private func showCounterSizeFeedback(_ size: CGFloat) {
-        showFeedback(String(localized: "Counter Size: \(size, format: .number.precision(.fractionLength(0))) pt"))
+        showFeedback(L10n.string("Counter Size: \(size, format: .number.precision(.fractionLength(0))) pt"))
     }
 
     private func stepActiveLadder(_ direction: Int) {
@@ -2119,7 +2119,7 @@ class OverlayWindow: NSPanel {
         let manager = CursorHighlightManager.shared
         manager.toggleSpotlightDimming()
         showToggleFeedback(
-            manager.spotlightDimmingEnabled ? String(localized: "Dimming On") : String(localized: "Dimming Off"),
+            manager.spotlightDimmingEnabled ? L10n.string("Dimming On") : L10n.string("Dimming Off"),
             icon: manager.spotlightDimmingEnabled ? "🌘" : "☀️"
         )
     }
@@ -2174,7 +2174,7 @@ class OverlayWindow: NSPanel {
 
         switch tool {
         case .pen, .arrow, .line, .highlighter, .rectangle, .circle:
-            let widthText = String(localized: "\(currentWidth, format: .number.precision(.fractionLength(2))) px")
+            let widthText = L10n.string("\(currentWidth, format: .number.precision(.fractionLength(2))) px")
             let text = "\(icon) \(toolName) • \(widthText)"
             showFeedback(text, lineColor: overlayView.currentColor, lineWidth: currentWidth)
         case .redact, .counter, .text, .select, .eraser:

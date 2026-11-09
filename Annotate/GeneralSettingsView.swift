@@ -26,6 +26,8 @@ struct GeneralSettingsView: View {
     private var fadeDelay: Double
     @AppStorage(.urlCommandsEnabled)
     private var urlCommandsEnabled: Bool
+    @AppStorage(.appLanguage)
+    private var appLanguage: AppLanguage
 
     /// Tools offered in the Default Tool picker, excluding Select and Eraser since neither
     /// is a sensible tool to land on when the overlay opens.
@@ -59,8 +61,8 @@ struct GeneralSettingsView: View {
                 SettingsHeader(
                     icon: "keyboard",
                     color: .gray,
-                    title: String(localized: "Keyboard Shortcuts"),
-                    subtitle: String(localized: "Set keyboard shortcuts to activate Annotate and jump to specific modes")
+                    title: L10n.string("Keyboard Shortcuts"),
+                    subtitle: L10n.string("Set keyboard shortcuts to activate Annotate and jump to specific modes")
                 )
             }
 
@@ -123,6 +125,18 @@ struct GeneralSettingsView: View {
                     SoundPlayer.shared.playOverlayOn()
                 }
 
+                Picker(selection: $appLanguage) {
+                    ForEach(AppLanguage.allCases) { language in
+                        Text(verbatim: language.displayName).tag(language)
+                    }
+                } label: {
+                    Text("Language")
+                    Text("Language for menus, settings, and on-screen feedback")
+                }
+                .onChange(of: appLanguage) { _, language in
+                    AppDelegate.shared?.setLanguage(language)
+                }
+
                 Toggle(
                     isOn: Binding(
                         get: { !hideDockIcon },
@@ -159,14 +173,14 @@ struct GeneralSettingsView: View {
                 SettingsHeader(
                     icon: "macwindow",
                     color: .blue,
-                    title: String(localized: "Application"),
-                    subtitle: String(localized: "Configure app launch and display options")
+                    title: L10n.string("Application"),
+                    subtitle: L10n.string("Configure app launch and display options")
                 )
             }
 
             Section {
                 SettingsSliderRow(
-                    title: String(localized: "Fade Delay"),
+                    title: L10n.string("Fade Delay"),
                     value: $fadeDelay,
                     range: fadeDelayRange,
                     step: 0.125,
@@ -180,8 +194,8 @@ struct GeneralSettingsView: View {
                 SettingsHeader(
                     icon: "timer",
                     color: .purple,
-                    title: String(localized: "Fade Mode"),
-                    subtitle: String(localized: "How long annotations stay at full opacity before fading out")
+                    title: L10n.string("Fade Mode"),
+                    subtitle: L10n.string("How long annotations stay at full opacity before fading out")
                 )
             }
         }
@@ -200,7 +214,7 @@ enum GlobalShortcutRecordingHandler {
         else { return nil }
         // Recorder saves before invoking its callback. Restore the accepted binding on conflict.
         KeyboardShortcuts.setShortcut(previousShortcut, for: name)
-        return String(localized: "This shortcut is already assigned to \(conflict). Change or clear it first.")
+        return L10n.string("This shortcut is already assigned to \(conflict). Change or clear it first.")
     }
 }
 

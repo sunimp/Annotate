@@ -18,14 +18,14 @@ extension ToolbarAction {
     var accessibilityLabel: String {
         switch self {
         case .tool(let tool): return tool.displayName
-        case .colorPicker: return String(localized: "Color")
+        case .colorPicker: return L10n.string("Color")
         // It opens the line width, font size, or counter size picker, depending on the tool.
-        case .widthPicker: return String(localized: "Size")
-        case .toggleFade: return String(localized: "Fade Mode")
+        case .widthPicker: return L10n.string("Size")
+        case .toggleFade: return L10n.string("Fade Mode")
         // Removes the newest item drawn with the current tool (the selection, with Select).
-        case .deleteLast: return String(localized: "Delete Last")
-        case .clearAll: return String(localized: "Clear All")
-        case .undo: return String(localized: "Undo")
+        case .deleteLast: return L10n.string("Delete Last")
+        case .clearAll: return L10n.string("Clear All")
+        case .undo: return L10n.string("Undo")
         }
     }
 }
@@ -39,8 +39,8 @@ enum ToolbarLayout: String, CaseIterable {
 
     var displayName: String {
         switch self {
-        case .horizontal: return String(localized: "Horizontal")
-        case .vertical: return String(localized: "Vertical")
+        case .horizontal: return L10n.string("Horizontal")
+        case .vertical: return L10n.string("Vertical")
         }
     }
 }
@@ -208,7 +208,7 @@ struct ToolbarView: View {
                         }
                     }
             }
-            .accessibilityValue(model.fadeMode ? String(localized: "On") : String(localized: "Off"))
+            .accessibilityValue(model.fadeMode ? L10n.string("On") : L10n.string("Off"))
         }
     }
 
@@ -321,7 +321,7 @@ struct ToolbarView: View {
     /// Empty for a cleared binding, so VoiceOver has no shortcut to announce.
     private func shortcutHint(for action: ToolbarAction) -> String {
         let keys = keycapText(for: action)
-        return keys.isEmpty ? "" : String(localized: "Shortcut: \(ShortcutBinding.spokenLabel(for: keys))")
+        return keys.isEmpty ? "" : L10n.string("Shortcut: \(ShortcutBinding.spokenLabel(for: keys))")
     }
 }
 

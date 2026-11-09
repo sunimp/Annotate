@@ -126,7 +126,7 @@ enum AnnotateCommand: Hashable, Sendable {
             return alreadySet ? .noOp : .ran
         case .clear:
             guard appDelegate.clearVisibleOverlays() else { return .noOp }
-            appDelegate.showToggleFeedback(String(localized: "Cleared"), icon: "🗑️")
+            appDelegate.showToggleFeedback(L10n.string("Cleared"), icon: "🗑️")
             return .ran
         // A switch already in the requested state still shows its HUD, which reports the state.
         case .toolbar(let target):
@@ -134,7 +134,7 @@ enum AnnotateCommand: Hashable, Sendable {
             let visible = target.resolve(current: current)
             appDelegate.setToolbarVisible(visible)
             appDelegate.showToggleFeedback(
-                visible ? String(localized: "Toolbar On") : String(localized: "Toolbar Off"), icon: "🧰")
+                visible ? L10n.string("Toolbar On") : L10n.string("Toolbar Off"), icon: "🧰")
             return visible == current ? .noOp : .ran
         case .fade(let target):
             let current = appDelegate.fadeModeEnabled
@@ -193,10 +193,10 @@ extension AnnotateCommand {
     /// One whole phrase per board and state, so every language can order the words its own way.
     static func boardFeedback(isBlackboard: Bool, enabled: Bool) -> String {
         switch (isBlackboard, enabled) {
-        case (true, true): return String(localized: "Blackboard On")
-        case (true, false): return String(localized: "Blackboard Off")
-        case (false, true): return String(localized: "Whiteboard On")
-        case (false, false): return String(localized: "Whiteboard Off")
+        case (true, true): return L10n.string("Blackboard On")
+        case (true, false): return L10n.string("Blackboard Off")
+        case (false, true): return L10n.string("Whiteboard On")
+        case (false, false): return L10n.string("Whiteboard Off")
         }
     }
 }

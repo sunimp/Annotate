@@ -16,12 +16,12 @@ enum SettingsPane: String, CaseIterable, Identifiable {
     /// Pane name shown in the sidebar, window title, and pane header.
     var title: String {
         switch self {
-        case .general: String(localized: "General")
-        case .tools: String(localized: "Tools")
-        case .board: String(localized: "Board")
-        case .cursor: String(localized: "Cursor")
-        case .capture: String(localized: "Capture")
-        case .shortcuts: String(localized: "Shortcuts")
+        case .general: L10n.string("General")
+        case .tools: L10n.string("Tools")
+        case .board: L10n.string("Board")
+        case .cursor: L10n.string("Cursor")
+        case .capture: L10n.string("Capture")
+        case .shortcuts: L10n.string("Shortcuts")
         }
     }
 
@@ -52,12 +52,12 @@ enum SettingsPane: String, CaseIterable, Identifiable {
     /// Secondary line under the pane title in `PaneHeader`.
     var subtitle: String {
         switch self {
-        case .general: String(localized: "Activation shortcuts and application behavior")
-        case .tools: String(localized: "Default sizes for text and counter annotations")
-        case .board: String(localized: "Board background appearance and visibility")
-        case .cursor: String(localized: "Cursor style, spotlight, and click effects")
-        case .capture: String(localized: "Where screenshots go and Screen Recording access")
-        case .shortcuts: String(localized: "Keyboard shortcuts for tools and utilities")
+        case .general: L10n.string("Activation shortcuts and application behavior")
+        case .tools: L10n.string("Default sizes for text and counter annotations")
+        case .board: L10n.string("Board background appearance and visibility")
+        case .cursor: L10n.string("Cursor style, spotlight, and click effects")
+        case .capture: L10n.string("Where screenshots go and Screen Recording access")
+        case .shortcuts: L10n.string("Keyboard shortcuts for tools and utilities")
         }
     }
 }

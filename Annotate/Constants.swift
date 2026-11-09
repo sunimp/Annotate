@@ -29,15 +29,15 @@ enum PaletteColor: String, CaseIterable, Sendable {
 
     var displayName: String {
         switch self {
-        case .red: return String(localized: "Red")
-        case .orange: return String(localized: "Orange")
-        case .yellow: return String(localized: "Yellow")
-        case .green: return String(localized: "Green")
-        case .cyan: return String(localized: "Cyan")
-        case .indigo: return String(localized: "Indigo")
-        case .magenta: return String(localized: "Magenta")
-        case .white: return String(localized: "White")
-        case .black: return String(localized: "Black")
+        case .red: return L10n.string("Red")
+        case .orange: return L10n.string("Orange")
+        case .yellow: return L10n.string("Yellow")
+        case .green: return L10n.string("Green")
+        case .cyan: return L10n.string("Cyan")
+        case .indigo: return L10n.string("Indigo")
+        case .magenta: return L10n.string("Magenta")
+        case .white: return L10n.string("White")
+        case .black: return L10n.string("Black")
         }
     }
 
