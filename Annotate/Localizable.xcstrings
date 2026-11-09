@@ -21,6 +21,9 @@
     "%lld pt": {
       "shouldTranslate": false
     },
+    "%lld px": {
+      "shouldTranslate": false
+    },
     "A": {
       "shouldTranslate": false
     },
@@ -2237,6 +2240,40 @@
         }
       }
     },
+    "Color set each time the overlay is activated": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Color que se aplica cada vez que se activa la superposición"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couleur appliquée à chaque activation de la superposition"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "オーバーレイを有効にするたびに設定される色"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "每次激活覆盖层时使用的颜色"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "每次啟用覆蓋層時使用的顏色"
+          }
+        }
+      }
+    },
     "Color…": {
       "localizations": {
         "es": {
@@ -3087,6 +3124,40 @@
         }
       }
     },
+    "Default Color": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Color predeterminado"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couleur par défaut"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "デフォルトの色"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "默认颜色"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "預設顏色"
+          }
+        }
+      }
+    },
     "Default Counter Size": {
       "localizations": {
         "es": {
@@ -3117,6 +3188,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "預設編號大小"
+          }
+        }
+      }
+    },
+    "Default Line Width": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grosor de línea predeterminado"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Épaisseur de trait par défaut"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "デフォルトの線の太さ"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "默认线宽"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "預設線條寬度"
           }
         }
       }
@@ -5636,6 +5741,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "線條寬度…"
+          }
+        }
+      }
+    },
+    "Line width set each time the overlay is activated": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grosor de línea que se aplica cada vez que se activa la superposición"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Épaisseur de trait appliquée à chaque activation de la superposition"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "オーバーレイを有効にするたびに設定される線の太さ"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "每次激活覆盖层时使用的线宽"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "每次啟用覆蓋層時使用的線條寬度"
           }
         }
       }

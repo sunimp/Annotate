@@ -104,6 +104,58 @@ enum DefaultToolOption: RawRepresentable, Hashable {
     }
 }
 
+/// The line width set each time the overlay is activated. `.lastUsed` keeps the width the user
+/// last picked; a fixed width resets to it, and changes in the overlay last until it closes.
+enum DefaultLineWidthOption: RawRepresentable, Hashable {
+    case lastUsed
+    case width(CGFloat)
+
+    /// The widths the setting offers: the quick picker's ladder.
+    static var widths: [CGFloat] { QuickPickerView.widthOptions }
+
+    var rawValue: String {
+        switch self {
+        case .lastUsed: return "lastUsed"
+        case .width(let width): return String(Double(width))
+        }
+    }
+
+    /// Only widths on the ladder decode, so the picker always has a row for the stored value.
+    init?(rawValue: String) {
+        if rawValue == "lastUsed" {
+            self = .lastUsed
+        } else if let width = Double(rawValue).map({ CGFloat($0) }), Self.widths.contains(width) {
+            self = .width(width)
+        } else {
+            return nil
+        }
+    }
+}
+
+/// The annotation color set each time the overlay is activated. `.lastUsed` keeps the color the
+/// user last picked; a fixed color resets to it, and changes in the overlay last until it closes.
+enum DefaultColorOption: RawRepresentable, Hashable {
+    case lastUsed
+    case color(PaletteColor)
+
+    var rawValue: String {
+        switch self {
+        case .lastUsed: return "lastUsed"
+        case .color(let color): return color.rawValue
+        }
+    }
+
+    init?(rawValue: String) {
+        if rawValue == "lastUsed" {
+            self = .lastUsed
+        } else if let color = PaletteColor(rawValue: rawValue) {
+            self = .color(color)
+        } else {
+            return nil
+        }
+    }
+}
+
 /// Represents a selected object for movement
 enum SelectedObject: Equatable, Hashable {
     case path(index: Int)

@@ -107,7 +107,7 @@ brew install --cask annotate
 
 1. Launch Annotate.
 2. Press the global hotkey (configurable in Settings) to toggle the overlay.
-3. Start annotating with the pen tool (Annotate remembers your last-used tool, or set a fixed default in Settings).
+3. Start annotating with the pen tool. Annotate remembers your last-used tool, line width, and color, or you can set fixed defaults for each in Settings → General.
 4. Press <kbd>Esc</kbd> to exit the overlay.
 
 > [!TIP]

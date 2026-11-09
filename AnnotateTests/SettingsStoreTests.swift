@@ -412,4 +412,18 @@ final class SettingsStoreTests: XCTestCase {
         XCTAssertEqual(AppStorage(.soundTheme, store: defaults).wrappedValue, .marker)
         XCTAssertEqual(AppStorage(.fadeDelay, store: defaults).wrappedValue, 2)
     }
+
+    func testDefaultLineWidthAndColorRoundTripAndRejectUnknownValues() {
+        XCTAssertEqual(settings[.defaultLineWidth], .lastUsed)
+        XCTAssertEqual(settings[.defaultColor], .lastUsed)
+
+        settings[.defaultLineWidth] = .width(8)
+        settings[.defaultColor] = .color(.cyan)
+        XCTAssertEqual(settings[.defaultLineWidth], .width(8))
+        XCTAssertEqual(settings[.defaultColor], .color(.cyan))
+
+        XCTAssertNil(DefaultLineWidthOption(rawValue: "7"), "Only widths on the ladder decode")
+        XCTAssertNil(DefaultColorOption(rawValue: "mauve"))
+        XCTAssertEqual(DefaultLineWidthOption(rawValue: "lastUsed"), .lastUsed)
+    }
 }

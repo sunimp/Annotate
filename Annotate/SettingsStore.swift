@@ -131,6 +131,16 @@ extension SettingKey<AppLanguage> {
     static var appLanguage: Self { .rawValue("AppLanguage", default: .system) }
 }
 
+extension SettingKey<DefaultLineWidthOption> {
+    /// The line width to apply on overlay activation. `.lastUsed` keeps the persisted width.
+    static var defaultLineWidth: Self { .rawValue("DefaultLineWidth", default: .lastUsed) }
+}
+
+extension SettingKey<DefaultColorOption> {
+    /// The color to apply on overlay activation. `.lastUsed` keeps the persisted color.
+    static var defaultColor: Self { .rawValue("DefaultColor", default: .lastUsed) }
+}
+
 extension SettingKey<ToolbarLayout> {
     static var toolbarLayout: Self { .rawValue("ToolbarLayout", default: .horizontal) }
 }

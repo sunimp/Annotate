@@ -810,6 +810,54 @@ final class AppDelegateTests: XCTestCase, Sendable {
             "Applying the configured default is not an explicit selection and must not overwrite the persisted last-used tool")
     }
 
+    func testApplyConfiguredDefaultLineWidthResetsWithoutOverwritingLastUsed() {
+        testDefaults.settings[.lineWidth] = 3
+        appDelegate.overlayWindows.values.forEach { $0.overlayView.currentLineWidth = 16 }
+        testDefaults.settings[.defaultLineWidth] = .width(5)
+
+        appDelegate.applyConfiguredDefaultLineWidth()
+
+        for window in appDelegate.overlayWindows.values {
+            XCTAssertEqual(window.overlayView.currentLineWidth, 5)
+        }
+        XCTAssertEqual(testDefaults.settings[.lineWidth], 3, "A fixed default must not become the last-used width")
+    }
+
+    func testApplyConfiguredDefaultLineWidthDoesNothingForLastUsed() {
+        appDelegate.overlayWindows.values.forEach { $0.overlayView.currentLineWidth = 16 }
+        XCTAssertEqual(testDefaults.settings[.defaultLineWidth], .lastUsed)
+
+        appDelegate.applyConfiguredDefaultLineWidth()
+
+        for window in appDelegate.overlayWindows.values {
+            XCTAssertEqual(window.overlayView.currentLineWidth, 16)
+        }
+    }
+
+    func testApplyConfiguredDefaultColorResetsWithoutOverwritingLastUsed() {
+        appDelegate.setColor(.systemGreen)
+        testDefaults.settings[.defaultColor] = .color(.indigo)
+
+        appDelegate.applyConfiguredDefaultColor()
+
+        XCTAssertTrue(appDelegate.currentColor.isClose(to: PaletteColor.indigo.nsColor))
+        for window in appDelegate.overlayWindows.values {
+            XCTAssertTrue(window.currentColor.isClose(to: PaletteColor.indigo.nsColor))
+        }
+        XCTAssertTrue(
+            testDefaults.settings[.selectedColor].isClose(to: .systemGreen),
+            "A fixed default must not become the last-used color")
+    }
+
+    func testApplyConfiguredDefaultColorDoesNothingForLastUsed() {
+        appDelegate.setColor(.systemGreen)
+        XCTAssertEqual(testDefaults.settings[.defaultColor], .lastUsed)
+
+        appDelegate.applyConfiguredDefaultColor()
+
+        XCTAssertTrue(appDelegate.currentColor.isClose(to: .systemGreen))
+    }
+
     func testApplyConfiguredDefaultToolDoesNothingForLastUsed() {
         guard let overlayWindow = appDelegate.overlayWindows.values.first else {
             XCTFail("No overlay window available")

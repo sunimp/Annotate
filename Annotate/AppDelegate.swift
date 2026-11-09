@@ -688,6 +688,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
         CursorHighlightManager.shared.annotationColor = currentColor
         CursorHighlightManager.shared.overlayVisibilityChanged()
         applyConfiguredDefaultTool()
+        applyConfiguredDefaultLineWidth()
+        applyConfiguredDefaultColor()
     }
 
     private func hideOverlays(_ windows: [OverlayWindow]) {
@@ -791,8 +793,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
 
     /// Makes `color` the annotation color: stored, on every overlay, and on the cursor highlight.
     /// The status item only takes it while an overlay is up; gray means the overlay is hidden.
-    func setColor(_ color: NSColor) {
-        settings[.selectedColor] = color
+    /// `persist: false` leaves the stored last-used color alone, for applying a fixed default.
+    func setColor(_ color: NSColor, persist: Bool = true) {
+        if persist {
+            settings[.selectedColor] = color
+        }
         currentColor = color
         overlayWindows.values.forEach { $0.currentColor = color }
         if alwaysOnMode {
@@ -812,6 +817,19 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
         guard case .tool(let tool) = settings[.defaultTool] else { return }
         guard overlayWindows.values.contains(where: { $0.overlayView.currentTool != tool }) else { return }
         switchTool(to: tool, persist: false)
+    }
+
+    /// Applies a fixed default line width when the overlay activates. Like the default tool, it
+    /// is not a choice the user made, so the persisted last-used width stays as it was.
+    func applyConfiguredDefaultLineWidth() {
+        guard case .width(let width) = settings[.defaultLineWidth] else { return }
+        overlayWindows.values.forEach { $0.overlayView.currentLineWidth = width }
+    }
+
+    /// Applies a fixed default color when the overlay activates, leaving the persisted color.
+    func applyConfiguredDefaultColor() {
+        guard case .color(let color) = settings[.defaultColor] else { return }
+        setColor(color.nsColor, persist: false)
     }
 
     @objc func enableArrowMode(_ sender: NSMenuItem) {
