@@ -18,6 +18,13 @@ targets:
     dependencies:
       - package: KeyboardShortcuts
       - package: Sparkle
+    scheme:
+      testTargets:
+        - AnnotateTests
+      # Tests assert English text. Xcode runs them inside Annotate.app, whose bundle carries
+      # every .lproj, so on a Mac set to another language they would read translated strings.
+      language: en
+      region: US
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.epilande.Annotate
