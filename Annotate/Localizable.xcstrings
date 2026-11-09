@@ -21,9 +21,6 @@
     "%lld pt": {
       "shouldTranslate": false
     },
-    "%lld px": {
-      "shouldTranslate": false
-    },
     "A": {
       "shouldTranslate": false
     },
@@ -2240,40 +2237,6 @@
         }
       }
     },
-    "Color set each time the overlay is activated": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Color que se aplica cada vez que se activa la superposición"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Couleur appliquée à chaque activation de la superposition"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "オーバーレイを有効にするたびに設定される色"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "每次激活覆盖层时使用的颜色"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "每次啟用覆蓋層時使用的顏色"
-          }
-        }
-      }
-    },
     "Color…": {
       "localizations": {
         "es": {
@@ -3124,40 +3087,6 @@
         }
       }
     },
-    "Default Color": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Color predeterminado"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Couleur par défaut"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "デフォルトの色"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "默认颜色"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "預設顏色"
-          }
-        }
-      }
-    },
     "Default Counter Size": {
       "localizations": {
         "es": {
@@ -3188,40 +3117,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "預設編號大小"
-          }
-        }
-      }
-    },
-    "Default Line Width": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Grosor de línea predeterminado"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Épaisseur de trait par défaut"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "デフォルトの線の太さ"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "默认线宽"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "預設線條寬度"
           }
         }
       }
@@ -4552,6 +4447,74 @@
         }
       }
     },
+    "Fixed Color": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Color fijo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couleur fixe"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "色を固定"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "固定颜色"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "固定顏色"
+          }
+        }
+      }
+    },
+    "Fixed Line Width": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grosor de línea fijo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Épaisseur de trait fixe"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "線の太さを固定"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "固定线宽"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "固定線條寬度"
+          }
+        }
+      }
+    },
     "Fixed editing and dismissal keys": {
       "localizations": {
         "es": {
@@ -5741,40 +5704,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "線條寬度…"
-          }
-        }
-      }
-    },
-    "Line width set each time the overlay is activated": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Grosor de línea que se aplica cada vez que se activa la superposición"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Épaisseur de trait appliquée à chaque activation de la superposition"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "オーバーレイを有効にするたびに設定される線の太さ"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "每次激活覆盖层时使用的线宽"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "每次啟用覆蓋層時使用的線條寬度"
           }
         }
       }
@@ -7373,6 +7302,74 @@
           "stringUnit": {
             "state": "translated",
             "value": "全部重置為預設值"
+          }
+        }
+      }
+    },
+    "Reset to this color each time the overlay is activated, instead of the last one used": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restablece este color cada vez que se activa la superposición, en lugar del último usado"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rétablit cette couleur à chaque activation de la superposition, au lieu de la dernière utilisée"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "オーバーレイを有効にするたびに、前回の色ではなくこの色に戻します"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "每次激活覆盖层时恢复为此颜色，而非上次使用的颜色"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "每次啟用覆蓋層時恢復為此顏色，而非上次使用的顏色"
+          }
+        }
+      }
+    },
+    "Reset to this width each time the overlay is activated, instead of the last one used": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restablece este grosor cada vez que se activa la superposición, en lugar del último usado"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rétablit cette épaisseur à chaque activation de la superposition, au lieu de la dernière utilisée"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "オーバーレイを有効にするたびに、前回の太さではなくこの太さに戻します"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "每次激活覆盖层时恢复为此线宽，而非上次使用的线宽"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "每次啟用覆蓋層時恢復為此線條寬度，而非上次使用的寬度"
           }
         }
       }

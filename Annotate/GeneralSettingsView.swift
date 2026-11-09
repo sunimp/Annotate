@@ -28,21 +28,13 @@ struct GeneralSettingsView: View {
     private var urlCommandsEnabled: Bool
     @AppStorage(.appLanguage)
     private var appLanguage: AppLanguage
-    @AppStorage(.defaultLineWidth)
-    private var defaultLineWidth: DefaultLineWidthOption
-    @AppStorage(.defaultColor)
-    private var defaultColor: DefaultColorOption
-
-    /// A filled circle for the Default Color menu. Menus drop SwiftUI shapes, so it is an image.
-    static func swatch(_ color: NSColor) -> NSImage {
-        NSImage(size: NSSize(width: 12, height: 12), flipped: false) { rect in
-            color.setFill()
-            NSBezierPath(ovalIn: rect.insetBy(dx: 0.5, dy: 0.5)).fill()
-            NSColor.separatorColor.setStroke()
-            NSBezierPath(ovalIn: rect.insetBy(dx: 0.5, dy: 0.5)).stroke()
-            return true
-        }
-    }
+    @AppStorage(.usesFixedLineWidth)
+    private var usesFixedLineWidth: Bool
+    @AppStorage(.fixedLineWidth)
+    private var fixedLineWidth: Double
+    @AppStorage(.usesFixedColor)
+    private var usesFixedColor: Bool
+    @State private var fixedColor = Color(SettingsStore.standard[.fixedColor])
 
     /// Tools offered in the Default Tool picker, excluding Select and Eraser since neither
     /// is a sensible tool to land on when the overlay opens.
@@ -180,29 +172,34 @@ struct GeneralSettingsView: View {
                     Text("Tool selected each time the overlay is activated")
                 }
 
-                Picker(selection: $defaultLineWidth) {
-                    Text("Last Used").tag(DefaultLineWidthOption.lastUsed)
-                    ForEach(DefaultLineWidthOption.widths, id: \.self) { width in
-                        Text("\(Int(width)) px").tag(DefaultLineWidthOption.width(width))
-                    }
-                } label: {
-                    Text("Default Line Width")
-                    Text("Line width set each time the overlay is activated")
+                Toggle(isOn: $usesFixedLineWidth) {
+                    Text("Fixed Line Width")
+                    Text("Reset to this width each time the overlay is activated, instead of the last one used")
                 }
 
-                Picker(selection: $defaultColor) {
-                    Text("Last Used").tag(DefaultColorOption.lastUsed)
-                    ForEach(PaletteColor.allCases, id: \.self) { color in
-                        Label {
-                            Text(verbatim: color.displayName)
-                        } icon: {
-                            Image(nsImage: Self.swatch(color.nsColor))
-                        }
-                        .tag(DefaultColorOption.color(color))
+                if usesFixedLineWidth {
+                    SettingsSliderRow(
+                        title: L10n.string("Line Width"),
+                        value: $fixedLineWidth,
+                        range: Double(lineWidthRange.lowerBound)...Double(lineWidthRange.upperBound),
+                        step: 0.5,
+                        valueText: { L10n.string("\($0, format: .number.precision(.fractionLength(1))) px") },
+                        boundsText: { L10n.string("\($0, format: .number.precision(.fractionLength(0...1))) px") }
+                    )
+                }
+
+                Toggle(isOn: $usesFixedColor) {
+                    Text("Fixed Color")
+                    Text("Reset to this color each time the overlay is activated, instead of the last one used")
+                }
+
+                if usesFixedColor {
+                    ColorPicker(selection: $fixedColor, supportsOpacity: false) {
+                        Text("Color")
                     }
-                } label: {
-                    Text("Default Color")
-                    Text("Color set each time the overlay is activated")
+                    .onChange(of: fixedColor) { _, color in
+                        SettingsStore.standard[.fixedColor] = NSColor(color)
+                    }
                 }
 
                 Toggle(isOn: $urlCommandsEnabled) {

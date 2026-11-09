@@ -73,9 +73,23 @@ extension SettingKey<Bool> {
     static var spotlightRequiresOverlay: Self { .bool("SpotlightRequiresOverlay") }
     static var spotlightDimmingEnabled: Self { .bool("SpotlightDimmingEnabled") }
     static var spotlightAutoDim: Self { .bool("SpotlightAutoDim") }
+
+    /// Whether activating the overlay resets the line width to `fixedLineWidth`. Off keeps the
+    /// last-used width.
+    static var usesFixedLineWidth: Self { .bool("UsesFixedLineWidth") }
+    /// Whether activating the overlay resets the color to `fixedColor`. Off keeps the last-used
+    /// color.
+    static var usesFixedColor: Self { .bool("UsesFixedColor") }
 }
 
 extension SettingKey<Double> {
+    /// The width `usesFixedLineWidth` resets to, clamped to the overlay's range.
+    static var fixedLineWidth: Self {
+        .double("FixedLineWidth", default: 3.0) {
+            $0.clamped(to: Double(lineWidthRange.lowerBound)...Double(lineWidthRange.upperBound))
+        }
+    }
+
     /// A stored 0 reads as unset, and anything else is clamped to the slider's range.
     static var boardOpacity: Self {
         .double("BoardOpacity", default: 0.9) { $0 == 0 ? nil : $0.clamped(to: 0.1...1.0) }
@@ -131,16 +145,6 @@ extension SettingKey<AppLanguage> {
     static var appLanguage: Self { .rawValue("AppLanguage", default: .system) }
 }
 
-extension SettingKey<DefaultLineWidthOption> {
-    /// The line width to apply on overlay activation. `.lastUsed` keeps the persisted width.
-    static var defaultLineWidth: Self { .rawValue("DefaultLineWidth", default: .lastUsed) }
-}
-
-extension SettingKey<DefaultColorOption> {
-    /// The color to apply on overlay activation. `.lastUsed` keeps the persisted color.
-    static var defaultColor: Self { .rawValue("DefaultColor", default: .lastUsed) }
-}
-
 extension SettingKey<ToolbarLayout> {
     static var toolbarLayout: Self { .rawValue("ToolbarLayout", default: .horizontal) }
 }
@@ -163,6 +167,8 @@ extension SettingKey<ActiveCursorStyle> {
 
 extension SettingKey<NSColor> {
     static var selectedColor: Self { .archivedColor("SelectedColor", default: .systemRed) }
+    /// The color `usesFixedColor` resets to.
+    static var fixedColor: Self { .archivedColor("FixedColor", default: .systemRed) }
     static var clickRippleColor: Self { .archivedColor("ClickRippleColor", default: .systemYellow) }
 }
 

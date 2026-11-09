@@ -819,17 +819,18 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
         switchTool(to: tool, persist: false)
     }
 
-    /// Applies a fixed default line width when the overlay activates. Like the default tool, it
-    /// is not a choice the user made, so the persisted last-used width stays as it was.
+    /// Applies the fixed default line width when the overlay activates. Like the default tool,
+    /// it is not a choice the user made, so the persisted last-used width stays as it was.
     func applyConfiguredDefaultLineWidth() {
-        guard case .width(let width) = settings[.defaultLineWidth] else { return }
+        guard settings[.usesFixedLineWidth] else { return }
+        let width = CGFloat(settings[.fixedLineWidth])
         overlayWindows.values.forEach { $0.overlayView.currentLineWidth = width }
     }
 
-    /// Applies a fixed default color when the overlay activates, leaving the persisted color.
+    /// Applies the fixed default color when the overlay activates, leaving the persisted color.
     func applyConfiguredDefaultColor() {
-        guard case .color(let color) = settings[.defaultColor] else { return }
-        setColor(color.nsColor, persist: false)
+        guard settings[.usesFixedColor] else { return }
+        setColor(settings[.fixedColor], persist: false)
     }
 
     @objc func enableArrowMode(_ sender: NSMenuItem) {

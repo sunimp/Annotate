@@ -813,19 +813,21 @@ final class AppDelegateTests: XCTestCase, Sendable {
     func testApplyConfiguredDefaultLineWidthResetsWithoutOverwritingLastUsed() {
         testDefaults.settings[.lineWidth] = 3
         appDelegate.overlayWindows.values.forEach { $0.overlayView.currentLineWidth = 16 }
-        testDefaults.settings[.defaultLineWidth] = .width(5)
+        testDefaults.settings[.usesFixedLineWidth] = true
+        testDefaults.settings[.fixedLineWidth] = 4.5
 
         appDelegate.applyConfiguredDefaultLineWidth()
 
         for window in appDelegate.overlayWindows.values {
-            XCTAssertEqual(window.overlayView.currentLineWidth, 5)
+            XCTAssertEqual(window.overlayView.currentLineWidth, 4.5, "Any width in range applies, not only ladder steps")
         }
         XCTAssertEqual(testDefaults.settings[.lineWidth], 3, "A fixed default must not become the last-used width")
     }
 
     func testApplyConfiguredDefaultLineWidthDoesNothingForLastUsed() {
         appDelegate.overlayWindows.values.forEach { $0.overlayView.currentLineWidth = 16 }
-        XCTAssertEqual(testDefaults.settings[.defaultLineWidth], .lastUsed)
+        testDefaults.settings[.fixedLineWidth] = 4.5
+        XCTAssertFalse(testDefaults.settings[.usesFixedLineWidth])
 
         appDelegate.applyConfiguredDefaultLineWidth()
 
@@ -836,13 +838,15 @@ final class AppDelegateTests: XCTestCase, Sendable {
 
     func testApplyConfiguredDefaultColorResetsWithoutOverwritingLastUsed() {
         appDelegate.setColor(.systemGreen)
-        testDefaults.settings[.defaultColor] = .color(.indigo)
+        let custom = NSColor(srgbRed: 0.2, green: 0.4, blue: 0.6, alpha: 1)
+        testDefaults.settings[.usesFixedColor] = true
+        testDefaults.settings[.fixedColor] = custom
 
         appDelegate.applyConfiguredDefaultColor()
 
-        XCTAssertTrue(appDelegate.currentColor.isClose(to: PaletteColor.indigo.nsColor))
+        XCTAssertTrue(appDelegate.currentColor.isClose(to: custom), "Any color applies, not only palette entries")
         for window in appDelegate.overlayWindows.values {
-            XCTAssertTrue(window.currentColor.isClose(to: PaletteColor.indigo.nsColor))
+            XCTAssertTrue(window.currentColor.isClose(to: custom))
         }
         XCTAssertTrue(
             testDefaults.settings[.selectedColor].isClose(to: .systemGreen),
@@ -851,7 +855,8 @@ final class AppDelegateTests: XCTestCase, Sendable {
 
     func testApplyConfiguredDefaultColorDoesNothingForLastUsed() {
         appDelegate.setColor(.systemGreen)
-        XCTAssertEqual(testDefaults.settings[.defaultColor], .lastUsed)
+        testDefaults.settings[.fixedColor] = .systemBlue
+        XCTAssertFalse(testDefaults.settings[.usesFixedColor])
 
         appDelegate.applyConfiguredDefaultColor()
 
