@@ -42,7 +42,7 @@ Baseline entries match on file path plus line text, so editing or moving a basel
 
 The app ships in English, Simplified Chinese, Traditional Chinese, Japanese, Spanish, and French. UI text lives in `Annotate/Localizable.xcstrings`; the Screen Recording prompt lives in `Annotate/InfoPlist.xcstrings`.
 
-- SwiftUI `Text("…")`, `Button("…")`, `Toggle("…")` and other `LocalizedStringKey` initializers are localized already. Pass a `String` to them only after `String(localized:)`, since a plain `String` is shown verbatim.
+- SwiftUI `Text("…")`, `Button("…")`, `Toggle("…")` and other `LocalizedStringKey` initializers are localized already. Pass a `String` to them only after `L10n.string`, since a plain `String` is shown verbatim.
 - Users pick the language in General settings (`AppLanguage`, default System Default) and it switches without a relaunch. AppKit titles, HUD text, and `displayName` properties read through `L10n.string("…")`, never `String(localized:)`, which ignores that choice. Read text when it is shown, not into a `static let`. Wrap every new hosting view's root in `.localizedEnvironment()`, and relabel new AppKit text in `AppDelegate.languageDidChange()`.
 - Interpolate whole phrases (`L10n.string("Current Tool: \(name)")`) instead of concatenating localized pieces, and give each state its own phrase (`Hide Blackboard`, `Show Whiteboard`) so languages can order words their own way.
 - Never localize raw values, command paths, URL schemes, setting keys, accessibility identifiers, or menu item identifiers. Find status menu items by `identifier`, never by title.
