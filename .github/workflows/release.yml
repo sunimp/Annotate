@@ -6,11 +6,11 @@ name: Release (macOS)
 on:
   push:
     tags:
-      - "v*"
+      - "[0-9]+.[0-9]+.[0-9]+*"
   workflow_dispatch:
     inputs:
       version:
-        description: "Release version without the v prefix, for example 1.9.0"
+        description: "Release version, for example 1.9.0 (no v prefix)"
         required: true
         type: string
 
@@ -48,14 +48,15 @@ jobs:
           VERSION_INPUT: ${{ inputs.version }}
         run: |
           set -euo pipefail
+          # Tags are the bare version (1.9.0), without a v prefix.
           if [ "$GITHUB_REF_TYPE" = "tag" ]; then
             tag="$GITHUB_REF_NAME"
           else
-            tag="v${VERSION_INPUT#v}"
+            tag="$VERSION_INPUT"
           fi
-          semver="${tag#v}"
+          semver="$tag"
           if ! [[ "$semver" =~ ^[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]]; then
-            echo "::error::Invalid version: $semver"
+            echo "::error::Invalid version '$semver'; use X.Y.Z without a v prefix"
             exit 1
           fi
           # Commit count + offset keeps build numbers monotonic (v1.0.12 was build 1012).
@@ -148,7 +149,7 @@ jobs:
           tag="${{ steps.version.outputs.tag }}"
           release_dir="${{ steps.package.outputs.release_dir }}"
 
-          prev_tag=$(git tag --list 'v*' --sort=-v:refname | grep -vxF "$tag" | head -n 1 || true)
+          prev_tag=$(git tag --list '[0-9]*.[0-9]*.[0-9]*' --sort=-v:refname | grep -vxF "$tag" | head -n 1 || true)
           if [ -n "$prev_tag" ]; then
             bullets=$(git log --no-merges --pretty=format:'- %s' "$prev_tag..HEAD" || true)
           else
