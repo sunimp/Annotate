@@ -1,26 +1,35 @@
 name: Release (macOS)
 
+# Builds an ad-hoc signed, non-notarized app, publishes ZIP + DMG + SHA256SUMS to a GitHub Release,
+# and (when SPARKLE_PRIVATE_KEY is set) signs the ZIP for Sparkle and updates appcast.xml on main.
+
 on:
   push:
     tags:
       - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version without the v prefix, for example 1.9.0"
+        required: true
+        type: string
 
 permissions:
   contents: write
 
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
-  build-sign-notarize-release:
-    name: Build → Sign → Notarize → Release
+  release:
+    name: Build and publish release
     runs-on: macos-26
-    timeout-minutes: 15
-    environment: release
+    timeout-minutes: 30
     env:
       APP_NAME: Annotate
       SCHEME: Annotate
-      CONFIG: Release
-      ARCHIVE_PATH: build/Annotate.xcarchive
-      EXPORT_DIR: build/export
-      EXPORT_PLIST: scripts/packaging/ExportOptions.plist
+      DERIVED_DATA: build/dd
 
     steps:
       - name: Checkout
@@ -33,203 +42,241 @@ jobs:
         with:
           xcode-version: "26.2"
 
-      - name: Verify Xcode version
-        run: xcodebuild -version
-
-      - name: Resolve tag version
+      - name: Resolve version
         id: version
+        env:
+          VERSION_INPUT: ${{ inputs.version }}
         run: |
-          TAG="${GITHUB_REF#refs/tags/}"
-          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
-          echo "semver=${TAG#v}" >> "$GITHUB_OUTPUT"
-          # Use git commit count + offset for guaranteed monotonic build numbers
-          # Offset ensures compatibility with existing releases (v1.0.12 = build 1012)
-          BUILD_NUMBER=$(($(git rev-list --count HEAD) + 1000))
-          echo "build_number=$BUILD_NUMBER" >> "$GITHUB_OUTPUT"
+          set -euo pipefail
+          if [ "$GITHUB_REF_TYPE" = "tag" ]; then
+            tag="$GITHUB_REF_NAME"
+          else
+            tag="v${VERSION_INPUT#v}"
+          fi
+          semver="${tag#v}"
+          if ! [[ "$semver" =~ ^[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]]; then
+            echo "::error::Invalid version: $semver"
+            exit 1
+          fi
+          # Commit count + offset keeps build numbers monotonic (v1.0.12 was build 1012).
+          build_number=$(($(git rev-list --count HEAD) + 1000))
+          prerelease=false
+          [[ "$semver" == *-test* || "$semver" == *-alpha* || "$semver" == *-beta* ]] && prerelease=true
+          {
+            echo "tag=$tag"
+            echo "semver=$semver"
+            echo "build_number=$build_number"
+            echo "prerelease=$prerelease"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Install dependencies
-        run: |
-          # Install XcodeGen and pandoc for project generation and markdown processing
-          brew install xcodegen pandoc
+        run: brew install xcodegen pandoc xcbeautify
 
       - name: Generate Xcode project
         run: xcodegen generate
 
-      - name: Inject TEAM_ID into ExportOptions
+      - name: Build ad-hoc signed release app
+        id: build
         run: |
-          sed "s/__TEAM_ID__/${{ secrets.TEAM_ID }}/" "$EXPORT_PLIST" > "$EXPORT_PLIST.out"
-          mv "$EXPORT_PLIST.out" "$EXPORT_PLIST"
-
-      - name: Import Developer ID certificate
-        uses: apple-actions/import-codesign-certs@v5
-        with:
-          p12-file-base64: ${{ secrets.MACOS_CERT_BASE64 }}
-          p12-password: ${{ secrets.MACOS_CERT_PASSWORD }}
-
-      - name: Install xcpretty
-        run: gem install xcpretty --no-document
-
-      - name: Xcode archive (arm64, verbose, unsigned)
-        timeout-minutes: 3
-        run: |
-          set -euxo pipefail
-          mkdir -p build
-          ENTRY="-project Annotate.xcodeproj"
-          xcodebuild \
-            $ENTRY \
+          set -euo pipefail
+          # No Developer ID certificate in CI, so sign ad-hoc ("-").
+          # Hardened runtime stays off: library validation rejects Sparkle.framework when the app
+          # has no Team ID, and it adds nothing to a non-notarized build. Turn it back on together
+          # with Developer ID signing and notarization.
+          xcodebuild clean build \
+            -project Annotate.xcodeproj \
             -scheme "$SCHEME" \
-            -configuration "$CONFIG" \
-            -archivePath "$ARCHIVE_PATH" \
+            -configuration Release \
             -destination "generic/platform=macOS" \
+            -derivedDataPath "$DERIVED_DATA" \
             ARCHS="arm64 x86_64" \
-            CODE_SIGNING_ALLOWED=NO \
-            MARKETING_VERSION=${{ steps.version.outputs.semver }} \
-            CURRENT_PROJECT_VERSION=${{ steps.version.outputs.build_number }} \
-            clean archive | xcpretty && exit ${PIPESTATUS[0]}
+            ONLY_ACTIVE_ARCH=NO \
+            CODE_SIGN_STYLE=Manual \
+            CODE_SIGN_IDENTITY="-" \
+            DEVELOPMENT_TEAM="" \
+            PROVISIONING_PROFILE_SPECIFIER="" \
+            ENABLE_HARDENED_RUNTIME=NO \
+            MARKETING_VERSION="${{ steps.version.outputs.semver }}" \
+            CURRENT_PROJECT_VERSION="${{ steps.version.outputs.build_number }}" \
+            2>&1 | xcbeautify
 
-      - name: Export signed app (Developer ID)
-        timeout-minutes: 2
+          app_path="$DERIVED_DATA/Build/Products/Release/$APP_NAME.app"
+          [ -d "$app_path" ] || { echo "::error::Cannot find $app_path"; exit 1; }
+          codesign --verify --deep --verbose=2 "$app_path"
+          echo "app_path=$app_path" >> "$GITHUB_OUTPUT"
+
+      - name: Package ZIP, DMG and checksums
+        id: package
         run: |
-          mkdir -p "$EXPORT_DIR"
-          xcodebuild -exportArchive \
-            -archivePath "$ARCHIVE_PATH" \
-            -exportPath "$EXPORT_DIR" \
-            -exportOptionsPlist "$EXPORT_PLIST" | xcpretty && exit ${PIPESTATUS[0]}
+          set -euo pipefail
+          semver="${{ steps.version.outputs.semver }}"
+          release_dir="build/release"
+          rm -rf "$release_dir" build/export
+          mkdir -p "$release_dir" build/export
 
-      - name: Re-sign with hardened runtime
-        run: |
-          codesign --force --sign "Developer ID Application" \
-            -o runtime --timestamp \
-            --entitlements "$APP_NAME/$APP_NAME.entitlements" \
-            "$EXPORT_DIR/$APP_NAME.app"
+          # ditto keeps the code signature and extended attributes.
+          zip_name="$APP_NAME-$semver.zip"
+          ditto -c -k --sequesterRsrc --keepParent "${{ steps.build.outputs.app_path }}" "$release_dir/$zip_name"
+          # Fixed name for install.sh, which downloads releases/latest/download/Annotate.zip.
+          cp "$release_dir/$zip_name" "$release_dir/$APP_NAME.zip"
 
-          codesign --verify --deep --strict --verbose=2 "$EXPORT_DIR/$APP_NAME.app"
+          cp -R "${{ steps.build.outputs.app_path }}" build/export/
+          dmg_path=$(MARKETING_VERSION="$semver" ./scripts/packaging/make_dmg.sh)
+          mv "$dmg_path" "$release_dir/"
+          dmg_name=$(basename "$dmg_path")
 
-      - name: Create ZIP for notarization
-        run: |
-          ZIP_NAME="$APP_NAME-${{ steps.version.outputs.semver }}.zip"
-          ZIP_PATH="build/$ZIP_NAME"
-          echo "ZIP_PATH=$ZIP_PATH" >> $GITHUB_ENV
-          echo "ZIP_NAME=$ZIP_NAME" >> $GITHUB_ENV
+          (cd "$release_dir" && shasum -a 256 "$zip_name" "$APP_NAME.zip" "$dmg_name" > SHA256SUMS.txt)
+          cat "$release_dir/SHA256SUMS.txt"
 
-          echo "📦 Creating ZIP archive: $ZIP_NAME"
-          rm -f "$ZIP_PATH"
-          # Use ditto to preserve extended attributes (code signatures)
-          ditto -c -k --keepParent "$EXPORT_DIR/$APP_NAME.app" "$ZIP_PATH"
-          echo "✅ ZIP created: $ZIP_PATH ($(stat -f%z "$ZIP_PATH") bytes)"
+          {
+            echo "release_dir=$release_dir"
+            echo "zip_name=$zip_name"
+            echo "zip_path=$release_dir/$zip_name"
+            echo "dmg_name=$dmg_name"
+          } >> "$GITHUB_OUTPUT"
 
-      - name: Notarize app bundle
-        timeout-minutes: 5
-        run: |
-          echo "📝 Submitting ZIP archive for notarization..."
-          xcrun notarytool submit "$ZIP_PATH" \
-            --apple-id "${{ secrets.NOTARIZE_APPLE_ID }}" \
-            --password "${{ secrets.NOTARIZE_PASSWORD }}" \
-            --team-id "${{ secrets.TEAM_ID }}" \
-            --wait
-
-      - name: Staple notarization to app bundle
-        run: |
-          echo "📎 Stapling notarization to .app bundle..."
-          xcrun stapler staple "$EXPORT_DIR/$APP_NAME.app"
-          xcrun stapler validate "$EXPORT_DIR/$APP_NAME.app"
-
-          echo "Verifying app signature and entitlements..."
-          codesign --verify --deep --strict --verbose=2 "$EXPORT_DIR/$APP_NAME.app"
-          spctl -a -vvv --type exec "$EXPORT_DIR/$APP_NAME.app"
-
-      - name: Update ZIP with stapled app
-        run: |
-          # Update ZIP with stapled notarization
-          echo "📦 Updating ZIP with stapled notarization..."
-          rm -f "$ZIP_PATH"
-          # Use ditto to preserve extended attributes (including stapled notarization ticket)
-          ditto -c -k --keepParent "$EXPORT_DIR/$APP_NAME.app" "$ZIP_PATH"
-          echo "✅ ZIP updated: $ZIP_PATH ($(stat -f%z "$ZIP_PATH") bytes)"
-
-      - name: Package DMG from notarized app
-        run: |
-          chmod +x scripts/packaging/make_dmg.sh
-          export MARKETING_VERSION="${{ steps.version.outputs.semver }}"
-          DMG_PATH=$(./scripts/packaging/make_dmg.sh)
-          echo "DMG_PATH=$DMG_PATH" >> $GITHUB_ENV
-
-      - name: Sign Sparkle update
-        run: |
-          chmod +x scripts/ci/sign_sparkle_update.sh
-          SPARKLE_SIGNATURE=$(./scripts/ci/sign_sparkle_update.sh "$ZIP_PATH" "${{ secrets.SPARKLE_PRIVATE_KEY }}")
-          echo "SPARKLE_SIGNATURE=$SPARKLE_SIGNATURE" >> $GITHUB_ENV
-
-      - name: Calculate ZIP file size
-        run: |
-          FILE_SIZE=$(stat -f%z "$ZIP_PATH")
-          echo "ZIP_SIZE=$FILE_SIZE" >> $GITHUB_ENV
-          echo "ZIP file size: $FILE_SIZE bytes"
-
-      - name: Create GitHub Release & upload assets
-        uses: softprops/action-gh-release@v2
+      - name: Upload workflow artifacts
+        uses: actions/upload-artifact@v4
         with:
-          tag_name: ${{ github.ref_name }}
-          name: "Annotate ${{ github.ref_name }}"
-          draft: false
-          prerelease: ${{ contains(github.ref_name, '-test') || contains(github.ref_name, '-alpha') || contains(github.ref_name, '-beta') }}
-          files: |
-            ${{ env.DMG_PATH }}
-            ${{ env.ZIP_PATH }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          name: ${{ env.APP_NAME }}-${{ steps.version.outputs.semver }}
+          path: ${{ steps.package.outputs.release_dir }}
 
-      - name: Generate and update appcast entry
-        if: ${{ !contains(github.ref_name, '-test') && !contains(github.ref_name, '-alpha') && !contains(github.ref_name, '-beta') }}
+      - name: Create release notes
+        id: notes
+        run: |
+          set -euo pipefail
+          tag="${{ steps.version.outputs.tag }}"
+          release_dir="${{ steps.package.outputs.release_dir }}"
+
+          prev_tag=$(git tag --list 'v*' --sort=-v:refname | grep -vxF "$tag" | head -n 1 || true)
+          if [ -n "$prev_tag" ]; then
+            bullets=$(git log --no-merges --pretty=format:'- %s' "$prev_tag..HEAD" || true)
+          else
+            bullets=$(git log --no-merges --pretty=format:'- %s' -n 30 || true)
+          fi
+          [ -n "$bullets" ] || bullets="- 常规维护与稳定性优化"
+
+          notes_path="$release_dir/RELEASE_NOTES.md"
+          # generate_appcast_entry.sh drops everything from "### 安装提示" on, so keep it after
+          # 更新内容 and keep the heading text in sync with that script.
+          {
+            echo "## Annotate $tag"
+            echo
+            echo "此 Release 由 GitHub Actions 自动构建。"
+            echo
+            echo "### 更新内容"
+            echo
+            echo "$bullets"
+            echo
+            echo "### 安装提示"
+            echo
+            echo "**一键安装或更新（推荐）**：在终端执行以下命令，脚本会把 \`$APP_NAME.app\` 安装到 \`/Applications\`（非管理员账户为 \`~/Applications\`）并打开。"
+            echo
+            echo '```bash'
+            echo "curl -fsSL https://raw.githubusercontent.com/$GITHUB_REPOSITORY/main/install.sh | sh"
+            echo '```'
+            echo
+            echo "**手动安装**：下载下方的 \`${{ steps.package.outputs.dmg_name }}\`，打开后将 \`$APP_NAME.app\` 拖入 \`/Applications\`；或下载 \`${{ steps.package.outputs.zip_name }}\` 解压后拖入。"
+            echo
+            echo "当前自动构建产物未进行 Developer ID 签名和公证。手动下载后首次打开时，如 macOS 提示“无法验证开发者”或阻止启动，请在确认来源可信后执行以下命令移除隔离属性："
+            echo
+            echo '```bash'
+            echo "xattr -dr com.apple.quarantine /Applications/$APP_NAME.app"
+            echo "open /Applications/$APP_NAME.app"
+            echo '```'
+            echo
+            echo "若 App 放在其他目录，请把上面命令中的路径替换为实际位置。"
+            echo
+            echo "### SHA-256"
+            echo
+            echo '```text'
+            cat "$release_dir/SHA256SUMS.txt"
+            echo '```'
+          } > "$notes_path"
+          echo "notes_path=$notes_path" >> "$GITHUB_OUTPUT"
+
+      - name: Publish GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          # Use the same build number for Sparkle version consistency
-          VERSION_NUMBER="${{ steps.version.outputs.semver }}"
-          SPARKLE_VERSION="${{ steps.version.outputs.build_number }}"
-          DOWNLOAD_URL="https://github.com/${{ github.repository }}/releases/download/${{ steps.version.outputs.tag }}/$ZIP_NAME"
+          set -euo pipefail
+          tag="${{ steps.version.outputs.tag }}"
+          dir="${{ steps.package.outputs.release_dir }}"
+          files=(
+            "$dir/${{ steps.package.outputs.dmg_name }}"
+            "$dir/${{ steps.package.outputs.zip_name }}"
+            "$dir/$APP_NAME.zip"
+            "$dir/SHA256SUMS.txt"
+          )
+          flags=(--title "Annotate $tag" --notes-file "${{ steps.notes.outputs.notes_path }}")
+          [ "${{ steps.version.outputs.prerelease }}" = true ] && flags+=(--prerelease)
 
-          # Use the isolated script to generate and insert the appcast entry
-          chmod +x scripts/ci/generate_appcast_entry.sh
-          ./scripts/ci/generate_appcast_entry.sh \
-            "${{ steps.version.outputs.tag }}" \
-            "$VERSION_NUMBER" \
-            "$SPARKLE_VERSION" \
-            "$SPARKLE_SIGNATURE" \
-            "$ZIP_SIZE" \
-            "$DOWNLOAD_URL"
-
-      - name: Sync MARKETING_VERSION in source
-        if: ${{ !contains(github.ref_name, '-test') && !contains(github.ref_name, '-alpha') && !contains(github.ref_name, '-beta') }}
-        run: |
-          # Annotate.xcodeproj/project.pbxproj is gitignored and regenerated by
-          # `xcodegen generate` above, so only project.yml needs syncing here.
-          SEMVER="${{ steps.version.outputs.semver }}"
-
-          if [[ ! "$SEMVER" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "::warning::Skipping MARKETING_VERSION sync for non-release version '$SEMVER'"
-            exit 0
+          if gh release view "$tag" >/dev/null 2>&1; then
+            gh release upload "$tag" "${files[@]}" --clobber
+            gh release edit "$tag" "${flags[@]}"
+          elif [ "$GITHUB_REF_TYPE" = "tag" ]; then
+            gh release create "$tag" "${files[@]}" "${flags[@]}" --verify-tag
+          else
+            gh release create "$tag" "${files[@]}" "${flags[@]}" --target "$GITHUB_SHA"
           fi
 
-          sed -i '' -E "s/(MARKETING_VERSION:[[:space:]]*\")[^\"]*(\")/\1${SEMVER}\2/" project.yml
-
-          grep -q "MARKETING_VERSION: \"${SEMVER}\"" project.yml || {
-            echo "::error::MARKETING_VERSION sync failed; project.yml format may have changed"
-            exit 1
-          }
-
-      - name: Commit updated appcast
-        if: ${{ !contains(github.ref_name, '-test') && !contains(github.ref_name, '-alpha') && !contains(github.ref_name, '-beta') }}
+      - name: Sign Sparkle update
+        id: sparkle
+        if: ${{ steps.version.outputs.prerelease == 'false' }}
+        env:
+          SPARKLE_PRIVATE_KEY: ${{ secrets.SPARKLE_PRIVATE_KEY }}
         run: |
-          # Configure git if not already set
-          git config user.name "github-actions[bot]" 2>/dev/null || true
-          git config user.email "github-actions[bot]@users.noreply.github.com" 2>/dev/null || true
+          set -euo pipefail
+          if [ -z "${SPARKLE_PRIVATE_KEY:-}" ]; then
+            echo "::warning::SPARKLE_PRIVATE_KEY is not set; skipping Sparkle signing and the appcast update."
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          zip_path="${{ steps.package.outputs.zip_path }}"
+          signature=$(./scripts/ci/sign_sparkle_update.sh "$zip_path" "$SPARKLE_PRIVATE_KEY")
+          {
+            echo "enabled=true"
+            echo "signature=$signature"
+            echo "length=$(stat -f%z "$zip_path")"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Update appcast and version on main
+        if: ${{ steps.sparkle.outputs.enabled == 'true' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          tag="${{ steps.version.outputs.tag }}"
+          semver="${{ steps.version.outputs.semver }}"
+
+          # The checkout is a detached tag. Switch to main first so the push is a fast-forward
+          # even when main moved on after the tag.
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          git checkout -B main origin/main
+
+          ./scripts/ci/generate_appcast_entry.sh \
+            "$tag" \
+            "$semver" \
+            "${{ steps.version.outputs.build_number }}" \
+            "${{ steps.sparkle.outputs.signature }}" \
+            "${{ steps.sparkle.outputs.length }}" \
+            "https://github.com/$GITHUB_REPOSITORY/releases/download/$tag/${{ steps.package.outputs.zip_name }}"
+
+          # Annotate.xcodeproj is generated by xcodegen and gitignored, so only project.yml needs syncing.
+          if [[ "$semver" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            sed -i '' -E "s/(MARKETING_VERSION:[[:space:]]*\")[^\"]*(\")/\1${semver}\2/" project.yml
+            grep -q "MARKETING_VERSION: \"${semver}\"" project.yml || {
+              echo "::error::MARKETING_VERSION sync failed; project.yml format may have changed"
+              exit 1
+            }
+          fi
 
           git add appcast.xml project.yml
           if git diff --cached --quiet; then
             echo "No changes to appcast.xml or project.yml"
-          else
-            git commit -m "chore: Update appcast.xml and version for release ${{ steps.version.outputs.tag }}"
-            git push origin HEAD:main
-            echo "✅ Committed updated appcast.xml and version bump"
+            exit 0
           fi
+          git commit -m "chore: 更新 appcast 与版本号至 $tag [skip ci]"
+          git push origin main
