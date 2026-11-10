@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct ToolsSettingsView: View {
+    @AppStorage(.arrowStyle)
+    private var arrowStyle: ArrowStyle
     @AppStorage(.textFontSize)
     private var defaultTextSize: Double
     @AppStorage(.textBackground)
@@ -25,6 +27,21 @@ struct ToolsSettingsView: View {
         Form {
             Section {
                 PaneHeader(pane: .tools)
+            }
+
+            Section {
+                Picker("Style", selection: $arrowStyle) {
+                    ForEach(ArrowStyle.allCases, id: \.self) { style in
+                        Text(style.displayName).tag(style)
+                    }
+                }
+            } header: {
+                SettingsHeader(
+                    icon: "arrow.up.right",
+                    color: .red,
+                    title: L10n.string("Arrow Tool"),
+                    subtitle: L10n.string("Choose the shape of new arrows")
+                )
             }
 
             Section {

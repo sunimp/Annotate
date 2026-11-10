@@ -1264,7 +1264,8 @@ class OverlayWindow: NSPanel {
         case .arrow:
             activeShapeTool = .arrow
             overlayView.currentArrow = Arrow(
-                startPoint: startPoint, endPoint: startPoint, color: currentColor, lineWidth: overlayView.currentLineWidth, creationTime: nil)
+                startPoint: startPoint, endPoint: startPoint, color: currentColor, lineWidth: overlayView.currentLineWidth, creationTime: nil,
+                style: pickerSettings[.arrowStyle])
         case .line:
             activeShapeTool = .line
             overlayView.currentLine = Line(

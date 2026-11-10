@@ -166,6 +166,12 @@ extension SettingKey<CounterStyle> {
     static var counterStyle: Self { .rawValue("CounterStyle", default: .bordered) }
 }
 
+extension SettingKey<ArrowStyle> {
+    /// The shape the Arrow tool gives new arrows. Existing arrows keep the style they were
+    /// drawn with.
+    static var arrowStyle: Self { .rawValue("ArrowStyle", default: .standard) }
+}
+
 extension SettingKey<ActiveCursorStyle> {
     static var activeCursorStyle: Self { .rawValue("ActiveCursorStyle", default: .none) }
 }

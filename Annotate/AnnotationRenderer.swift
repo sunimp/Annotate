@@ -187,16 +187,11 @@ struct AnnotationRenderer {
             for arrow in document.arrows where layer.contains(arrow.creationTime) {
                 guard let alpha = fade.alpha(creationTime: arrow.creationTime, at: now) else { continue }
                 guard isDirty(arrow.redrawBounds) else { continue }
-                drawArrow(
-                    from: arrow.startPoint,
-                    to: arrow.endPoint,
-                    color: arrow.color.withAlphaComponent(alpha),
-                    lineWidth: arrow.lineWidth
-                )
+                drawArrow(arrow, color: arrow.color.withAlphaComponent(alpha))
             }
 
             if let arrow = live?.arrow, isDirty(arrow.redrawBounds) {
-                drawArrow(from: arrow.startPoint, to: arrow.endPoint, color: arrow.color, lineWidth: arrow.lineWidth)
+                drawArrow(arrow, color: arrow.color)
             }
 
         case .lines:
@@ -302,55 +297,9 @@ struct AnnotationRenderer {
 
     // MARK: - Primitives
 
-    private func drawArrow(from start: NSPoint, to end: NSPoint, color: NSColor, lineWidth: CGFloat) {
-        let adaptedColor = board.adapt(color)
-
-        // Calculate arrow head dimensions for equilateral triangle
-        // Scale arrowhead size relative to line width, with a minimum and reasonable multiplier
-        let sideLength: CGFloat = max(10.0, lineWidth * 4.0)
-
-        let dx = end.x - start.x
-        let dy = end.y - start.y
-        let angle = atan2(dy, dx)
-
-        // For an equilateral triangle, the height is (sqrt(3)/2) * side_length
-        // and the base width is equal to side_length
-        let height = sideLength * sqrt(3.0) / 2.0
-        let halfBase = sideLength / 2.0
-
-        // Calculate the base center of the equilateral triangle
-        let baseCenter = NSPoint(
-            x: end.x - height * cos(angle),
-            y: end.y - height * sin(angle)
-        )
-
-        // Calculate the two base corners perpendicular to the arrow direction
-        let perpAngle = angle + .pi / 2
-        let p1 = NSPoint(
-            x: baseCenter.x + halfBase * cos(perpAngle),
-            y: baseCenter.y + halfBase * sin(perpAngle)
-        )
-        let p2 = NSPoint(
-            x: baseCenter.x - halfBase * cos(perpAngle),
-            y: baseCenter.y - halfBase * sin(perpAngle)
-        )
-
-        // Draw the line from start to the base center of the triangle
-        let linePath = NSBezierPath()
-        linePath.move(to: start)
-        linePath.line(to: baseCenter)
-        adaptedColor.setStroke()
-        linePath.lineWidth = lineWidth
-        linePath.stroke()
-
-        // Draw filled equilateral triangle
-        let trianglePath = NSBezierPath()
-        trianglePath.move(to: end)
-        trianglePath.line(to: p1)
-        trianglePath.line(to: p2)
-        trianglePath.close()
-        adaptedColor.setFill()
-        trianglePath.fill()
+    private func drawArrow(_ arrow: Arrow, color: NSColor) {
+        board.adapt(color).setFill()
+        arrow.outline.fill()
     }
 
     private func drawLine(from start: NSPoint, to end: NSPoint, color: NSColor, lineWidth: CGFloat) {
@@ -545,6 +494,107 @@ extension Rectangle {
 extension Arrow {
     /// Padded wide enough for the arrowhead.
     var redrawBounds: NSRect { AnnotationRenderer.paddedBounds(startPoint, endPoint, padding: max(lineWidth * 4, 30)) }
+
+    /// Shaft and head as one filled shape, so no anti-aliased seam shows where they meet.
+    /// Drawing and hit testing both use it. On an arrow shorter than its head, the head
+    /// shrinks to the arrow's length instead of reaching past the start, where the shaft
+    /// would fold back across it.
+    var outline: NSBezierPath {
+        let path = NSBezierPath()
+        let dx = endPoint.x - startPoint.x
+        let dy = endPoint.y - startPoint.y
+        let length = hypot(dx, dy)
+        guard length > 0 else { return path }
+        let ux = dx / length
+        let uy = dy / length
+        /// The point `along` back from the tip toward the start and `across` to its left.
+        func point(_ along: CGFloat, _ across: CGFloat) -> NSPoint {
+            NSPoint(x: endPoint.x - ux * along - uy * across, y: endPoint.y - uy * along + ux * across)
+        }
+
+        // Distances back from the tip: `neck` is where the shaft meets the head and `barb`
+        // is where the head's back corners sit.
+        var headLength, headHalfWidth, neck, barb, neckHalfWidth, tailHalfWidth: CGFloat
+        switch style {
+        case .classic:
+            let side = max(10, lineWidth * 4)
+            headLength = side * sqrt(3) / 2
+            headHalfWidth = side / 2
+            neck = headLength
+            barb = headLength
+            neckHalfWidth = lineWidth / 2
+            tailHalfWidth = lineWidth / 2
+        case .standard:
+            headLength = max(12, lineWidth * 4.5)
+            headHalfWidth = headLength / 2
+            neck = headLength
+            barb = headLength
+            neckHalfWidth = lineWidth * 0.65
+            tailHalfWidth = lineWidth * 0.3
+        case .fancy:
+            headLength = max(12, lineWidth * 4.5)
+            headHalfWidth = headLength / 2
+            neck = headLength * 0.75
+            barb = headLength
+            neckHalfWidth = lineWidth * 0.7
+            // A narrow flat tail: the shaft keeps tapering almost to a point, then ends square
+            // instead of trailing off into a hairline.
+            tailHalfWidth = lineWidth * 0.12
+        }
+        let scale = min(1, length / barb)
+        headHalfWidth *= scale
+        neck *= scale
+        barb *= scale
+        neckHalfWidth = min(neckHalfWidth, headHalfWidth)
+        tailHalfWidth = min(tailHalfWidth, neckHalfWidth)
+
+        let corners = [
+            point(length, tailHalfWidth),
+            point(neck, neckHalfWidth),
+            point(barb, headHalfWidth),
+            endPoint,
+            point(barb, -headHalfWidth),
+            point(neck, -neckHalfWidth),
+            point(length, -tailHalfWidth),
+        ]
+        guard style == .standard else {
+            path.move(to: corners[0])
+            corners.dropFirst().forEach { path.line(to: $0) }
+            path.close()
+            return path
+        }
+
+        // Standard rounds every corner. Start halfway along the tail edge, which is the
+        // arrow's start point, so the path never begins on a corner.
+        let cornerRadius = lineWidth * 0.25
+        path.move(to: startPoint)
+        for index in corners.indices {
+            let previous = corners[(index + corners.count - 1) % corners.count]
+            let corner = corners[index]
+            let next = corners[(index + 1) % corners.count]
+            path.appendArc(
+                from: corner, to: next,
+                radius: Self.fittedRadius(cornerRadius, at: corner, between: previous, and: next))
+        }
+        path.close()
+        return path
+    }
+
+    /// Shrinks `radius` until the arc's tangent points sit within the first half of both
+    /// edges at `corner`, so neighboring rounded corners never overlap.
+    private static func fittedRadius(
+        _ radius: CGFloat, at corner: NSPoint, between previous: NSPoint, and next: NSPoint
+    ) -> CGFloat {
+        let ax = previous.x - corner.x, ay = previous.y - corner.y
+        let bx = next.x - corner.x, by = next.y - corner.y
+        let lengthA = hypot(ax, ay), lengthB = hypot(bx, by)
+        guard lengthA > 0, lengthB > 0 else { return 0 }
+        let cosine = max(-1, min(1, (ax * bx + ay * by) / (lengthA * lengthB)))
+        let halfAngle = acos(cosine) / 2
+        guard halfAngle > 0.001 else { return 0 }
+        // The arc touches each edge `radius / tan(halfAngle)` from the corner.
+        return min(radius, min(lengthA, lengthB) / 2 * tan(halfAngle))
+    }
 }
 
 extension Line {

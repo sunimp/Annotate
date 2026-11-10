@@ -2350,7 +2350,7 @@ class OverlayView: NSView, NSTextFieldDelegate {
         AnnotationTextEditorContrast.apply(to: textField, textColor: editorTextColor)
 
         self.addSubview(textField)
-        textField.becomeFirstResponder()
+        _ = textField.becomeFirstResponder()
 
         // Select all text if editing existing annotation
         if !existingText.isEmpty {

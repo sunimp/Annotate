@@ -449,6 +449,7 @@ Settings are organized into a sidebar with six panes: **General**, **Tools**, **
 
 ### Tools
 
+- **Arrow Tool**: Pick the **Style** for new arrows. Standard (default) has a wide head and a shaft that narrows to a rounded tail. Fancy has a head with swept-back barbs and a shaft that narrows gently to a flat tail. Classic is a straight shaft under an equilateral triangle. Existing arrows keep the style they were drawn with.
 - **Default Text Size**: Adjust the default font size for text annotations.
 - **Label background**: Draw new text annotations on a rounded background pill for contrast.
 - **Default Counter Size**: Adjust the default size for counter annotations.

@@ -1746,6 +1746,22 @@ final class OverlayWindowTests: XCTestCase {
             "Changing the style restyles new counters only")
     }
 
+    func testADrawnArrowTakesTheArrowStyleSetting() {
+        let defaults = TestUserDefaults.create()
+        window.overlayView.pickerUserDefaultsOverride = defaults
+        window.overlayView.fadeMode = false
+        window.overlayView.currentTool = .arrow
+
+        for (style, y) in [(ArrowStyle.standard, 200.0), (.classic, 300.0)] {
+            defaults.settings[.arrowStyle] = style
+            sendMouse(.leftMouseDown, at: NSPoint(x: 200, y: y))
+            sendMouse(.leftMouseDragged, at: NSPoint(x: 300, y: y))
+            sendMouse(.leftMouseUp, at: NSPoint(x: 300, y: y))
+        }
+
+        XCTAssertEqual(window.overlayView.arrows.map(\.style), [.standard, .classic])
+    }
+
     private func sendMouse(_ type: NSEvent.EventType, at location: NSPoint) {
         window.sendEvent(
             TestEvents.createMouseEvent(

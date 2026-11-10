@@ -182,6 +182,26 @@ struct DrawingPath {
     }
 }
 
+/// The shape of an arrow. The raw value is stored in settings, so renaming a case resets
+/// that setting.
+enum ArrowStyle: String, CaseIterable {
+    /// A shaft that narrows toward a rounded tail, under a wide triangular head.
+    case standard
+    /// A shaft that narrows toward a flat tail, under a head with swept-back barbs.
+    case fancy
+    /// A straight shaft of the stroke width under an equilateral triangle, the shape arrows
+    /// had before styles existed.
+    case classic
+
+    var displayName: String {
+        switch self {
+        case .standard: return L10n.string("Standard")
+        case .fancy: return L10n.string("Fancy")
+        case .classic: return L10n.string("Classic")
+        }
+    }
+}
+
 /// Represents an arrow annotation with start and end points.
 struct Arrow {
     var startPoint: NSPoint
@@ -189,6 +209,7 @@ struct Arrow {
     var color: NSColor
     var lineWidth: CGFloat
     var creationTime: CFTimeInterval?
+    var style: ArrowStyle = .standard
 }
 
 /// Represents a line annotation with start and end points.
@@ -531,6 +552,7 @@ extension Arrow: Equatable {
     public static func == (lhs: Arrow, rhs: Arrow) -> Bool {
         return lhs.startPoint == rhs.startPoint && lhs.endPoint == rhs.endPoint
             && lhs.color.isEqual(rhs.color) && lhs.lineWidth == rhs.lineWidth && lhs.creationTime == rhs.creationTime
+            && lhs.style == rhs.style
     }
 }
 

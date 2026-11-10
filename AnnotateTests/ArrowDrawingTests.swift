@@ -223,4 +223,27 @@ final class ArrowDrawingTests: XCTestCase {
             )
         }
     }
+
+    func testAShortArrowOutlineStaysBetweenItsEnds() {
+        // An arrow shorter than its head used to fold its shaft back past the start.
+        for style in ArrowStyle.allCases {
+            let arrow = Arrow(
+                startPoint: NSPoint(x: 100, y: 100), endPoint: NSPoint(x: 104, y: 100),
+                color: .red, lineWidth: 10, style: style)
+            let bounds = arrow.outline.bounds
+            XCTAssertGreaterThanOrEqual(bounds.minX, 100 - 5 - 0.01, "\(style)")
+            XCTAssertLessThanOrEqual(bounds.maxX, 104 + 0.01, "\(style)")
+        }
+    }
+
+    func testEveryArrowStyleCoversItsShaftAndHead() {
+        for style in ArrowStyle.allCases {
+            let arrow = Arrow(
+                startPoint: NSPoint(x: 100, y: 100), endPoint: NSPoint(x: 300, y: 100),
+                color: .red, lineWidth: 6, style: style)
+            XCTAssertTrue(arrow.outline.contains(NSPoint(x: 200, y: 100)), "\(style) shaft")
+            XCTAssertTrue(arrow.outline.contains(NSPoint(x: 295, y: 100)), "\(style) head")
+            XCTAssertFalse(arrow.outline.contains(NSPoint(x: 200, y: 120)), "\(style) beside")
+        }
+    }
 }

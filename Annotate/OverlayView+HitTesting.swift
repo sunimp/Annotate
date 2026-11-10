@@ -293,30 +293,8 @@ extension OverlayView {
             return true
         }
         
-        // Also check if point is inside the arrowhead triangle
-        let sideLength: CGFloat = max(10.0, arrow.lineWidth * 4.0)
-        let dx = arrow.endPoint.x - arrow.startPoint.x
-        let dy = arrow.endPoint.y - arrow.startPoint.y
-        let angle = atan2(dy, dx)
-        let height = sideLength * sqrt(3.0) / 2.0
-        let halfBase = sideLength / 2.0
-        
-        let baseCenter = NSPoint(
-            x: arrow.endPoint.x - height * cos(angle),
-            y: arrow.endPoint.y - height * sin(angle)
-        )
-        
-        let perpAngle = angle + .pi / 2
-        let p1 = NSPoint(
-            x: baseCenter.x + halfBase * cos(perpAngle),
-            y: baseCenter.y + halfBase * sin(perpAngle)
-        )
-        let p2 = NSPoint(
-            x: baseCenter.x - halfBase * cos(perpAngle),
-            y: baseCenter.y - halfBase * sin(perpAngle)
-        )
-        
-        return isPointInTriangle(point: point, v1: arrow.endPoint, v2: p1, v3: p2)
+        // The head and the tapered shaft are wider than the tolerance near the tip.
+        return arrow.outline.contains(point)
     }
     
     private func hitTestPath(_ path: DrawingPath, tool: ToolType, point: NSPoint) -> Bool {
@@ -416,17 +394,6 @@ extension OverlayView {
     }
     
     // MARK: - Helper Methods
-    
-    private func isPointInTriangle(point: NSPoint, v1: NSPoint, v2: NSPoint, v3: NSPoint) -> Bool {
-        let denominator = ((v2.y - v3.y) * (v1.x - v3.x) + (v3.x - v2.x) * (v1.y - v3.y))
-        guard denominator != 0 else { return false }
-        
-        let a = ((v2.y - v3.y) * (point.x - v3.x) + (v3.x - v2.x) * (point.y - v3.y)) / denominator
-        let b = ((v3.y - v1.y) * (point.x - v3.x) + (v1.x - v3.x) * (point.y - v3.y)) / denominator
-        let c = 1 - a - b
-        
-        return a >= 0 && a <= 1 && b >= 0 && b <= 1 && c >= 0 && c <= 1
-    }
     
     private func distanceFromPointToLineSegment(point: NSPoint, lineStart: NSPoint, lineEnd: NSPoint) -> CGFloat {
         let dx = lineEnd.x - lineStart.x

@@ -61,6 +61,7 @@ final class SettingsStoreTests: XCTestCase {
         XCTAssertEqual(settings[.defaultTool], .lastUsed)
         XCTAssertEqual(settings[.redactionStyle], .solid)
         XCTAssertEqual(settings[.counterStyle], .bordered)
+        XCTAssertEqual(settings[.arrowStyle], .standard)
         XCTAssertEqual(settings[.activeCursorStyle], ActiveCursorStyle.none)
 
         assertColor(settings[.selectedColor], isCloseTo: .systemRed)
@@ -97,6 +98,7 @@ final class SettingsStoreTests: XCTestCase {
         settings[.defaultTool] = .tool(.arrow)
         settings[.redactionStyle] = .pixelate
         settings[.counterStyle] = .filled
+        settings[.arrowStyle] = .fancy
         settings[.activeCursorStyle] = .crosshair
         settings[.clickRippleColor] = .systemPurple
         settings[.hideCursorEffectsInApps] = ["com.apple.Keynote", "com.microsoft.Powerpoint"]
@@ -117,6 +119,7 @@ final class SettingsStoreTests: XCTestCase {
         XCTAssertEqual(settings[.defaultTool], .tool(.arrow))
         XCTAssertEqual(settings[.redactionStyle], .pixelate)
         XCTAssertEqual(settings[.counterStyle], .filled)
+        XCTAssertEqual(settings[.arrowStyle], .fancy)
         XCTAssertEqual(settings[.activeCursorStyle], .crosshair)
         assertColor(settings[.clickRippleColor], isCloseTo: .systemPurple)
         XCTAssertEqual(settings[.hideCursorEffectsInApps], ["com.apple.Keynote", "com.microsoft.Powerpoint"])
