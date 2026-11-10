@@ -11,6 +11,9 @@
 
 ![annotate](https://github.com/user-attachments/assets/16baefb6-9fad-4702-9233-2991992ad030)
 
+> [!NOTE]
+> 本仓库 fork 自 [epilande/Annotate](https://github.com/epilande/Annotate)，独立发布与更新，Bundle ID 为 `com.sunimp.Annotate`。从上游版本切换过来时，macOS 会将其视为新应用：偏好设置、全局快捷键和屏幕录制权限需要重新设置。
+
 ## ❓ 为什么做 Annotate？
 
 有时你需要突出屏幕上的某个部分，或用图形直观地表达想法。Annotate 用简单高效的界面满足这一需求。它支持画笔、箭头、荧光笔、矩形、圆形、编号和文本等工具进行实时屏幕标注，非常适合在演示、现场 Demo 或教学中突出和讲解内容，让观众看得更明白。
@@ -56,7 +59,9 @@
 curl -fsSL https://raw.githubusercontent.com/sunimp/Annotate/main/install.sh | sh
 ```
 
-脚本会把 `Annotate.app` 安装到 `/Applications`（非管理员账户为 `~/Applications`）并打开，再次执行即可更新。发布版本未经 Developer ID 签名和公证，浏览器下载的 App 会带隔离属性，首次启动会被门禁拦截；`curl` 下载不带这个属性，所以无需额外操作。脚本很短，可先阅读：[`install.sh`](install.sh)。设置 `ANNOTATE_DEST` 可安装到其他目录。
+脚本会校验 SHA-256，把 `Annotate.app` 安装到 `/Applications`（非管理员账户为 `~/Applications`）并打开，再次执行即可更新。设置 `ANNOTATE_DEST` 可安装到其他目录。脚本很短，可先阅读：[`install.sh`](install.sh)。
+
+发布版本为 ad-hoc 签名，未经 Developer ID 签名和公证。浏览器下载的应用带有隔离属性，首次启动会被门禁拦截；`curl` 下载不带这个属性，因此无需额外操作。
 
 ### 下载发布版本
 
@@ -84,7 +89,7 @@ curl -fsSL https://raw.githubusercontent.com/sunimp/Annotate/main/install.sh | s
 > [!NOTE]
 > 需要 macOS 14（Sonoma）或更高版本。同时支持 Apple 芯片和 Intel 芯片的 Mac。
 >
-> 发布版本为 ad-hoc 签名，未经公证。手动下载后首次打开如被门禁拦截，请在确认来源可信后移除隔离属性：
+> 手动下载后首次打开如被门禁拦截，请在确认来源可信后移除隔离属性：
 >
 > ```sh
 > xattr -dr com.apple.quarantine /Applications/Annotate.app
@@ -99,16 +104,20 @@ curl -fsSL https://raw.githubusercontent.com/sunimp/Annotate/main/install.sh | s
    git clone https://github.com/sunimp/Annotate
    ```
 
-2. **在 Xcode 中打开项目：**
+2. **生成并打开 Xcode 工程：**
+
+   `Annotate.xcodeproj` 由 [XcodeGen](https://github.com/yonaskolb/XcodeGen) 根据 `project.yml` 生成，不在仓库中：
 
    ```sh
    cd Annotate
+   brew install xcodegen
+   xcodegen generate
    open Annotate.xcodeproj
    ```
 
 3. **构建并运行：**
    - 确保已安装最新版本的 Xcode。
-   - 选择目标 macOS 版本，然后在 Xcode 中构建并运行项目。
+   - 选择 `Annotate` scheme，在 Xcode 中构建并运行。也可以只用 SwiftPM：`swift build`、`swift test`。
 
 ## 🚀 快速上手
 
@@ -383,6 +392,9 @@ Annotate 会向“快捷指令”App 添加以下操作，你可以在快捷指�
 
 选择工具、设置颜色、清除标注以及各项“设置”操作会在已打开的叠加层上显示屏幕提示。
 
+> [!WARNING]
+> 快捷指令操作需要使用 Apple Development 或 Developer ID 证书签名的构建。本仓库发布的 ad-hoc 签名版本可以在“快捷指令”中列出这些操作，但运行时会提示“快捷指令无法与该应用通信”。需要快捷指令时，请用自己的证书[从源码构建](#从源码构建)；下方的 `annotate://` 链接不受影响。
+
 ### URL 协议
 
 每个快捷指令操作都有对应的 `annotate://` 链接，任何能打开 URL 的工具都可以运行它：
@@ -502,4 +514,4 @@ Annotate 内置由 [Sparkle](https://sparkle-project.org/) 提供的自动更新
 - **手动检查**：从菜单栏选择 **检查更新…**，或使用“关于”窗口。
 - **安全更新**：所有更新在安装前都会经过加密签名和验证。
 
-更新会在后台自动下载并安装。有新版本时你会收到通知，其中包含更新说明，可以选择立即安装或稍后安装。
+有新版本时会弹出提示并显示更新说明，你可以选择立即安装、稍后提醒或跳过该版本，不会在未经确认时自动安装。通过[一键安装](#一键安装推荐)脚本更新也可以。
