@@ -10,8 +10,8 @@
 	<true/>
 	<key>com.apple.security.temporary-exception.mach-lookup.global-name</key>
 	<array>
-		<string>com.epilande.Annotate-spks</string>
-		<string>com.epilande.Annotate-spki</string>
+		<string>com.sunimp.Annotate-spks</string>
+		<string>com.sunimp.Annotate-spki</string>
 	</array>
 </dict>
 </plist>

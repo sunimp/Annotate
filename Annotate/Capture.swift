@@ -8,7 +8,7 @@ import os
 // the picked area for Capture Area. Nothing here reads app
 // singletons or views; `AppDelegate+Capture.swift` gathers the overlay's state and passes it in.
 
-private let log = Logger(subsystem: "com.epilande.Annotate", category: "Capture")
+private let log = Logger(subsystem: "com.sunimp.Annotate", category: "Capture")
 
 /// What a capture covers. The raw value names it in command paths, so renaming a case breaks
 /// saved links.

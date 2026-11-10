@@ -74,7 +74,7 @@ extension AnnotateCommand {
     }
 }
 
-private let log = Logger(subsystem: "com.epilande.Annotate", category: "URLCommands")
+private let log = Logger(subsystem: "com.sunimp.Annotate", category: "URLCommands")
 
 extension AppDelegate {
     func application(_ application: NSApplication, open urls: [URL]) {

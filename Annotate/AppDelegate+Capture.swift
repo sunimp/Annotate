@@ -1,7 +1,7 @@
 import Cocoa
 import os
 
-private let log = Logger(subsystem: "com.epilande.Annotate", category: "Capture")
+private let log = Logger(subsystem: "com.sunimp.Annotate", category: "Capture")
 
 /// Capture Screen and Capture Area from the menu, the overlay shortcuts, and
 /// `AnnotateCommand.capture`: picks the display, reads what its overlay shows, and reports the

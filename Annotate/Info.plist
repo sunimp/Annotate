@@ -40,9 +40,9 @@
 	<key>NSScreenCaptureUsageDescription</key>
 	<string>Capture Screen and Capture Area save what is on screen with your annotations, and Pixelate and Blur redactions read the pixels under the rectangle.</string>
 	<key>SUFeedURL</key>
-	<string>https://raw.githubusercontent.com/epilande/Annotate/main/appcast.xml</string>
+	<string>https://raw.githubusercontent.com/sunimp/Annotate/main/appcast.xml</string>
 	<key>SUPublicEDKey</key>
-	<string>zKs810UVligBC4LdTPa0TXY4P7R6jtg7ZjjeQX1ULLk=</string>
+	<string>9l+YkYt90jj+FeuKi85r2w+dBl5cyXJ4u7qvdwBWpYA=</string>
 	<key>SUEnableAutomaticChecks</key>
 	<true/>
 	<key>SUScheduledCheckInterval</key>

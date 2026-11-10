@@ -70,7 +70,7 @@ protocol RedactionSampling: AnyObject {
         completion: @escaping @MainActor ([RedactionFilterResult?]) -> Void)
 }
 
-private let log = Logger(subsystem: "com.epilande.Annotate", category: "ScreenSampler")
+private let log = Logger(subsystem: "com.sunimp.Annotate", category: "ScreenSampler")
 
 /// CIContext is thread-safe; one shared instance avoids rebuilding its GPU state per filter.
 private let sharedCIContext = CIContext(options: [.cacheIntermediates: false])
