@@ -74,14 +74,14 @@ struct AboutView: View {
             // Links and Attribution
             VStack(spacing: 8) {
                 HStack(spacing: 16) {
-                    Link("GitHub", destination: URL(string: "https://github.com/epilande/Annotate")!)
+                    Link("GitHub", destination: URL(string: "https://github.com/sunimp/Annotate")!)
                         .font(.caption)
                     
-                    Link("Report Issue", destination: URL(string: "https://github.com/epilande/Annotate/issues")!)
+                    Link("Report Issue", destination: URL(string: "https://github.com/sunimp/Annotate/issues")!)
                         .font(.caption)
                 }
                 
-                Text("Created by epilande")
+                Text("Created by sunimp")
                     .font(.caption)
                     .foregroundColor(.secondary)
             }

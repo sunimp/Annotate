@@ -38,11 +38,11 @@ fetch_github_release_notes() {
     echo "🔍 Fetching GitHub release notes for $tag_name..." >&2
     
     # Determine repository from environment or default
-    local repo="${GITHUB_REPOSITORY:-epilande/Annotate}"
+    local repo="${GITHUB_REPOSITORY:-sunimp/Annotate}"
     
     # Use GitHub CLI to fetch release notes with explicit repo context
     # The GITHUB_TOKEN environment variable is automatically used by gh CLI in GitHub Actions
-    if gh release view "$tag_name" --repo "$repo" --json body --jq '.body' 2>/dev/null; then
+    if gh release view "$tag_name" --repo "$repo" --json body --jq '.body' 2>/dev/null | sed '/^### 安装提示/,$d'; then
         return 0
     else
         echo "⚠️  Failed to fetch GitHub release notes for $tag_name" >&2
@@ -84,7 +84,7 @@ format_release_notes_html() {
     fi
     
     # Always show the full changelog link
-    echo "<p>See the <a href=\"https://github.com/epilande/Annotate/releases/tag/$tag_name\">full changelog</a> for details.</p>"
+    echo "<p>See the <a href=\"https://github.com/${GITHUB_REPOSITORY:-sunimp/Annotate}/releases/tag/$tag_name\">full changelog</a> for details.</p>"
 }
 
 if [ $# -lt 6 ] || [ $# -gt 7 ]; then
@@ -150,7 +150,7 @@ DESCRIPTION_HTML=$(format_release_notes_html "$TAG_NAME" "$RELEASE_NOTES")
 cat > new_entry.xml << EOF
         <item>
             <title>Version $TAG_NAME</title>
-            <link>https://github.com/epilande/Annotate/releases/tag/$TAG_NAME</link>
+            <link>https://github.com/${GITHUB_REPOSITORY:-sunimp/Annotate}/releases/tag/$TAG_NAME</link>
             <description><![CDATA[
 $DESCRIPTION_HTML
             ]]></description>

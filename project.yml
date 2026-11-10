@@ -1,6 +1,6 @@
 name: Annotate
 options:
-  bundleIdPrefix: com.epilande
+  bundleIdPrefix: com.sunimp
   developmentLanguage: en
   deploymentTarget:
     macOS: "14.0"
@@ -27,8 +27,8 @@ targets:
       region: US
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.epilande.Annotate
-        MARKETING_VERSION: "1.8.0"
+        PRODUCT_BUNDLE_IDENTIFIER: com.sunimp.Annotate
+        MARKETING_VERSION: "1.9.0"
         CURRENT_PROJECT_VERSION: "1"
         CODE_SIGN_ENTITLEMENTS: Annotate/Annotate.entitlements
         SWIFT_VERSION: "6.0"

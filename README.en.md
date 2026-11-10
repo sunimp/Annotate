@@ -11,6 +11,9 @@
 
 ![annotate](https://github.com/user-attachments/assets/16baefb6-9fad-4702-9233-2991992ad030)
 
+> [!NOTE]
+> This repository is a fork of [epilande/Annotate](https://github.com/epilande/Annotate), released and updated on its own, with the bundle ID `com.sunimp.Annotate`. macOS treats it as a new app when you switch from the upstream build, so preferences, global shortcuts, and the Screen Recording permission have to be set up again.
+
 ## ❓ Why?
 
 Sometimes you need to emphasize a part of your screen or share ideas visually, and Annotate fills that gap with a simple, efficient interface. It enables real-time screen annotations using tools like pen, arrow, highlighter, rectangle, circle, counter, and text—perfect for highlighting and explaining concepts during presentations, live demos, or teaching sessions where visual annotations enhance understanding and clarity.
@@ -50,11 +53,21 @@ Sometimes you need to emphasize a part of your screen or share ideas visually, a
 
 ## 📦 Installation
 
+### One-line install (recommended)
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/sunimp/Annotate/main/install.sh | sh
+```
+
+It checks the SHA-256, installs `Annotate.app` to `/Applications` (or `~/Applications` on a non-admin account), and opens it. Run it again any time to update. Set `ANNOTATE_DEST` to install somewhere else. The script is short and readable: [`install.sh`](install.sh).
+
+Releases are ad-hoc signed, not signed with a Developer ID or notarized. macOS adds a quarantine flag to apps downloaded in a browser, which makes Gatekeeper block the first launch; `curl` doesn't add that flag, so this just works.
+
 ### Download Release
 
 1. **Download the Application:**
 
-   - Go to [latest release](https://github.com/epilande/Annotate/releases/latest) page.
+   - Go to [latest release](https://github.com/sunimp/Annotate/releases/latest) page.
    - Download the `Annotate-x.x.x.dmg` file for easy installation, or `Annotate-x.x.x.zip` for manual installation.
 
 2. **Install the Application:**
@@ -76,34 +89,35 @@ Sometimes you need to emphasize a part of your screen or share ideas visually, a
 > [!NOTE]
 > Requires macOS 14 (Sonoma) or later. Supports both Apple Silicon and Intel Macs.
 >
-> The app is code-signed and notarized for macOS Gatekeeper compatibility.
+> If Gatekeeper blocks the first launch of a manual download, clear the quarantine flag once you trust the source:
+>
+> ```sh
+> xattr -dr com.apple.quarantine /Applications/Annotate.app
+> ```
 
-### Homebrew
-
-Install via [Homebrew Cask](https://formulae.brew.sh/cask/annotate):
-
-```sh
-brew install --cask annotate
-```
 
 ### Build from Source
 
 1. **Clone the Repository:**
 
    ```sh
-   git clone https://github.com/epilande/Annotate
+   git clone https://github.com/sunimp/Annotate
    ```
 
-2. **Open the Project in Xcode:**
+2. **Generate and Open the Xcode Project:**
+
+   `Annotate.xcodeproj` is generated from `project.yml` by [XcodeGen](https://github.com/yonaskolb/XcodeGen) and isn't checked in:
 
    ```sh
    cd Annotate
+   brew install xcodegen
+   xcodegen generate
    open Annotate.xcodeproj
    ```
 
 3. **Build and Run:**
    - Ensure you have the latest version of Xcode installed.
-   - Select your target macOS version, then build and run the project in Xcode.
+   - Select the `Annotate` scheme, then build and run it in Xcode. SwiftPM works too: `swift build`, `swift test`.
 
 ## 🚀 Quick Start
 
@@ -497,4 +511,4 @@ Annotate includes automatic update checking powered by [Sparkle](https://sparkle
 - **Manual Check**: Select **Check for Updates...** from the menu bar or use the About window.
 - **Secure Updates**: All updates are cryptographically signed and verified before installation.
 
-Updates are downloaded and installed seamlessly in the background. You'll be notified when a new version is available, with release notes and the option to install immediately or later.
+When a new version is available, you'll see a prompt with the release notes and can install it now, be reminded later, or skip that version. Nothing installs without your confirmation. Running the [one-line install](#one-line-install-recommended) script again also updates the app.

@@ -2611,36 +2611,36 @@
         }
       }
     },
-    "Created by epilande": {
+    "Created by sunimp": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Creado por epilande"
+            "value": "Creado por sunimp"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Créé par epilande"
+            "value": "Créé par sunimp"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "作成: epilande"
+            "value": "作成: sunimp"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "由 epilande 创建"
+            "value": "由 sunimp 创建"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "由 epilande 製作"
+            "value": "由 sunimp 製作"
           }
         }
       }

@@ -73,7 +73,7 @@ The app ships in English, Simplified Chinese, Traditional Chinese, Japanese, Spa
 
 When a change affects what the overlay, toolbar, quick pickers, or cursor effects draw, post before and after screenshots in the PR, cropped to the affected area ([example from #73](https://github.com/epilande/Annotate/pull/73#issuecomment-5488286942)). Tests check the model; screenshots check the pixels.
 
-1. Quit the installed Annotate. Debug builds share its bundle ID (`com.epilande.Annotate`), preferences, and global shortcuts. They never start the updater.
+1. Quit the installed Annotate. Debug builds share its bundle ID (`com.sunimp.Annotate`), preferences, and global shortcuts. They never start the updater.
 2. Build and open the base first. Run `git worktree add ../annotate-base origin/main`, then in `../annotate-base`:
 
    ```sh

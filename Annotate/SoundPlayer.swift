@@ -152,7 +152,7 @@ final class SoundPlayer {
         #endif
     }
 
-    private static let log = Logger(subsystem: "com.epilande.Annotate", category: "SoundPlayer")
+    private static let log = Logger(subsystem: "com.sunimp.Annotate", category: "SoundPlayer")
 
     /// Logs rather than traps: a missing clip degrades to silence, and a bundling regression should
     /// surface as a failing test or a Console line, never as a crash at launch.
