@@ -6,6 +6,30 @@
         <description>Annotate App Updates</description>
         <language>en</language>
         <item>
+            <title>Version 1.9.1</title>
+            <link>https://github.com/sunimp/Annotate/releases/tag/1.9.1</link>
+            <description><![CDATA[
+<h1>Annotate 1.9.1</h1>
+
+<h2 id="annotate-191">Annotate 1.9.1</h2>
+<p>此 Release 由 GitHub Actions 自动构建。</p>
+<h3 id="更新内容">更新内容</h3>
+<ul>
+<li>feat: 新增箭头样式设置，修复箭头柄与头部之间的细缝</li>
+<li>chore: 更新 appcast 与版本号至 1.9.0 [skip ci]</li>
+</ul>
+
+<p>See the <a href="https://github.com/sunimp/Annotate/releases/tag/1.9.1">full changelog</a> for details.</p>
+            ]]></description>
+            <pubDate>Tue, 10 Nov 2026 03:43:42 +0000</pubDate>
+            <enclosure url="https://github.com/sunimp/Annotate/releases/download/1.9.1/Annotate-1.9.1.zip"
+                       sparkle:version="1291"
+                       sparkle:shortVersionString="1.9.1"
+                       sparkle:edSignature="VC8Sj6mZh6SfNtvAn7udyv7SMYQo2JYHSsSQ8QMC6mOMJyDxNPC+QQkio91HVyMKeO6WV4KkDWpGpMhdBsCOBA=="
+                       length="3873158"
+                       type="application/octet-stream" />
+        </item>
+        <item>
             <title>Version 1.9.0</title>
             <link>https://github.com/sunimp/Annotate/releases/tag/1.9.0</link>
             <description><![CDATA[
