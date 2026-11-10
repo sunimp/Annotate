@@ -5,5 +5,57 @@
         <link>https://github.com/sunimp/Annotate</link>
         <description>Annotate App Updates</description>
         <language>en</language>
+        <item>
+            <title>Version 1.9.0</title>
+            <link>https://github.com/sunimp/Annotate/releases/tag/1.9.0</link>
+            <description><![CDATA[
+<h1>Annotate 1.9.0</h1>
+
+<h2 id="annotate-190">Annotate 1.9.0</h2>
+<p>此 Release 由 GitHub Actions 自动构建。</p>
+<h3 id="更新内容">更新内容</h3>
+<ul>
+<li>docs: README 按本仓库的发布方式重新梳理</li>
+<li>ci: Release tag 改为不带 v 前缀的版本号</li>
+<li>ci: 自动构建 ad-hoc 签名版本并发布 Release，新增一键安装脚本</li>
+<li>chore: 项目归属迁移到 sunimp</li>
+<li>chore: 版本号升至 1.9.0</li>
+<li>fix: 允许 DMG 签名失败后继续完成打包</li>
+<li>test: Xcode 测试固定使用英文，避免读到系统语言</li>
+<li>feat: 多屏标注范围、拖动与 fade 性能优化、指针回到叠加层时恢复键盘焦点</li>
+<li>chore: 测试切到 Swift 6，精简 SwiftLint 基线</li>
+<li>docs: 添加 CLAUDE.md</li>
+<li>feat(settings): 固定线宽、固定颜色改为连续可调；文本工具图标改为 T</li>
+<li>feat(settings): 默认线宽、默认颜色支持固定值</li>
+<li>docs(agents): SwiftUI 传 String 时改用 L10n.string</li>
+<li>feat(l10n): 设置页加语言选择，运行时切换，默认跟随系统</li>
+<li>docs: 记录本地化流程与规则表 E</li>
+<li>feat(l10n): 支持简繁中文、日文、西班牙文、法文</li>
+<li>docs(agents): 规则表 A 更新为 redraw ratchet 已落地的现状</li>
+<li>fix(undo): 移动撤销按位置找回对象，替换 Any 存储</li>
+<li>feat(capture): Add Capture Area (#143)</li>
+<li>feat(capture): Add Capture Screen (#142)</li>
+<li>refactor(overlay): Extract AnnotationRenderer from OverlayView (#141)</li>
+<li>fix(undo): Undo a Clear All of every display in one step (#140)</li>
+<li>fix(url): Hand focus back when a second link beats the launch activation (#139)</li>
+<li>feat(toolbar): Add VoiceOver labels to toolbar buttons (#138)</li>
+<li>fix(url): Hand focus back after links and keep rejected links out of the log (#137)</li>
+<li>feat(url): Add annotate:// links that run commands (#136)</li>
+<li>feat(commands): Add a shared command layer and Shortcuts actions (#135)</li>
+<li>chore: Update appcast.xml and version for release v1.8.0</li>
+<li>fix(toolbar): Even out vertical section widths (#133)</li>
+<li>fix(toolbar): Let a drag that starts on a chip move the bar (#132)</li>
+</ul>
+
+<p>See the <a href="https://github.com/sunimp/Annotate/releases/tag/1.9.0">full changelog</a> for details.</p>
+            ]]></description>
+            <pubDate>Tue, 10 Nov 2026 02:21:36 +0000</pubDate>
+            <enclosure url="https://github.com/sunimp/Annotate/releases/download/1.9.0/Annotate-1.9.0.zip"
+                       sparkle:version="1289"
+                       sparkle:shortVersionString="1.9.0"
+                       sparkle:edSignature="WPDwqkm/hRFYzT9Q2f8IETz3x5hBtIPU531Uw7sURooJkP95clXMR6RIccP8AfgNg0Vu64mbX4d362mur6iwAg=="
+                       length="3860559"
+                       type="application/octet-stream" />
+        </item>
     </channel>
 </rss>
