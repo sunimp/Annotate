@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Generate and insert new appcast entry with GitHub release notes
+# Set MINIMUM_SYSTEM_VERSION so Sparkle skips the update on older macOS.
 # Usage: ./generate_appcast_entry.sh <tag_name> <version_number> <sparkle_version> <signature> <zip_size> <download_url> [appcast_file]
 
 set -euo pipefail
@@ -154,7 +155,8 @@ cat > new_entry.xml << EOF
             <description><![CDATA[
 $DESCRIPTION_HTML
             ]]></description>
-            <pubDate>$PUB_DATE</pubDate>
+            <pubDate>$PUB_DATE</pubDate>${MINIMUM_SYSTEM_VERSION:+
+            <sparkle:minimumSystemVersion>$MINIMUM_SYSTEM_VERSION</sparkle:minimumSystemVersion>}
             <enclosure url="$DOWNLOAD_URL"
                        sparkle:version="$SPARKLE_VERSION"
                        sparkle:shortVersionString="$VERSION_NUMBER"

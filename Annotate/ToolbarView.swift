@@ -121,16 +121,11 @@ struct ToolbarView: View {
     private static let chipSymbols =
         ToolType.allCases.map(\.symbolName) + [fadeSymbol, deleteLastSymbol, clearAllSymbol, undoSymbol]
 
-    @ViewBuilder
     var body: some View {
-        if #available(macOS 26.0, *) {
-            // Resolve the segments' backdrop together on first presentation. Separate
-            // effects in this non-key panel keep an inactive fill until the first click.
-            // Zero spacing preserves the gaps between the three glass surfaces.
-            GlassEffectContainer(spacing: 0) { toolbarContent }
-        } else {
-            toolbarContent
-        }
+        // Resolve the segments' backdrop together on first presentation. Separate
+        // effects in this non-key panel keep an inactive fill until the first click.
+        // Zero spacing preserves the gaps between the three glass surfaces.
+        GlassEffectContainer(spacing: 0) { toolbarContent }
     }
 
     private var isVertical: Bool { model.layout == .vertical }

@@ -1,7 +1,7 @@
 name: Release (macOS)
 
 # Builds an ad-hoc signed, non-notarized app, publishes ZIP + DMG + SHA256SUMS to a GitHub Release,
-# and (when SPARKLE_PRIVATE_KEY is set) signs the ZIP for Sparkle and updates appcast.xml on main.
+# and for a stable version signs the ZIP for Sparkle and updates appcast.xml on main.
 
 on:
   push:
@@ -228,10 +228,10 @@ jobs:
           SPARKLE_PRIVATE_KEY: ${{ secrets.SPARKLE_PRIVATE_KEY }}
         run: |
           set -euo pipefail
+          # A stable release without an appcast entry never reaches installed copies, so fail.
           if [ -z "${SPARKLE_PRIVATE_KEY:-}" ]; then
-            echo "::warning::SPARKLE_PRIVATE_KEY is not set; skipping Sparkle signing and the appcast update."
-            echo "enabled=false" >> "$GITHUB_OUTPUT"
-            exit 0
+            echo "::error::SPARKLE_PRIVATE_KEY is not set; installed copies would never see this release."
+            exit 1
           fi
           zip_path="${{ steps.package.outputs.zip_path }}"
           signature=$(./scripts/ci/sign_sparkle_update.sh "$zip_path" "$SPARKLE_PRIVATE_KEY")
@@ -239,6 +239,7 @@ jobs:
             echo "enabled=true"
             echo "signature=$signature"
             echo "length=$(stat -f%z "$zip_path")"
+            echo "minimum_system_version=$(/usr/libexec/PlistBuddy -c 'Print :LSMinimumSystemVersion' "${{ steps.build.outputs.app_path }}/Contents/Info.plist")"
           } >> "$GITHUB_OUTPUT"
 
       - name: Update appcast and version on main
@@ -257,6 +258,7 @@ jobs:
           git fetch origin main
           git checkout -B main origin/main
 
+          MINIMUM_SYSTEM_VERSION="${{ steps.sparkle.outputs.minimum_system_version }}" \
           ./scripts/ci/generate_appcast_entry.sh \
             "$tag" \
             "$semver" \

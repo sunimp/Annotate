@@ -878,7 +878,7 @@ final class ToolbarTests: XCTestCase {
         installedStatusItem = true
 
         let item = try XCTUnwrap(
-            appDelegate.statusItem.menu?.items.first {
+            appDelegate.statusMenuItems.first {
                 $0.action == #selector(AppDelegate.toggleToolbar)
             }
         )
@@ -1572,7 +1572,7 @@ final class ToolbarTests: XCTestCase {
         for (action, selector, binding) in cases {
             XCTAssertTrue(shortcuts.setShortcut(binding, for: action))
             appDelegate.refreshMenuKeyEquivalents()
-            let item = try XCTUnwrap(appDelegate.statusItem.menu?.items.first { $0.action == selector })
+            let item = try XCTUnwrap(appDelegate.statusMenuItems.first { $0.action == selector })
             XCTAssertEqual(item.keyEquivalent, binding.menuKeyEquivalent)
             XCTAssertEqual(item.keyEquivalentModifierMask, binding.modifiers)
             XCTAssertEqual(window.toolbarModel.shortcuts[action], binding.displayValue)

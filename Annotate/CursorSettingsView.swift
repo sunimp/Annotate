@@ -20,10 +20,6 @@ struct CursorSettingsView: View {
     var body: some View {
         Form {
             Section {
-                PaneHeader(pane: .cursor)
-            }
-
-            Section {
                 LabeledContent {
                     ActiveCursorPreview(
                         style: activeCursorStyle,
@@ -60,12 +56,7 @@ struct CursorSettingsView: View {
                     }
                 }
             } header: {
-                SettingsHeader(
-                    icon: "cursorarrow",
-                    color: .purple,
-                    title: L10n.string("Active Cursor"),
-                    subtitle: L10n.string("Cursor appearance when overlay is active")
-                )
+                Text("Active Cursor")
             }
 
             Section {
@@ -169,12 +160,7 @@ struct CursorSettingsView: View {
                     }
                 }
             } header: {
-                SettingsHeader(
-                    icon: "cursorarrow.motionlines",
-                    color: .pink,
-                    title: L10n.string("Cursor Highlight"),
-                    subtitle: L10n.string("Spotlight and click effects for presentations")
-                )
+                Text("Cursor Highlight")
             }
 
             if clickEffectsEnabled || cursorHighlightEnabled || activeCursorStyle != .none {
@@ -207,12 +193,7 @@ struct CursorSettingsView: View {
                     }
                     .padding(.top, 2)
                 } header: {
-                    SettingsHeader(
-                        icon: "cursorarrow.slash",
-                        color: .blue,
-                        title: L10n.string("Hide Cursor Effects In"),
-                        subtitle: L10n.string("Suppress effects while one of these apps is focused")
-                    )
+                    Text("Hide Cursor Effects In")
                 } footer: {
                     Text("Useful for virtual machines (such as UTM), games, and remote desktop clients that capture or lock the cursor.")
                         .font(.footnote)
@@ -222,7 +203,6 @@ struct CursorSettingsView: View {
         }
         .formStyle(.grouped)
         .toggleStyle(.switch)
-        .settingsScrollEdgeEffect()
         .onAppear {
             syncState()
         }

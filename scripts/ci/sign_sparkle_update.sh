@@ -32,12 +32,24 @@ check_dependencies() {
 
 # Function to download Sparkle tools
 download_sparkle_tools() {
+    # Pinned version and checksum, so a replaced download can't sign our updates.
     local sparkle_version="2.8.0"
+    local sparkle_sha256="fd5681ee92bf238aaac2d08214ceaf0cc8976e452d7f882d80bac1e61581f3b1"
     local sparkle_url="https://github.com/sparkle-project/Sparkle/releases/download/${sparkle_version}/Sparkle-${sparkle_version}.tar.xz"
-    
+    local archive
+    archive=$(mktemp)
+
     echo "🔽 Downloading Sparkle tools from: $sparkle_url" >&2
-    if ! curl -L "$sparkle_url" | tar -xJ; then
-        echo "❌ Failed to download or extract Sparkle tools" >&2
+    if ! curl -fsSL "$sparkle_url" -o "$archive"; then
+        echo "❌ Failed to download Sparkle tools" >&2
+        return 1
+    fi
+    if ! echo "${sparkle_sha256}  ${archive}" | shasum -a 256 -c - >/dev/null; then
+        echo "❌ Sparkle tools checksum mismatch, refusing to use them" >&2
+        return 1
+    fi
+    if ! tar -xJf "$archive" bin/sign_update; then
+        echo "❌ Failed to extract sign_update" >&2
         return 1
     fi
     
@@ -75,7 +87,7 @@ sign_zip_file() {
     trap "rm -f '$private_key_file'" EXIT
     
     # Write private key to secure temp file
-    echo "$private_key_secret" > "$private_key_file"
+    printf '%s' "$private_key_secret" | tr -d '\r\n' > "$private_key_file"
     chmod 600 "$private_key_file"
     
     # Verify private key file was created

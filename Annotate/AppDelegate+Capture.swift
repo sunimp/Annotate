@@ -345,9 +345,9 @@ extension AppDelegate {
         }
         guard let overlay, overlay.isVisible else { return }
         if let file = result.savedFile {
-            overlay.showToggleFeedback(L10n.string("Saved \(file.lastPathComponent)"), icon: "📸")
+            overlay.showToggleFeedback(L10n.string("Saved \(file.lastPathComponent)"), symbol: "square.and.arrow.down")
         } else if result.copiedToClipboard {
-            overlay.showToggleFeedback(L10n.string("Copied to Clipboard"), icon: "📋")
+            overlay.showToggleFeedback(L10n.string("Copied to Clipboard"), symbol: "doc.on.clipboard")
         }
     }
 
@@ -400,7 +400,7 @@ extension AppDelegate {
     /// never silent. `alerts` false skips the alert, for a caller that reports the problem itself.
     private func reportCaptureProblem(_ problem: CaptureProblem, on overlay: OverlayWindow?, alerts: Bool = true) {
         if let overlay, overlay.isVisible, !settings[.hideToolFeedback] {
-            overlay.showToggleFeedback(problem.title, icon: problem.icon)
+            overlay.showToggleFeedback(problem.title, symbol: problem.symbol)
         } else if alerts {
             queueCaptureProblemAlert(problem)
         }
@@ -441,7 +441,7 @@ extension AppDelegate {
             isPrivacyPromptOnScreen()
                 ? L10n.string("Screen Recording is off. Answer the macOS prompt")
                 : L10n.string("Screen Recording is off. Opening Settings…"),
-            icon: "🔒")
+            symbol: "lock.fill")
         DispatchQueue.main.asyncAfter(deadline: .now() + (showsNotice ? screenRecordingNoticeDelay : 0)) {
             [weak self] in
             guard let self else { return }
@@ -510,13 +510,14 @@ extension AppDelegate {
 /// and the alert's detail.
 struct CaptureProblem: Equatable {
     let title: String
-    let icon: String
+    /// The SF Symbol the HUD shows before the title.
+    let symbol: String
     let detail: String
 
     static var failed: CaptureProblem {
         CaptureProblem(
             title: L10n.string("Capture Failed"),
-            icon: "⚠️",
+            symbol: "exclamationmark.triangle.fill",
             detail: L10n.string("Annotate couldn't finish the capture. Try again in a moment."))
     }
 
@@ -524,14 +525,14 @@ struct CaptureProblem: Equatable {
     static func undelivered(error: Error) -> CaptureProblem {
         CaptureProblem(
             title: L10n.string("Capture Failed"),
-            icon: "⚠️",
+            symbol: "exclamationmark.triangle.fill",
             detail: L10n.string("Annotate couldn't deliver the image. \(error.localizedDescription)"))
     }
 
     static func folderUnavailable(_ folder: String, savedAs file: URL) -> CaptureProblem {
         CaptureProblem(
             title: L10n.string("Can't Reach \(folder). Saved to Default Folder"),
-            icon: "📁",
+            symbol: "folder",
             detail: L10n.string(
                 "Annotate can't reach \(folder), so it saved \(file.lastPathComponent) in \(CaptureSettingsView.displayPath(of: file.deletingLastPathComponent())). Choose another folder in Settings."))
     }
@@ -539,7 +540,7 @@ struct CaptureProblem: Equatable {
     static func copyFailed(savedAs file: URL, error: Error) -> CaptureProblem {
         CaptureProblem(
             title: L10n.string("Couldn't Copy. Saved \(file.lastPathComponent)"),
-            icon: "⚠️",
+            symbol: "exclamationmark.triangle.fill",
             detail: L10n.string("The image was saved, but Annotate couldn't copy it to the clipboard. \(error.localizedDescription)"))
     }
 
@@ -547,7 +548,7 @@ struct CaptureProblem: Equatable {
     static func annotationDataFailed(savedAs file: URL, error: String) -> CaptureProblem {
         CaptureProblem(
             title: L10n.string("Couldn't Save Annotation Data. Saved \(file.lastPathComponent)"),
-            icon: "⚠️",
+            symbol: "exclamationmark.triangle.fill",
             detail: L10n.string("The image was saved, but Annotate couldn't save its annotation data next to it. \(error)"))
     }
 
@@ -556,14 +557,14 @@ struct CaptureProblem: Equatable {
     func addingAnnotationDataFailure(_ error: String) -> CaptureProblem {
         CaptureProblem(
             title: L10n.string("\(title). Couldn't Save Annotation Data"),
-            icon: icon,
+            symbol: symbol,
             detail: L10n.string("\(detail) Annotate also couldn't save the annotation data next to the image. \(error)"))
     }
 
     static func saveFailed(error: Error?) -> CaptureProblem {
         CaptureProblem(
             title: L10n.string("Couldn't Save. Copied to Clipboard"),
-            icon: "📋",
+            symbol: "doc.on.clipboard",
             detail: [L10n.string("The image is on the clipboard, but Annotate couldn't save it."), error?.localizedDescription]
                 .compactMap { $0 }
                 .joined(separator: " "))

@@ -3,11 +3,8 @@ import SwiftUI
 
 /// Owns the AppKit window that hosts `SettingsView`.
 ///
-/// The window is built by hand (rather than through the SwiftUI `Settings`
-/// scene) so its chrome can be configured for a seamless sidebar: a hidden
-/// title, a transparent unified toolbar, and full-size content let the
-/// sidebar material run to the very top of the window with the traffic
-/// lights sitting on it.
+/// Built by hand rather than through the SwiftUI `Settings` scene, which AppKit can't open
+/// to a pane or report closing. The window is titled with the shown pane.
 @MainActor
 final class SettingsWindowManager {
     static let shared = SettingsWindowManager()
@@ -21,15 +18,18 @@ final class SettingsWindowManager {
     /// The pane the open window shows. Each new window starts fresh, on General.
     private(set) var navigation = SettingsNavigation()
 
+    /// Bumped by each `updateTitle()` so only the newest observation keeps the title current.
+    private var titleGeneration = 0
+
     /// Run once when the window closes.
     private var closeHandlers: [@MainActor () -> Void] = []
 
     private init() {}
 
-    /// Shows the settings window, creating it on first use and re-fronting
-    /// the existing one on subsequent calls. With a `pane`, switches to it.
-    /// `requestingScreenRecording` has the Capture pane ask for Screen Recording access.
-    /// `onClose` runs when the window closes, including a window that was already open.
+    /// Shows the settings window, creating it on first use and re-fronting the existing one
+    /// after. With a `pane`, switches to it. `requestingScreenRecording` has the Capture pane
+    /// ask for Screen Recording access. `onClose` runs when the window closes, including a
+    /// window that was already open.
     func show(
         pane: SettingsPane? = nil,
         requestingScreenRecording: Bool = false,
@@ -40,6 +40,7 @@ final class SettingsWindowManager {
         }
         if settingsWindow == nil {
             navigation = SettingsNavigation()
+            makeWindow()
         }
         if let pane {
             navigation.selection = pane
@@ -47,36 +48,46 @@ final class SettingsWindowManager {
         if requestingScreenRecording {
             navigation.requestsScreenRecording = true
         }
-        if let window = settingsWindow {
-            NSApp.activate(ignoringOtherApps: true)
-            window.deminiaturize(nil)
-            window.makeKeyAndOrderFront(nil)
-            return
-        }
+        guard let window = settingsWindow else { return }
+        NSApp.activate(ignoringOtherApps: true)
+        window.deminiaturize(nil)
+        window.makeKeyAndOrderFront(nil)
+    }
 
-        let window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 780, height: 580),
-            styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
-            backing: .buffered,
-            defer: false
-        )
+    private func makeWindow() {
+        let controller = NSHostingController(rootView: SettingsView(navigation: navigation).localizedEnvironment())
+        controller.sceneBridgingOptions = [.toolbars]
 
-        window.title = L10n.string("Annotate Settings")
-        window.titleVisibility = .hidden
-        window.titlebarAppearsTransparent = true
-        window.toolbar = NSToolbar()
+        let window = NSWindow(contentViewController: controller)
+        window.styleMask = [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView]
         window.toolbarStyle = .unified
-        window.contentView = NSHostingView(rootView: SettingsView(navigation: navigation).localizedEnvironment())
+        window.setContentSize(NSSize(width: 860, height: 640))
         window.center()
         window.isReleasedWhenClosed = false
-        window.level = .normal
 
+        let delegate = SettingsWindowDelegate()
+        window.delegate = delegate
+        windowDelegate = delegate
         settingsWindow = window
-        NSApp.activate(ignoringOtherApps: true)
-        window.makeKeyAndOrderFront(nil)
+        updateTitle()
+    }
 
-        windowDelegate = SettingsWindowDelegate()
-        window.delegate = windowDelegate
+    /// Titles the window with the shown pane, now and whenever the selection changes.
+    /// Call again after a language change.
+    func updateTitle() {
+        guard let window = settingsWindow else { return }
+        // Each call starts a new observation chain; older chains stop at the next change.
+        titleGeneration += 1
+        let generation = titleGeneration
+        let navigation = navigation
+        window.title = withObservationTracking {
+            (navigation.selection ?? .general).title
+        } onChange: { [weak self] in
+            Task { @MainActor in
+                guard let self, self.titleGeneration == generation else { return }
+                self.updateTitle()
+            }
+        }
     }
 
     fileprivate func windowWillClose() {
@@ -88,8 +99,8 @@ final class SettingsWindowManager {
     }
 }
 
-/// Clears the manager's references when the window closes so the next
-/// `show()` builds a fresh window.
+/// Clears the manager's references when the window closes so the next `show()` builds a
+/// fresh window.
 private final class SettingsWindowDelegate: NSObject, NSWindowDelegate {
     func windowWillClose(_: Notification) {
         SettingsWindowManager.shared.windowWillClose()

@@ -330,40 +330,6 @@
         }
       }
     },
-    "Activation shortcuts and application behavior": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Atajos de activación y comportamiento de la app"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Raccourcis d’activation et comportement de l’app"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "起動ショートカットとアプリケーションの動作"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "激活快捷键与应用行为"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "啟用快速鍵與應用程式行為"
-          }
-        }
-      }
-    },
     "Active Cursor": {
       "localizations": {
         "es": {
@@ -500,40 +466,6 @@
         }
       }
     },
-    "Additional annotation features": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Funciones de anotación adicionales"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fonctionnalités d’annotation supplémentaires"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "その他の注釈機能"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "其他标注功能"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "其他註解功能"
-          }
-        }
-      }
-    },
     "Adjust stroke width": {
       "localizations": {
         "es": {
@@ -564,74 +496,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "調整筆畫寬度"
-          }
-        }
-      }
-    },
-    "Adjust the default font size for text annotations": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ajusta el tamaño de letra por omisión de las anotaciones de texto"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ajuster la taille de police par défaut des annotations textuelles"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "テキスト注釈のデフォルトのフォントサイズを調整します"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "调整文本标注的默认字号"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "調整文字註解的預設字體大小"
-          }
-        }
-      }
-    },
-    "Adjust the default size and style for counter annotations": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ajusta el tamaño y el estilo por omisión de los contadores"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ajuster la taille et le style par défaut des compteurs"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "カウンタ注釈のデフォルトのサイズとスタイルを調整します"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "调整编号标记的默认大小和样式"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "調整編號標記的預設大小與樣式"
           }
         }
       }
@@ -874,9 +738,6 @@
         }
       }
     },
-    "Annotate": {
-      "shouldTranslate": false
-    },
     "Annotate On": {
       "localizations": {
         "es": {
@@ -907,40 +768,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "標註範圍"
-          }
-        }
-      }
-    },
-    "Annotate Settings": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ajustes de Annotate"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Réglages d’Annotate"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Annotateの設定"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Annotate 设置"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Annotate 設定"
           }
         }
       }
@@ -1319,40 +1146,6 @@
         }
       }
     },
-    "Basic drawing and annotation shortcuts": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Atajos básicos de dibujo y anotación"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Raccourcis de dessin et d’annotation de base"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "基本的な描画と注釈のショートカット"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "基本绘制与标注快捷键"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "基本繪圖與註解快速鍵"
-          }
-        }
-      }
-    },
     "Bind each color to the number the color picker shows under it": {
       "localizations": {
         "es": {
@@ -1655,40 +1448,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "畫板設定"
-          }
-        }
-      }
-    },
-    "Board background appearance and visibility": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aspecto y visibilidad del fondo de pizarra"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Apparence et visibilité du fond de tableau"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ボード背景の外観と表示"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "画板背景外观与可见性"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "畫板背景的外觀與顯示"
           }
         }
       }
@@ -2713,40 +2472,6 @@
         }
       }
     },
-    "Choose how redaction rectangles hide what is under them": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Elige cómo ocultan los rectángulos de ocultación lo que tienen debajo"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Choisir comment les rectangles de masquage cachent le contenu en dessous"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "墨消しの長方形で下の内容をどのように隠すかを選択します"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "选择遮盖矩形隐藏下方内容的方式"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "選擇遮蔽矩形如何隱藏下方內容"
-          }
-        }
-      }
-    },
     "Choose how the cursor appears while annotating": {
       "localizations": {
         "es": {
@@ -2777,40 +2502,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "選擇註解時游標的外觀"
-          }
-        }
-      }
-    },
-    "Choose the shape of new arrows": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Elige la forma de las flechas nuevas"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Choisir la forme des nouvelles flèches"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "新しい矢印の形を選択します"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "选择新箭头的形状"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "選擇新箭頭的形狀"
           }
         }
       }
@@ -3184,7 +2875,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "關閉覆蓋層時清除所有繪圖"
+            "value": "關閉疊加層時清除所有繪圖"
           }
         }
       }
@@ -3286,7 +2977,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "清除所有已開啟覆蓋層上的註解。可在覆蓋層中還原清除動作。"
+            "value": "清除所有已開啟疊加層上的註解。可在疊加層中還原清除動作。"
           }
         }
       }
@@ -3354,7 +3045,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "關閉覆蓋層"
+            "value": "關閉疊加層"
           }
         }
       }
@@ -3388,7 +3079,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "關閉所有顯示器上的註解覆蓋層，並離開永遠開啟模式。"
+            "value": "關閉所有顯示器上的註解疊加層，並離開永遠開啟模式。"
           }
         }
       }
@@ -3559,40 +3250,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "顏色…"
-          }
-        }
-      }
-    },
-    "Configure app launch and display options": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Configura el inicio de la app y las opciones de visualización"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Configurer le lancement et l’affichage de l’app"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "アプリの起動と表示のオプションを設定します"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "配置应用启动与显示选项"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "設定 App 的啟動與顯示選項"
           }
         }
       }
@@ -4345,108 +4002,6 @@
         }
       }
     },
-    "Cursor appearance when overlay is active": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aspecto del cursor con la capa activa"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Apparence du curseur lorsque le calque est actif"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "オーバーレイがアクティブなときのカーソルの外観"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "叠加层激活时的光标外观"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "覆蓋層啟用時的游標外觀"
-          }
-        }
-      }
-    },
-    "Cursor style, spotlight, and click effects": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Estilo del cursor, foco y efectos de clic"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Style du curseur, projecteur et effets de clic"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "カーソルのスタイル、スポットライト、クリック効果"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "光标样式、聚光灯和点按效果"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "游標樣式、聚光燈與點按效果"
-          }
-        }
-      }
-    },
-    "Customize board appearance and visibility": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Personaliza el aspecto y la visibilidad de la pizarra"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Personnaliser l’apparence et la visibilité du tableau"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ボードの外観と表示をカスタマイズします"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "自定画板外观与可见性"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "自訂畫板的外觀與顯示"
-          }
-        }
-      }
-    },
     "Cyan": {
       "localizations": {
         "es": {
@@ -4715,40 +4270,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "預設工具"
-          }
-        }
-      }
-    },
-    "Default sizes for text and counter annotations": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tamaños por omisión de texto y contadores"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tailles par défaut du texte et des compteurs"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "テキスト注釈とカウンタ注釈のデフォルトサイズ"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "文本和编号标注的默认大小"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "文字與編號註解的預設大小"
           }
         }
       }
@@ -5025,74 +4546,6 @@
         }
       }
     },
-    "Display Annotate icon in the Dock": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mostrar el icono de Annotate en el Dock"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Afficher l’icône d’Annotate dans le Dock"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "DockにAnnotateのアイコンを表示します"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "在程序坞中显示 Annotate 图标"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "在 Dock 中顯示 Annotate 圖像"
-          }
-        }
-      }
-    },
-    "Display Annotate icon in the menu bar. With both icons hidden, open Annotate again to show Settings": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Muestra el icono de Annotate en la barra de menús. Si ocultas ambos iconos, vuelve a abrir Annotate para ver Ajustes"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Afficher l’icône d’Annotate dans la barre des menus. Si les deux icônes sont masquées, rouvrez Annotate pour afficher les Réglages"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Annotateのアイコンをメニューバーに表示します。両方のアイコンを非表示にした場合は、Annotateをもう一度開くと設定が表示されます"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "在菜单栏中显示 Annotate 图标。两个图标都隐藏时，再次打开 Annotate 即可显示设置"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "在選單列中顯示 Annotate 圖像。兩個圖像都隱藏時，再次打開 Annotate 即可顯示設定"
-          }
-        }
-      }
-    },
     "Display the floating shortcut toolbar on annotation overlays": {
       "localizations": {
         "es": {
@@ -5122,7 +4575,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "在註解覆蓋層上顯示浮動快速鍵工具列"
+            "value": "在註解疊加層上顯示浮動快速鍵工具列"
           }
         }
       }
@@ -5462,7 +4915,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "每次擷取都會傳送一則附預覽的通知，已儲存的擷取通知附有「在 Finder 中顯示」。無論是否傳送通知，覆蓋層上的提示都會顯示，除非開啟了「隱藏工具回饋」。"
+            "value": "每次擷取都會傳送一則附預覽的通知，已儲存的擷取通知附有「在 Finder 中顯示」。無論是否傳送通知，疊加層上的提示都會顯示，除非開啟了「隱藏工具回饋」。"
           }
         }
       }
@@ -6045,40 +5498,6 @@
         }
       }
     },
-    "Fixed editing and dismissal keys": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Teclas fijas de edición y cierre"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Touches fixes d’édition et de fermeture"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "固定の編集キーと閉じるキー"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "固定的编辑与关闭按键"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "固定的編輯與關閉按鍵"
-          }
-        }
-      }
-    },
     "Folder": {
       "localizations": {
         "es": {
@@ -6181,42 +5600,42 @@
         }
       }
     },
-    "Geometric shape shortcuts": {
+    "GitHub": {
+      "shouldTranslate": false
+    },
+    "Global Shortcuts": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Atajos de formas geométricas"
+            "value": "Atajos globales"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Raccourcis des formes géométriques"
+            "value": "Raccourcis globaux"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "図形のショートカット"
+            "value": "グローバルショートカット"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "几何形状快捷键"
+            "value": "全局快捷键"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "幾何形狀快速鍵"
+            "value": "全域快速鍵"
           }
         }
       }
-    },
-    "GitHub": {
-      "shouldTranslate": false
     },
     "Green": {
       "localizations": {
@@ -6248,40 +5667,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "綠色"
-          }
-        }
-      }
-    },
-    "Hear about captures made with the overlay closed": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Recibe avisos de las capturas hechas con la capa cerrada"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Soyez averti des captures faites calque fermé"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "オーバーレイを閉じているときのキャプチャも通知します"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "叠加层关闭时截图也能收到通知"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "覆蓋層關閉時擷取也能收到通知"
           }
         }
       }
@@ -6383,7 +5768,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "隱藏覆蓋層"
+            "value": "隱藏疊加層"
           }
         }
       }
@@ -6553,7 +5938,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "隱藏覆蓋層，或先關閉已開啟的選擇器或標籤"
+            "value": "隱藏疊加層，或先關閉已開啟的選擇器或標籤"
           }
         }
       }
@@ -6694,40 +6079,6 @@
         }
       }
     },
-    "How long annotations stay at full opacity before fading out": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tiempo que las anotaciones permanecen totalmente opacas antes de desvanecerse"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Durée pendant laquelle les annotations restent opaques avant de s’estomper"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "注釈がフェードアウトし始めるまで完全に不透明なまま表示される時間"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "标注开始淡出前保持完全不透明的时长"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "註解在淡出前維持完全不透明的時間"
-          }
-        }
-      }
-    },
     "Increase Size": {
       "localizations": {
         "es": {
@@ -6826,74 +6177,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "讓 Annotate 保持啟用，不自動隱藏"
-          }
-        }
-      }
-    },
-    "Keyboard Shortcuts": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Atajos de teclado"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Raccourcis clavier"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "キーボードショートカット"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "键盘快捷键"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "鍵盤快速鍵"
-          }
-        }
-      }
-    },
-    "Keyboard shortcuts for tools and utilities": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Atajos de teclado para herramientas y utilidades"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Raccourcis clavier des outils et utilitaires"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ツールとユーティリティのキーボードショートカット"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "工具和实用功能的键盘快捷键"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "工具與實用工具的鍵盤快速鍵"
           }
         }
       }
@@ -7442,36 +6725,36 @@
         }
       }
     },
-    "Needed to read what is on screen": {
+    "Modes": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Necesario para leer lo que hay en pantalla"
+            "value": "Modos"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nécessaire pour lire le contenu de l’écran"
+            "value": "Modes"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "画面上の内容を読み取るために必要です"
+            "value": "モード"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "读取屏幕内容时需要"
+            "value": "模式"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "讀取螢幕內容時需要"
+            "value": "模式"
           }
         }
       }
@@ -8015,7 +7298,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "在指標所在的顯示器上打開註解覆蓋層，並離開永遠開啟模式。"
+            "value": "在指標所在的顯示器上打開註解疊加層，並離開永遠開啟模式。"
           }
         }
       }
@@ -8049,7 +7332,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "在指標所在的顯示器上打開註解覆蓋層；若已打開則將其關閉。"
+            "value": "在指標所在的顯示器上打開註解疊加層；若已打開則將其關閉。"
           }
         }
       }
@@ -8083,7 +7366,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "打開覆蓋層讓你拖出顯示器的一部分，然後將其連同標註擷取成 PNG 並傳給下一步。同時依 Annotate 設定中的「擷取後」儲存、拷貝或兩者都做。取消選擇則失敗。"
+            "value": "打開疊加層讓你拖出顯示器的一部分，然後將其連同標註擷取成 PNG 並傳給下一步。同時依 Annotate 設定中的「擷取後」儲存、拷貝或兩者都做。取消選擇則失敗。"
           }
         }
       }
@@ -8186,6 +7469,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "橢圓"
+          }
+        }
+      }
+    },
+    "Overlay": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Superposición"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Superposition"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "オーバーレイ"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "叠加层"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "疊加層"
           }
         }
       }
@@ -8428,40 +7745,6 @@
         }
       }
     },
-    "Pickers, sizes, and overlay controls": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Selectores, tamaños y controles de la capa"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sélecteurs, tailles et commandes du calque"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ピッカー、サイズ、オーバーレイの操作"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "选择器、尺寸与叠加层控制"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "選擇器、大小與覆蓋層控制"
-          }
-        }
-      }
-    },
     "Pixelate": {
       "localizations": {
         "es": {
@@ -8559,7 +7842,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "為覆蓋層與清除動作播放回饋音效"
+            "value": "為疊加層與清除動作播放回饋音效"
           }
         }
       }
@@ -9335,13 +8618,13 @@
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "每次激活覆盖层时恢复为此颜色，而非上次使用的颜色"
+            "value": "每次激活叠加层时恢复为此颜色，而非上次使用的颜色"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "每次啟用覆蓋層時恢復為此顏色，而非上次使用的顏色"
+            "value": "每次啟用疊加層時恢復為此顏色，而非上次使用的顏色"
           }
         }
       }
@@ -9369,13 +8652,13 @@
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "每次激活覆盖层时恢复为此线宽，而非上次使用的线宽"
+            "value": "每次激活叠加层时恢复为此线宽，而非上次使用的线宽"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "每次啟用覆蓋層時恢復為此線條寬度，而非上次使用的寬度"
+            "value": "每次啟用疊加層時恢復為此線條寬度，而非上次使用的寬度"
           }
         }
       }
@@ -9614,40 +8897,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "在擷取畫面旁儲存標註資料"
-          }
-        }
-      }
-    },
-    "Save the display or an area with its annotations": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Guardar la pantalla o un área con sus anotaciones"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enregistrer l’écran ou une zone avec ses annotations"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ディスプレイまたは範囲を注釈付きで保存します"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "存储带标注的显示器画面或区域"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "儲存顯示器或區域及其註解"
           }
         }
       }
@@ -9958,6 +9207,40 @@
         }
       }
     },
+    "Search Settings": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buscar ajustes"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rechercher dans les réglages"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "設定を検索"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "搜索设置"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "搜尋設定"
+          }
+        }
+      }
+    },
     "Select": {
       "localizations": {
         "es": {
@@ -10123,7 +9406,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "選取註解工具並打開覆蓋層。"
+            "value": "選取註解工具並打開疊加層。"
           }
         }
       }
@@ -10366,40 +9649,6 @@
         }
       }
     },
-    "Set keyboard shortcuts to activate Annotate and jump to specific modes": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Define atajos de teclado para activar Annotate y pasar a modos concretos"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Définir des raccourcis clavier pour activer Annotate et passer à des modes précis"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Annotateを起動したり特定のモードに切り替えたりするキーボードショートカットを設定します"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "设置用于激活 Annotate 和切换到特定模式的键盘快捷键"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "設定用來啟用 Annotate 及切換至特定模式的鍵盤快速鍵"
-          }
-        }
-      }
-    },
     "Set toolbar to ${state}": {
       "localizations": {
         "es": {
@@ -10463,7 +9712,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "將標註顏色設為調色盤槽位：1 紅、2 橙、3 黃、4 綠、5 青、6 靛、7 洋紅、8 白、9 黑。不會打開覆蓋層。"
+            "value": "將標註顏色設為調色盤槽位：1 紅、2 橙、3 黃、4 綠、5 青、6 靛、7 洋紅、8 白、9 黑。不會打開疊加層。"
           }
         }
       }
@@ -10706,6 +9955,74 @@
         }
       }
     },
+    "Show Annotate's icon in the Dock after launch and while it runs. When off, Annotate stays out of the Dock and the app switcher": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muestra el icono de Annotate en el Dock tras abrirse y mientras se ejecuta. Si está desactivado, Annotate no aparece en el Dock ni en el selector de apps"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Affiche l’icône d’Annotate dans le Dock après son lancement et tant qu’il est ouvert. Désactivé, Annotate n’apparaît ni dans le Dock ni dans le sélecteur d’apps"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "起動後および実行中、DockにAnnotateのアイコンを表示します。オフにすると、DockとAppスイッチャーに表示されません"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App 启动后及运行期间，在程序坞中显示 Annotate 图标。关闭后，Annotate 不出现在程序坞和 App 切换器中"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App 啟動後及執行期間，在 Dock 中顯示 Annotate 圖像。關閉後，Annotate 不會出現在 Dock 和 App 切換器中"
+          }
+        }
+      }
+    },
+    "Show Annotate's icon in the menu bar after launch and while it runs. With both icons off, open Annotate again to show Settings": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muestra el icono de Annotate en la barra de menús tras abrirse y mientras se ejecuta. Con ambos iconos desactivados, vuelve a abrir Annotate para ver los ajustes"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Affiche l’icône d’Annotate dans la barre des menus après son lancement et tant qu’il est ouvert. Si les deux icônes sont désactivées, rouvrez Annotate pour afficher les réglages"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "起動後および実行中、メニューバーにAnnotateのアイコンを表示します。両方のアイコンをオフにした場合は、Annotateをもう一度開くと設定が表示されます"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App 启动后及运行期间，在菜单栏中显示 Annotate 图标。两个图标都关闭时，再次打开 Annotate 即可显示设置"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App 啟動後及執行期間，在選單列中顯示 Annotate 圖像。兩個圖像都關閉時，再次打開 Annotate 即可顯示設定"
+          }
+        }
+      }
+    },
     "Show Blackboard": {
       "localizations": {
         "es": {
@@ -10774,6 +10091,74 @@
         }
       }
     },
+    "Show Dock Icon": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostrar icono en el Dock"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher l’icône dans le Dock"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dockにアイコンを表示"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "显示程序坞图标"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "顯示 Dock 圖像"
+          }
+        }
+      }
+    },
+    "Show Menu Bar Icon": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostrar icono en la barra de menús"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher l’icône dans la barre des menus"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "メニューバーにアイコンを表示"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "显示菜单栏图标"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "顯示選單列圖像"
+          }
+        }
+      }
+    },
     "Show Overlay": {
       "localizations": {
         "es": {
@@ -10803,7 +10188,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "顯示覆蓋層"
+            "value": "顯示疊加層"
           }
         }
       }
@@ -10876,40 +10261,6 @@
         }
       }
     },
-    "Show in Dock": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mostrar en el Dock"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Afficher dans le Dock"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dockに表示"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "在程序坞中显示"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "在 Dock 中顯示"
-          }
-        }
-      }
-    },
     "Show in Finder": {
       "localizations": {
         "es": {
@@ -10940,40 +10291,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "在 Finder 中顯示"
-          }
-        }
-      }
-    },
-    "Show in Menu Bar": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mostrar en la barra de menús"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Afficher dans la barre des menus"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "メニューバーに表示"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "在菜单栏中显示"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "在選單列中顯示"
           }
         }
       }
@@ -11143,7 +10460,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "僅在覆蓋層啟用時顯示聚光燈"
+            "value": "僅在疊加層啟用時顯示聚光燈"
           }
         }
       }
@@ -11245,7 +10562,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "顯示或隱藏覆蓋層工具列。不會打開覆蓋層。"
+            "value": "顯示或隱藏疊加層工具列。不會打開疊加層。"
           }
         }
       }
@@ -11386,6 +10703,40 @@
         }
       }
     },
+    "Sound": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sonido"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Son"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "サウンド"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "声音"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "聲音"
+          }
+        }
+      }
+    },
     "Sound Theme": {
       "localizations": {
         "es": {
@@ -11484,40 +10835,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "聚光燈大小"
-          }
-        }
-      }
-    },
-    "Spotlight and click effects for presentations": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Foco y efectos de clic para presentaciones"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Projecteur et effets de clic pour les présentations"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "プレゼンテーション向けのスポットライトとクリック効果"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "用于演示的聚光灯和点按效果"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "用於簡報的聚光燈與點按效果"
           }
         }
       }
@@ -11688,40 +11005,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "樣式"
-          }
-        }
-      }
-    },
-    "Suppress effects while one of these apps is focused": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Desactivar los efectos mientras una de estas apps esté en primer plano"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Désactiver les effets lorsqu’une de ces apps est au premier plan"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "これらのアプリがフォーカスされている間は効果を抑制します"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "以下应用处于前台时停用效果"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "當這些 App 位於前景時停用效果"
           }
         }
       }
@@ -12469,7 +11752,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "切換覆蓋層"
+            "value": "切換疊加層"
           }
         }
       }
@@ -12605,7 +11888,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "每次啟用覆蓋層時選取的工具"
+            "value": "每次啟用疊加層時選取的工具"
           }
         }
       }
@@ -12640,6 +11923,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "工具：%@"
+          }
+        }
+      }
+    },
+    "Toolbar": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Barra de herramientas"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Barre d’outils"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ツールバー"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "工具栏"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "工具列"
           }
         }
       }
@@ -13154,40 +12471,6 @@
         }
       }
     },
-    "Version %@": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Versión %@"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Version %@"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "バージョン %@"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "版本 %@"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "版本 %@"
-          }
-        }
-      }
-    },
     "Version %@ (%@)": {
       "localizations": {
         "es": {
@@ -13252,40 +12535,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "垂直"
-          }
-        }
-      }
-    },
-    "Where screenshots go and Screen Recording access": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Destino de las capturas y acceso a Grabación de pantalla"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Emplacement des captures et accès à l’enregistrement de l’écran"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "スクリーンショットの保存先と画面収録へのアクセス"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "截图存储位置与屏幕录制权限"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "截圖儲存位置與螢幕錄製權限"
           }
         }
       }

@@ -53,35 +53,6 @@ struct GeneralSettingsView: View {
     var body: some View {
         Form {
             Section {
-                PaneHeader(pane: .general)
-            }
-
-            Section {
-                LabeledContent {
-                    GlobalShortcutRecorder(name: .toggleOverlay)
-                } label: {
-                    Text("Activation Shortcut")
-                    Text("Primary keyboard shortcut to activate Annotate")
-                    Text("Requires modifier keys (⌘, ⌥, ⌃, or ⇧)")
-                }
-
-                LabeledContent {
-                    GlobalShortcutRecorder(name: .toggleAlwaysOnMode)
-                } label: {
-                    Text("Always-On Mode")
-                    Text("Keep Annotate active without auto-hide")
-                    Text("Requires modifier keys (⌘, ⌥, ⌃, or ⇧)")
-                }
-            } header: {
-                SettingsHeader(
-                    icon: "keyboard",
-                    color: .gray,
-                    title: L10n.string("Keyboard Shortcuts"),
-                    subtitle: L10n.string("Set keyboard shortcuts to activate Annotate and jump to specific modes")
-                )
-            }
-
-            Section {
                 Toggle(isOn: $launchAtLogin) {
                     Text("Launch at Login")
                     Text("Open Annotate automatically when you log in")
@@ -90,71 +61,25 @@ struct GeneralSettingsView: View {
                     launchAtLogin = Self.setLaunchAtLogin(enabled)
                 }
 
-                Picker(selection: $overlayScope) {
-                    ForEach(OverlayScope.allCases, id: \.self) { scope in
-                        Text(scope.displayName).tag(scope)
-                    }
-                } label: {
-                    Text("Annotate On")
-                    Text("Open the overlay on the screen under the pointer, or on every screen")
+                Toggle(
+                    isOn: Binding(
+                        get: { !hideDockIcon },
+                        set: { hideDockIcon = !$0 }
+                    )
+                ) {
+                    Text("Show Dock Icon")
+                    Text("Show Annotate's icon in the Dock after launch and while it runs. When off, Annotate stays out of the Dock and the app switcher")
+                }
+                .onChange(of: hideDockIcon) { _, _ in
+                    AppDelegate.shared?.updateDockIconVisibility()
                 }
 
-                Toggle(isOn: $clearDrawingsOnStart) {
-                    Text("Clear Drawings on Toggle")
-                    Text("Clear all drawings when toggling overlay off")
+                Toggle(isOn: $showMenuBarIcon) {
+                    Text("Show Menu Bar Icon")
+                    Text("Show Annotate's icon in the menu bar after launch and while it runs. With both icons off, open Annotate again to show Settings")
                 }
-
-                Toggle(isOn: $hideToolFeedback) {
-                    Text("Hide Tool Feedback")
-                    Text("Disable visual feedback when switching tools")
-                }
-
-                Toggle(isOn: $toolbarVisible) {
-                    Text("Show toolbar")
-                    Text("Display the floating shortcut toolbar on annotation overlays")
-                }
-                .onChange(of: toolbarVisible) { _, visible in
-                    AppDelegate.shared?.setToolbarVisible(visible)
-                }
-
-                Toggle(isOn: $toolbarShowsShortcuts) {
-                    Text("Show shortcuts in toolbar")
-                    Text("Label each toolbar button with its keyboard shortcut")
-                }
-                .disabled(!toolbarVisible)
-                .onChange(of: toolbarShowsShortcuts) { _, _ in
-                    AppDelegate.shared?.applyToolbarAppearance()
-                }
-
-                Picker(selection: $toolbarLayout) {
-                    ForEach(ToolbarLayout.allCases, id: \.self) { layout in
-                        Text(layout.displayName).tag(layout)
-                    }
-                } label: {
-                    Text("Toolbar Layout")
-                    Text("Run the toolbar along the bottom or down the left edge")
-                }
-                .disabled(!toolbarVisible)
-                .onChange(of: toolbarLayout) { _, _ in
-                    AppDelegate.shared?.applyToolbarAppearance()
-                }
-
-                Toggle(isOn: $soundsEnabled) {
-                    Text("Play sounds")
-                    Text("Play feedback sounds for overlay and clear actions")
-                }
-
-                Picker(selection: $soundTheme) {
-                    ForEach(SoundTheme.allCases) { theme in
-                        Text(theme.displayName).tag(theme)
-                    }
-                } label: {
-                    Text("Sound Theme")
-                    Text("Chalk, paper, marker, pencil, or typewriter cues")
-                }
-                .disabled(!soundsEnabled)
-                .onChange(of: soundTheme) { _, _ in
-                    SoundPlayer.shared.playOverlayOn()
+                .onChange(of: showMenuBarIcon) { _, _ in
+                    AppDelegate.shared?.updateMenuBarIconVisibility()
                 }
 
                 Picker(selection: $appLanguage) {
@@ -169,36 +94,29 @@ struct GeneralSettingsView: View {
                     AppDelegate.shared?.setLanguage(language)
                 }
 
-                Toggle(
-                    isOn: Binding(
-                        get: { !hideDockIcon },
-                        set: { hideDockIcon = !$0 }
-                    )
-                ) {
-                    Text("Show in Dock")
-                    Text("Display Annotate icon in the Dock")
+                Toggle(isOn: $urlCommandsEnabled) {
+                    Text("Allow URL commands")
+                    Text("Run \(AnnotateCommand.urlScheme):// links from other apps, scripts, and the browser")
                 }
-                .onChange(of: hideDockIcon) { _, _ in
-                    AppDelegate.shared?.updateDockIconVisibility()
-                }
+            } header: {
+                Text("Application")
+            }
 
-                Toggle(isOn: $showMenuBarIcon) {
-                    Text("Show in Menu Bar")
-                    Text("Display Annotate icon in the menu bar. With both icons hidden, open Annotate again to show Settings")
-                }
-                .onChange(of: showMenuBarIcon) { _, _ in
-                    AppDelegate.shared?.updateMenuBarIconVisibility()
-                }
-
-                Toggle(isOn: $selectAfterPlacingText) {
-                    Text("Switch to Select after placing text")
-                    Text("After committing a label, select it so you can move it right away")
+            Section {
+                Picker(selection: $overlayScope) {
+                    ForEach(OverlayScope.allCases, id: \.self) { scope in
+                        Label(scope.displayName, systemImage: scope == .allScreens ? "display.2" : "display")
+                            .tag(scope)
+                    }
+                } label: {
+                    Text("Annotate On")
+                    Text("Open the overlay on the screen under the pointer, or on every screen")
                 }
 
                 Picker(selection: $defaultToolOption) {
-                    Text("Last Used").tag(DefaultToolOption.lastUsed)
+                    Label("Last Used", systemImage: "clock.arrow.circlepath").tag(DefaultToolOption.lastUsed)
                     ForEach(Self.selectableDefaultTools, id: \.self) { tool in
-                        Text(tool.displayName).tag(DefaultToolOption.tool(tool))
+                        Label(tool.displayName, systemImage: tool.symbolName).tag(DefaultToolOption.tool(tool))
                     }
                 } label: {
                     Text("Default Tool")
@@ -235,17 +153,91 @@ struct GeneralSettingsView: View {
                     }
                 }
 
-                Toggle(isOn: $urlCommandsEnabled) {
-                    Text("Allow URL commands")
-                    Text("Run \(AnnotateCommand.urlScheme):// links from other apps, scripts, and the browser")
+                if usesFixedLineWidth || usesFixedColor {
+                    SettingsPreviewTile(
+                        image: SettingsPreview.stroke(
+                            lineWidth: usesFixedLineWidth ? fixedLineWidth : 3,
+                            color: usesFixedColor ? NSColor(fixedColor) : SettingsPreview.color,
+                            size: NSSize(width: 320, height: 40)))
+                }
+
+                Toggle(isOn: $clearDrawingsOnStart) {
+                    Text("Clear Drawings on Toggle")
+                    Text("Clear all drawings when toggling overlay off")
+                }
+
+                Toggle(isOn: $selectAfterPlacingText) {
+                    Text("Switch to Select after placing text")
+                    Text("After committing a label, select it so you can move it right away")
+                }
+
+                Toggle(isOn: $hideToolFeedback) {
+                    Text("Hide Tool Feedback")
+                    Text("Disable visual feedback when switching tools")
                 }
             } header: {
-                SettingsHeader(
-                    icon: "macwindow",
-                    color: .blue,
-                    title: L10n.string("Application"),
-                    subtitle: L10n.string("Configure app launch and display options")
-                )
+                Text("Overlay")
+            }
+
+            Section {
+                Toggle(isOn: $toolbarVisible) {
+                    Text("Show toolbar")
+                    Text("Display the floating shortcut toolbar on annotation overlays")
+                }
+                .onChange(of: toolbarVisible) { _, visible in
+                    AppDelegate.shared?.setToolbarVisible(visible)
+                }
+
+                Toggle(isOn: $toolbarShowsShortcuts) {
+                    Text("Show shortcuts in toolbar")
+                    Text("Label each toolbar button with its keyboard shortcut")
+                }
+                .disabled(!toolbarVisible)
+                .onChange(of: toolbarShowsShortcuts) { _, _ in
+                    AppDelegate.shared?.applyToolbarAppearance()
+                }
+
+                Picker(selection: $toolbarLayout) {
+                    ForEach(ToolbarLayout.allCases, id: \.self) { layout in
+                        Label(
+                            layout.displayName,
+                            systemImage: layout == .vertical
+                                ? "rectangle.leftthird.inset.filled" : "rectangle.bottomthird.inset.filled"
+                        )
+                        .tag(layout)
+                    }
+                } label: {
+                    Text("Toolbar Layout")
+                    Text("Run the toolbar along the bottom or down the left edge")
+                }
+                .disabled(!toolbarVisible)
+                .onChange(of: toolbarLayout) { _, _ in
+                    AppDelegate.shared?.applyToolbarAppearance()
+                }
+            } header: {
+                Text("Toolbar")
+            }
+
+            Section {
+                Toggle(isOn: $soundsEnabled) {
+                    Text("Play sounds")
+                    Text("Play feedback sounds for overlay and clear actions")
+                }
+
+                Picker(selection: $soundTheme) {
+                    ForEach(SoundTheme.allCases) { theme in
+                        Text(theme.displayName).tag(theme)
+                    }
+                } label: {
+                    Text("Sound Theme")
+                    Text("Chalk, paper, marker, pencil, or typewriter cues")
+                }
+                .disabled(!soundsEnabled)
+                .onChange(of: soundTheme) { _, _ in
+                    SoundPlayer.shared.playOverlayOn()
+                }
+            } header: {
+                Text("Sound")
             }
 
             Section {
@@ -261,17 +253,11 @@ struct GeneralSettingsView: View {
                     AppDelegate.shared?.applyFadeDelay()
                 }
             } header: {
-                SettingsHeader(
-                    icon: "timer",
-                    color: .purple,
-                    title: L10n.string("Fade Mode"),
-                    subtitle: L10n.string("How long annotations stay at full opacity before fading out")
-                )
+                Text("Fade Mode")
             }
         }
         .formStyle(.grouped)
         .toggleStyle(.switch)
-        .settingsScrollEdgeEffect()
         .onAppear { launchAtLogin = SMAppService.mainApp.status == .enabled }
     }
 
@@ -306,7 +292,7 @@ enum GlobalShortcutRecordingHandler {
     }
 }
 
-private struct GlobalShortcutRecorder: View {
+struct GlobalShortcutRecorder: View {
     let name: KeyboardShortcuts.Name
     @State private var previousShortcut: KeyboardShortcuts.Shortcut?
     @State private var conflictMessage: String?

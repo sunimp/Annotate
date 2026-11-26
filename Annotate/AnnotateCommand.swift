@@ -130,7 +130,7 @@ enum AnnotateCommand: Hashable, Sendable {
             return alreadySet ? .noOp : .ran
         case .clear:
             guard appDelegate.clearVisibleOverlays() else { return .noOp }
-            appDelegate.showToggleFeedback(L10n.string("Cleared"), icon: "🗑️")
+            appDelegate.showToggleFeedback(L10n.string("Cleared"), symbol: "trash")
             return .ran
         // A switch already in the requested state still shows its HUD, which reports the state.
         case .toolbar(let target):
@@ -138,7 +138,7 @@ enum AnnotateCommand: Hashable, Sendable {
             let visible = target.resolve(current: current)
             appDelegate.setToolbarVisible(visible)
             appDelegate.showToggleFeedback(
-                visible ? L10n.string("Toolbar On") : L10n.string("Toolbar Off"), icon: "🧰")
+                visible ? L10n.string("Toolbar On") : L10n.string("Toolbar Off"), symbol: "dock.rectangle")
             return visible == current ? .noOp : .ran
         case .fade(let target):
             let current = appDelegate.fadeModeEnabled
@@ -153,7 +153,7 @@ enum AnnotateCommand: Hashable, Sendable {
             appDelegate.setBoardEnabled(enabled)
             appDelegate.showToggleFeedback(
                 Self.boardFeedback(isBlackboard: board.currentBoardType == .blackboard, enabled: enabled),
-                icon: board.currentBoardType == .blackboard ? "⬛" : "⬜")
+                symbol: board.currentBoardType == .blackboard ? "rectangle.fill" : "rectangle")
             return enabled == current ? .noOp : .ran
         case .capture(let scope):
             // The capture finishes later and reports itself on the overlay. Capture Area

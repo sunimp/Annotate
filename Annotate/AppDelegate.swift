@@ -301,18 +301,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
 
             menu.addItem(NSMenuItem.separator())
 
+            menu.addItem(makeToolMenuItem())
             menu.addItem(NSMenuItem(title: L10n.string("Color…"), action: #selector(showColorPicker(_:)), keyEquivalent: ""))
             menu.addItem(
                 NSMenuItem(title: L10n.string("Line Width…"), action: #selector(showLineWidthPicker(_:)), keyEquivalent: ""))
-            menu.addItem(makeToolMenuItem())
-
-            menu.addItem(NSMenuItem.separator())
-
-            menu.addItem(makeStatusMenuItem(L10n.string("Show Whiteboard"), #selector(toggleBoardVisibility(_:)), .board))
-            menu.addItem(makeStatusMenuItem(L10n.string("Cursor Highlight"), #selector(toggleClickEffects(_:)), .cursorHighlight))
-            menu.addItem(makeStatusMenuItem(L10n.string("Fade Mode"), #selector(toggleFadeMode(_:)), .fadeMode))
-            menu.addItem(makeStatusMenuItem(L10n.string("Always-On Mode"), #selector(toggleAlwaysOnMode), .alwaysOnMode))
-            menu.addItem(makeStatusMenuItem(L10n.string("Show Toolbar"), #selector(toggleToolbar), .toolbar))
+            menu.addItem(makeModesMenuItem())
 
             menu.addItem(NSMenuItem.separator())
 
@@ -329,6 +322,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
             menu.addItem(NSMenuItem.separator())
 
             menu.addItem(NSMenuItem(title: L10n.string("Settings..."), action: #selector(showSettings), keyEquivalent: ","))
+            menu.addItem(NSMenuItem(title: L10n.string("About Annotate"), action: #selector(showAbout), keyEquivalent: ""))
             menu.addItem(NSMenuItem(title: L10n.string("Check for Updates..."), action: #selector(checkForUpdates), keyEquivalent: ""))
 
             menu.addItem(NSMenuItem.separator())
@@ -355,7 +349,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
         menu?.cancelTracking()
         refreshStatusMenu()
         aboutWindow?.title = L10n.string("About Annotate")
-        SettingsWindowManager.shared.settingsWindow?.title = L10n.string("Annotate Settings")
+        SettingsWindowManager.shared.updateTitle()
         overlayWindows.values.forEach { $0.refreshToolbarShortcuts() }
     }
 
@@ -390,6 +384,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
         }
         let item = NSMenuItem(title: L10n.string("Tool"), action: nil, keyEquivalent: "")
         item.identifier = .currentTool
+        item.submenu = submenu
+        return item
+    }
+
+    /// The Modes item, whose submenu holds the on/off states: board, cursor highlight, fade,
+    /// Always-On, and toolbar. No delegate, for the same reason as the Tool submenu.
+    private func makeModesMenuItem() -> NSMenuItem {
+        let submenu = NSMenu(title: L10n.string("Modes"))
+        submenu.addItem(makeStatusMenuItem(L10n.string("Show Whiteboard"), #selector(toggleBoardVisibility(_:)), .board))
+        submenu.addItem(makeStatusMenuItem(L10n.string("Cursor Highlight"), #selector(toggleClickEffects(_:)), .cursorHighlight))
+        submenu.addItem(makeStatusMenuItem(L10n.string("Fade Mode"), #selector(toggleFadeMode(_:)), .fadeMode))
+        submenu.addItem(makeStatusMenuItem(L10n.string("Always-On Mode"), #selector(toggleAlwaysOnMode), .alwaysOnMode))
+        submenu.addItem(makeStatusMenuItem(L10n.string("Show Toolbar"), #selector(toggleToolbar), .toolbar))
+        let item = NSMenuItem(title: L10n.string("Modes"), action: nil, keyEquivalent: "")
         item.submenu = submenu
         return item
     }
@@ -904,13 +912,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
 
         showToggleFeedback(
             newState ? L10n.string("Cursor Highlight On") : L10n.string("Cursor Highlight Off"),
-            icon: newState ? "👆" : "🚫")
+            symbol: newState ? "cursorarrow.rays" : "cursorarrow")
     }
 
     /// Shows the on-screen HUD on every open overlay. With none open there is nowhere to draw it.
-    func showToggleFeedback(_ text: String, icon: String) {
+    func showToggleFeedback(_ text: String, symbol: String) {
         for window in overlayWindows.values where window.isVisible {
-            window.showToggleFeedback(text, icon: icon)
+            window.showToggleFeedback(text, symbol: symbol)
         }
     }
 
@@ -953,9 +961,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
         updateToolbarMenuItem()
     }
 
-    /// The status menu's top-level item with `identifier`.
+    /// Every item in the status menu, followed by the items of its submenus.
+    var statusMenuItems: [NSMenuItem] {
+        let items = statusItem?.menu?.items ?? []
+        return items + items.flatMap { $0.submenu?.items ?? [] }
+    }
+
+    /// The status menu item with `identifier`, at the top level or in a submenu.
     func statusMenuItem(_ identifier: NSUserInterfaceItemIdentifier) -> NSMenuItem? {
-        statusItem?.menu?.items.first { $0.identifier == identifier }
+        statusMenuItems.first { $0.identifier == identifier }
     }
     
     private func configureWindowForNormalMode(_ overlayWindow: OverlayWindow) {
@@ -1039,10 +1053,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
     /// Gives the status menu's items, and the Tool submenu's, the key equivalents bound in
     /// Settings. Recent Captures has none (see `RecentCapturesMenu`).
     func refreshMenuKeyEquivalents() {
-        guard let menu = statusItem?.menu else { return }
-        let toolItems = statusMenuItem(.currentTool)?.submenu?.items ?? []
-
-        for item in menu.items + toolItems {
+        for item in statusMenuItems {
             let action: ShortcutKey
             switch item.action {
             case #selector(showColorPicker(_:)):
@@ -1152,7 +1163,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
 
         updateFadeModeMenuItems()
 
-        showToggleFeedback(enabled ? L10n.string("Fade Mode") : L10n.string("Persist Mode"), icon: enabled ? "⏳" : "📌")
+        showToggleFeedback(enabled ? L10n.string("Fade Mode") : L10n.string("Persist Mode"), symbol: enabled ? "circle.lefthalf.filled" : "pin.fill")
     }
 
     var toolbarVisible: Bool {
@@ -1279,7 +1290,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
             )
             aboutWindow?.contentViewController = hostingController
             aboutWindow?.title = L10n.string("About Annotate")
-        SettingsWindowManager.shared.settingsWindow?.title = L10n.string("Annotate Settings")
             aboutWindow?.isReleasedWhenClosed = false
             aboutWindow?.delegate = self
         }

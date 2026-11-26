@@ -73,10 +73,6 @@ struct CaptureSettingsView: View {
     var body: some View {
         Form {
             Section {
-                PaneHeader(pane: .capture)
-            }
-
-            Section {
                 Picker("After capture", selection: $afterCapture) {
                     ForEach(AfterCapture.allCases, id: \.self) { option in
                         Text(option.title).tag(option)
@@ -96,38 +92,22 @@ struct CaptureSettingsView: View {
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             } header: {
-                SettingsHeader(
-                    icon: "camera.viewfinder",
-                    color: .teal,
-                    title: L10n.string("Capture"),
-                    subtitle: L10n.string("Save the display or an area with its annotations")
-                )
+                Text("Capture")
             }
 
             Section {
                 notificationRow
             } header: {
-                SettingsHeader(
-                    icon: "bell.badge",
-                    color: .orange,
-                    title: L10n.string("Notifications"),
-                    subtitle: L10n.string("Hear about captures made with the overlay closed")
-                )
+                Text("Notifications")
             }
 
             Section {
                 screenRecordingRow
             } header: {
-                SettingsHeader(
-                    icon: "record.circle",
-                    color: .red,
-                    title: L10n.string("Screen Recording"),
-                    subtitle: L10n.string("Needed to read what is on screen")
-                )
+                Text("Screen Recording")
             }
         }
         .formStyle(.grouped)
-        .settingsScrollEdgeEffect()
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
             // The user comes back here after flipping the switch in System Settings.
             hasScreenCaptureAccess = ScreenSampler.shared.refreshScreenCaptureAccess()

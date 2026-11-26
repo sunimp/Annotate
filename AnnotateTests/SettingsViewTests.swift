@@ -42,25 +42,32 @@ final class SettingsViewTests: XCTestCase {
     func testSettingsPaneCasesCarrySidebarMetadata() {
         for pane in SettingsPane.allCases {
             XCTAssertFalse(pane.title.isEmpty)
-            XCTAssertFalse(pane.subtitle.isEmpty)
-            XCTAssertFalse(pane.symbol.isEmpty)
+            XCTAssertFalse(pane.searchTerms.isEmpty)
+            XCTAssertNotNil(NSImage(systemSymbolName: pane.symbol, accessibilityDescription: nil), pane.symbol)
         }
     }
 
-    func testPaneHeaderBodyBuilds() {
-        let header = PaneHeader(pane: .general)
-        XCTAssertEqual(header.pane, .general)
-        XCTAssertNotNil(header.body)
+    func testSearchMatchesPaneTitlesAndRowTitles() {
+        XCTAssertEqual(SettingsPane.allCases.filter { $0.matches("") }, SettingsPane.allCases)
+        XCTAssertEqual(SettingsPane.allCases.filter { $0.matches("  ") }, SettingsPane.allCases)
+        XCTAssertEqual(SettingsPane.allCases.filter { $0.matches("board") }, [.board])
+        XCTAssertEqual(SettingsPane.allCases.filter { $0.matches("spotlight") }, [.cursor])
+        XCTAssertEqual(SettingsPane.allCases.filter { $0.matches("LAUNCH") }, [.general])
+        XCTAssertEqual(SettingsPane.allCases.filter { $0.matches("activation") }, [.shortcuts])
+        XCTAssertFalse(SettingsPane.allCases.contains { $0.matches("zzz") })
+        for pane in SettingsPane.allCases {
+            for term in pane.searchTerms {
+                XCTAssertTrue(pane.matches(term), "\(pane) must match its own term \(term)")
+            }
+        }
     }
 
     func testSettingsViewBodyBuilds() {
-        let settingsView = SettingsView()
-        XCTAssertNotNil(settingsView.body)
+        XCTAssertNotNil(SettingsView().body)
     }
 
     func testSettingsViewCanBeEmbeddedInHostingController() {
-        let hostingController = NSHostingController(rootView: SettingsView())
-        XCTAssertNotNil(hostingController.view)
+        XCTAssertNotNil(NSHostingController(rootView: SettingsView()).view)
     }
 
     func testCaptureSettingsViewCanBeEmbeddedInHostingController() {
@@ -83,19 +90,6 @@ final class SettingsViewTests: XCTestCase {
         XCTAssertNotNil(hostingController.view)
     }
 
-    func testSettingsHeaderHoldsIconTitleAndSubtitle() {
-        let header = SettingsHeader(
-            icon: "gearshape",
-            color: .blue,
-            title: "General",
-            subtitle: "General settings"
-        )
-        XCTAssertEqual(header.icon, "gearshape")
-        XCTAssertEqual(header.title, "General")
-        XCTAssertEqual(header.subtitle, "General settings")
-        XCTAssertNotNil(header.body)
-    }
-
     // MARK: - Settings Window Manager Tests
 
     func testShowCreatesConfiguredSettingsWindow() {
@@ -103,10 +97,15 @@ final class SettingsViewTests: XCTestCase {
 
         let window = SettingsWindowManager.shared.settingsWindow
         XCTAssertNotNil(window, "show() must create the settings window")
-        XCTAssertEqual(window?.title, "Annotate Settings")
-        XCTAssertEqual(window?.titleVisibility, .hidden)
-        XCTAssertEqual(window?.titlebarAppearsTransparent, true)
+        XCTAssertEqual(window?.toolbarStyle, .unified)
         XCTAssertEqual(window?.styleMask.contains(.fullSizeContentView), true)
+        XCTAssertEqual(SettingsWindowManager.shared.navigation.selection, .general)
+        XCTAssertEqual(window?.title, "General", "The window is titled with the shown pane")
+
+        SettingsWindowManager.shared.show(pane: .cursor)
+        let cursorDeadline = Date().addingTimeInterval(5)
+        while window?.title != "Cursor" && Date() < cursorDeadline { wait(for: 0.05) }
+        XCTAssertEqual(window?.title, "Cursor")
 
         window?.close()
         XCTAssertNil(
@@ -147,6 +146,7 @@ final class SettingsViewTests: XCTestCase {
         XCTAssertEqual(secondClosed, 1)
 
         SettingsWindowManager.shared.show()
+        XCTAssertEqual(SettingsWindowManager.shared.navigation.selection, .general, "A new window starts on General")
         SettingsWindowManager.shared.settingsWindow?.close()
         XCTAssertEqual(firstClosed, 1, "Each handler runs once")
         XCTAssertEqual(secondClosed, 1, "Each handler runs once")

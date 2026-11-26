@@ -87,7 +87,7 @@ Releases are ad-hoc signed, not signed with a Developer ID or notarized. macOS a
    - Open your **Applications** folder and double-click `Annotate.app` to launch it.
 
 > [!NOTE]
-> Requires macOS 14 (Sonoma) or later. Supports both Apple Silicon and Intel Macs.
+> Requires macOS 26 (Tahoe) or later. Supports both Apple Silicon and Intel Macs.
 >
 > If Gatekeeper blocks the first launch of a manual download, clear the quarantine flag once you trust the source:
 >
@@ -464,8 +464,8 @@ Settings are organized into a sidebar with six panes: **General**, **Tools**, **
 - **Toolbar Layout**: Horizontal (default) runs the bar along the bottom of the screen; Vertical runs it as a column down the left edge. Each layout remembers its own position per display.
 - **Play sounds**: Play feedback sounds for overlay and clear actions. Off by default.
 - **Sound Theme**: Choose between Chalk (default), Paper, Marker, Pencil, and Typewriter feedback sounds.
-- **Show in Dock**: Display Annotate icon in the Dock. Off by default.
-- **Show in Menu Bar**: Display Annotate icon in the menu bar. On by default. Hiding it keeps the global shortcuts working. With both icons hidden, open Annotate again (from Finder, Launchpad, or Spotlight) to show Settings.
+- **Show Dock Icon**: Show Annotate's icon in the Dock after launch and while it runs. Off by default; when off, Annotate stays out of the Dock and the app switcher.
+- **Show Menu Bar Icon**: Show Annotate's icon in the menu bar after launch and while it runs. On by default. Hiding it keeps the global shortcuts working. With both icons hidden, open Annotate again (from Finder, Launchpad, or Spotlight) to show Settings.
 - **Switch to Select after placing text**: After committing a label, switch to the Select tool with that label selected. Off by default so text mode stays selected.
 - **Default Tool**: Choose which tool is selected each time the overlay is activated (defaults to last used).
 - **Allow URL commands**: Run [`annotate://` links](#url-scheme) from other apps, scripts, and the browser. On by default; turn it off to ignore every link.

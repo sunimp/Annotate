@@ -1826,7 +1826,7 @@ class OverlayWindow: NSPanel {
             overlayView.currentTool == .counter
         {
             overlayView.resetCounter()
-            showToggleFeedback(L10n.string("Counter Reset"), icon: "🔄")
+            showToggleFeedback(L10n.string("Counter Reset"), symbol: "arrow.counterclockwise")
             return
         }
 
@@ -2153,21 +2153,23 @@ class OverlayWindow: NSPanel {
         manager.toggleSpotlightDimming()
         showToggleFeedback(
             manager.spotlightDimmingEnabled ? L10n.string("Dimming On") : L10n.string("Dimming Off"),
-            icon: manager.spotlightDimmingEnabled ? "🌘" : "☀️"
+            symbol: manager.spotlightDimmingEnabled ? "moon.fill" : "sun.max"
         )
     }
 
-    func showToggleFeedback(_ text: String, icon: String) {
+    /// `symbol` is an SF Symbol name, drawn in the text color before `text`.
+    func showToggleFeedback(_ text: String, symbol: String) {
         let hideToolFeedback = pickerSettings[.hideToolFeedback]
         guard !hideToolFeedback else { return }
-        showFeedback("\(icon) \(text)")
+        showFeedback(text, icon: feedbackSymbol(symbol, color: feedbackTextColor))
     }
 
     func showColorFeedback(_ color: PaletteColor) {
         let hideToolFeedback = pickerSettings[.hideToolFeedback]
         guard !hideToolFeedback else { return }
         showFeedback(
-            "🎨 \(color.displayName)", lineColor: color.nsColor, lineWidth: overlayView.currentLineWidth)
+            color.displayName, icon: feedbackSymbol("circle.fill", color: color.nsColor),
+            lineColor: color.nsColor, lineWidth: overlayView.currentLineWidth)
     }
 
     func showToolFeedback(_ tool: ToolType) {
@@ -2175,49 +2177,74 @@ class OverlayWindow: NSPanel {
         let hideToolFeedback = pickerSettings[.hideToolFeedback]
         guard !hideToolFeedback else { return }
 
-        let toolName = tool.displayName
-        let icon: String
-
-        switch tool {
-        case .pen:
-            icon = "✒️"
-        case .arrow:
-            icon = "➡️"
-        case .line:
-            icon = "📏"
-        case .highlighter:
-            icon = "🟨"
-        case .rectangle:
-            icon = "🔲"
-        case .circle:
-            icon = "⭕"
-        case .filledRectangle:
-            icon = "⬛"
-        case .filledCircle:
-            icon = "⚫"
-        case .redact:
-            icon = "🕶️"
-        case .counter:
-            icon = "🔢"
-        case .text:
-            icon = "📝"
-        case .select:
-            icon = "👆"
-        case .eraser:
-            icon = "🧹"
-        }
-
-        let currentWidth = overlayView.currentLineWidth
+        let width = overlayView.currentLineWidth
+        let icon = toolFeedbackIcon(for: tool, width: width)
 
         switch tool {
         case .pen, .arrow, .line, .highlighter, .rectangle, .circle, .filledRectangle, .filledCircle:
-            let widthText = L10n.string("\(currentWidth, format: .number.precision(.fractionLength(2))) px")
-            let text = "\(icon) \(toolName) • \(widthText)"
-            showFeedback(text, lineColor: overlayView.currentColor, lineWidth: currentWidth)
-        case .redact, .counter, .text, .select, .eraser:
-            let text = "\(icon) \(toolName)"
-            showFeedback(text, lineColor: overlayView.currentColor)
+            let widthText = L10n.string("\(width, format: .number.precision(.fractionLength(2))) px")
+            var parts = [tool.displayName, widthText]
+            if tool == .arrow { parts.insert(pickerSettings[.arrowStyle].displayName, at: 1) }
+            showFeedback(
+                parts.joined(separator: " • "), icon: icon, lineColor: overlayView.currentColor, lineWidth: width)
+        case .redact:
+            let text = "\(tool.displayName) • \(pickerSettings[.redactionStyle].displayName)"
+            showFeedback(text, icon: icon, lineColor: overlayView.currentColor)
+        case .counter, .text, .select, .eraser:
+            showFeedback(tool.displayName, icon: icon, lineColor: overlayView.currentColor)
         }
+    }
+
+    /// The tool's symbol as it would draw now: in the current color (at the highlighter's
+    /// laydown alpha), with a stroke weight that follows the line width, and for Redact the
+    /// symbol of the active style. Select and Eraser don't draw, so they keep the text color.
+    private func toolFeedbackIcon(for tool: ToolType, width: CGFloat) -> NSImage? {
+        let symbol: String
+        switch (tool, pickerSettings[.redactionStyle]) {
+        case (.redact, .pixelate): symbol = "squareshape.split.3x3"
+        case (.redact, .blur): symbol = "drop.halffull"
+        case (.redact, _): symbol = "rectangle.fill"
+        default: symbol = tool.symbolName
+        }
+        let weights: [NSFont.Weight] = [.ultraLight, .thin, .light, .regular, .medium, .semibold, .bold, .heavy]
+        let weight: NSFont.Weight
+        switch tool {
+        case .pen, .arrow, .line, .highlighter, .rectangle, .circle, .filledRectangle, .filledCircle:
+            weight = weights[QuickPickerView.nearestIndex(in: QuickPickerView.widthOptions, to: width)]
+        default:
+            weight = .semibold
+        }
+        let color: NSColor
+        switch tool {
+        case .select, .eraser: color = feedbackTextColor
+        default: color = overlayView.currentColor.withAlphaComponent(tool.laydownAlpha)
+        }
+        if tool == .arrow { return arrowFeedbackIcon(color: color, width: width) }
+        return feedbackSymbol(symbol, color: color, weight: weight)
+    }
+
+    /// The arrow as the overlay draws it, from `Arrow.outline` in the active style. The width
+    /// is mapped onto 1...3.5 pt, since a 24 px shaft would fill the whole icon.
+    private func arrowFeedbackIcon(color: NSColor, width: CGFloat) -> NSImage {
+        let options = QuickPickerView.widthOptions
+        let progress = CGFloat(QuickPickerView.nearestIndex(in: options, to: width)) / CGFloat(max(options.count - 1, 1))
+        let arrow = Arrow(
+            startPoint: NSPoint(x: 3, y: 3), endPoint: NSPoint(x: 25, y: 25), color: color,
+            lineWidth: 1 + progress * 2.5, style: pickerSettings[.arrowStyle])
+        return NSImage(size: NSSize(width: 28, height: 28), flipped: false) { _ in
+            color.setFill()
+            arrow.outline.fill()
+            return true
+        }
+    }
+
+    private var feedbackTextColor: NSColor { isDarkModeActive() ? .white : .black }
+
+    private func feedbackSymbol(_ name: String, color: NSColor, weight: NSFont.Weight = .semibold) -> NSImage? {
+        let config = NSImage.SymbolConfiguration(pointSize: 22, weight: weight)
+            .applying(.init(paletteColors: [color]))
+        return NSImage(systemSymbolName: name, accessibilityDescription: nil)?
+            .withSymbolConfiguration(config)
     }
     
     /// Shows a feedback message at the bottom center of the screen
@@ -2230,6 +2257,7 @@ class OverlayWindow: NSPanel {
     
     private func showFeedback(
         _ text: String,
+        icon: NSImage? = nil,
         duration: TimeInterval = 1.5,
         fadeOutDuration: TimeInterval = 0.5,
         lineColor: NSColor? = nil,
@@ -2239,6 +2267,7 @@ class OverlayWindow: NSPanel {
         
         let containerView = createFeedbackContainer(
             text: text,
+            icon: icon,
             lineColor: lineColor,
             lineWidth: lineWidth
         )
@@ -2264,10 +2293,11 @@ class OverlayWindow: NSPanel {
     
     private func createFeedbackContainer(
         text: String,
+        icon: NSImage?,
         lineColor: NSColor?,
         lineWidth: CGFloat?
     ) -> NSView {
-        let feedbackLabel = createFeedbackLabel(text: text)
+        let feedbackLabel = createFeedbackLabel(text: text, icon: icon)
         let containerWidth = feedbackContainerWidth(fitting: feedbackLabel)
         let containerHeight: CGFloat = (lineWidth != nil) ? 80 : 50
         let containerFrame = calculateFeedbackContainerFrame(
@@ -2339,9 +2369,10 @@ class OverlayWindow: NSPanel {
         containerView.layer?.cornerRadius = 8
     }
     
-    private func createFeedbackLabel(text: String) -> NSTextField {
+    private func createFeedbackLabel(text: String, icon: NSImage?) -> NSTextField {
+        let font = NSFont.boldSystemFont(ofSize: 24)
         let feedbackLabel = NSTextField(labelWithString: text)
-        feedbackLabel.font = NSFont.boldSystemFont(ofSize: 24)
+        feedbackLabel.font = font
         feedbackLabel.backgroundColor = .clear
         feedbackLabel.isBordered = false
         feedbackLabel.isEditable = false
@@ -2354,7 +2385,27 @@ class OverlayWindow: NSPanel {
         feedbackLabel.lineBreakMode = .byTruncatingMiddle
 
         // Set text color based on system appearance
-        feedbackLabel.textColor = isDarkModeActive() ? .white : .black
+        feedbackLabel.textColor = feedbackTextColor
+        if let icon {
+            let attachment = NSTextAttachment()
+            attachment.image = icon
+            attachment.bounds = NSRect(
+                x: 0, y: (font.capHeight - icon.size.height) / 2,
+                width: icon.size.width, height: icon.size.height)
+            let attributes: [NSAttributedString.Key: Any] = [
+                .font: font, .foregroundColor: feedbackLabel.textColor ?? NSColor.labelColor,
+            ]
+            let string = NSMutableAttributedString(attachment: attachment)
+            string.append(NSAttributedString(string: " \(text)", attributes: attributes))
+            string.addAttribute(
+                .paragraphStyle, value: {
+                    let style = NSMutableParagraphStyle()
+                    style.alignment = .center
+                    style.lineBreakMode = .byTruncatingMiddle
+                    return style
+                }(), range: NSRange(location: 0, length: string.length))
+            feedbackLabel.attributedStringValue = string
+        }
         return feedbackLabel
     }
 

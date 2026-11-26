@@ -17,7 +17,9 @@ struct AnnotateApp: App {
 
     var body: some Scene {
         Settings {
-            SettingsView()
+            // The settings window is SettingsWindowManager's; this scene only lets the
+            // commands below replace the app menu's Settings… item.
+            EmptyView()
         }
         .commands {
             // Route Cmd+, and the app menu's Settings… item to the managed

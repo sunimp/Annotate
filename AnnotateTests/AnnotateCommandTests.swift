@@ -71,8 +71,10 @@ final class AnnotateCommandTests: XCTestCase {
         appDelegate.overlayWindows.values.filter(\.isVisible)
     }
 
+    /// The HUD's text without its leading symbol attachment.
     private func feedbackText(on window: OverlayWindow) -> String? {
         window.currentFeedbackView?.subviews.lazy.compactMap { $0 as? NSTextField }.first?.stringValue
+            .trimmingPrefix("\u{FFFC} ").description
     }
 
     // MARK: - Palette
@@ -198,7 +200,7 @@ final class AnnotateCommandTests: XCTestCase {
     func testColorShowsItsHUDOnTheOpenOverlay() {
         run(.show)
         run(.color(.indigo))
-        XCTAssertEqual(feedbackText(on: overlay), "🎨 Indigo")
+        XCTAssertEqual(feedbackText(on: overlay), "Indigo")
     }
 
     // MARK: - Per-color shortcuts
@@ -215,7 +217,7 @@ final class AnnotateCommandTests: XCTestCase {
         for window in appDelegate.overlayWindows.values {
             XCTAssertEqual(window.currentColor, .systemIndigo)
         }
-        XCTAssertEqual(feedbackText(on: overlay), "🎨 Indigo")
+        XCTAssertEqual(feedbackText(on: overlay), "Indigo")
     }
 
     func testCThenANumberPicksTheColorOnThatNumber() throws {
@@ -288,7 +290,7 @@ final class AnnotateCommandTests: XCTestCase {
 
         run(.clear)
         XCTAssertTrue(overlay.overlayView.paths.isEmpty)
-        XCTAssertEqual(feedbackText(on: overlay), "🗑️ Cleared")
+        XCTAssertEqual(feedbackText(on: overlay), "Cleared")
     }
 
     func testClearClearsEveryDisplayInAlwaysOn() {
@@ -415,7 +417,7 @@ final class AnnotateCommandTests: XCTestCase {
 
         overlay.overlayView.paths.append(TestFactory.createDrawingPath())
         XCTAssertEqual(run(.clear), .ran)
-        XCTAssertEqual(feedbackText(on: overlay), "🗑️ Cleared")
+        XCTAssertEqual(feedbackText(on: overlay), "Cleared")
     }
 
     func testClearLeavesAHiddenOverlayAlone() {
@@ -444,7 +446,7 @@ final class AnnotateCommandTests: XCTestCase {
     func testToolbarShowsItsHUDOnTheOpenOverlay() {
         run(.show)
         run(.toolbar(.off))
-        XCTAssertEqual(feedbackText(on: overlay), "🧰 Toolbar Off")
+        XCTAssertEqual(feedbackText(on: overlay), "Toolbar Off")
     }
 
     func testCommandHUDHonorsHideToolFeedback() {
@@ -645,7 +647,7 @@ final class AnnotateCommandTests: XCTestCase {
 
         XCTAssertNotNil(pasteboard.data(forType: .png))
         XCTAssertFalse(FileManager.default.fileExists(atPath: folder.path), "No file means no folder either")
-        XCTAssertEqual(feedbackText(on: overlay), "📋 Copied to Clipboard")
+        XCTAssertEqual(feedbackText(on: overlay), "Copied to Clipboard")
         XCTAssertTrue(captureProblemAlerts.isEmpty, "Saving no file is what was asked for")
         XCTAssertEqual(captureNotifier.notices.map(\.title), ["Capture Copied"])
     }
@@ -660,7 +662,7 @@ final class AnnotateCommandTests: XCTestCase {
 
         XCTAssertNil(pasteboard.data(forType: .png))
         let file = try XCTUnwrap(try FileManager.default.contentsOfDirectory(atPath: folder.path).first)
-        XCTAssertEqual(feedbackText(on: overlay), "📸 Saved \(file)")
+        XCTAssertEqual(feedbackText(on: overlay), "Saved \(file)")
     }
 
     func testFailedSaveWithNothingElseToDoReportsWhy() async throws {
@@ -704,7 +706,7 @@ final class AnnotateCommandTests: XCTestCase {
         await finishCaptures()
 
         XCTAssertEqual(
-            feedbackText(on: overlay), "📁 Can't Reach \(chosen.lastPathComponent). Saved to Default Folder")
+            feedbackText(on: overlay), "Can't Reach \(chosen.lastPathComponent). Saved to Default Folder")
         XCTAssertTrue(captureProblemAlerts.isEmpty)
         XCTAssertEqual(captureNotifier.notices.map(\.title), ["Capture Saved to the Default Folder"])
     }
@@ -759,7 +761,7 @@ final class AnnotateCommandTests: XCTestCase {
         let files = try FileManager.default.contentsOfDirectory(atPath: folder.path)
         XCTAssertEqual(files.count, 1)
         let file = try XCTUnwrap(files.first)
-        XCTAssertEqual(feedbackText(on: overlay), "📸 Saved \(file)")
+        XCTAssertEqual(feedbackText(on: overlay), "Saved \(file)")
         let png = try XCTUnwrap(pasteboard.data(forType: .png))
         let image = try XCTUnwrap(NSBitmapImageRep(data: png)?.cgImage)
         // The solid redaction at the display's bottom-left corner.
@@ -834,7 +836,7 @@ final class AnnotateCommandTests: XCTestCase {
         let image = try XCTUnwrap(files.first)
         XCTAssertEqual(files, [image], "The image is saved, alone")
         XCTAssertTrue(image.hasSuffix(".png"), image)
-        XCTAssertEqual(feedbackText(on: overlay), "⚠️ Couldn't Save Annotation Data. Saved \(image)")
+        XCTAssertEqual(feedbackText(on: overlay), "Couldn't Save Annotation Data. Saved \(image)")
         XCTAssertTrue(captureProblemAlerts.isEmpty)
     }
 
@@ -994,7 +996,7 @@ final class AnnotateCommandTests: XCTestCase {
         let pixel = CaptureTestImages.pixel(image, x: 16, y: 10)
         XCTAssertTrue(pixel.isClose(to: blue), "The newer capture must end up on the clipboard: \(pixel)")
         let newest = try XCTUnwrap(files.first { (try? Data(contentsOf: $0)) == png })
-        XCTAssertEqual(feedbackText(on: overlay), "📸 Saved \(newest.lastPathComponent)")
+        XCTAssertEqual(feedbackText(on: overlay), "Saved \(newest.lastPathComponent)")
     }
 
     /// Runs the run loop until `condition` holds or `timeout` passes. Synchronous on purpose:
@@ -1017,7 +1019,7 @@ final class AnnotateCommandTests: XCTestCase {
         XCTAssertEqual(run(.capture(.screen)), .ran)
         runLoop { self.feedbackText(on: self.overlay) != nil }
 
-        XCTAssertEqual(feedbackText(on: overlay), "🔒 Screen Recording is off. Opening Settings…")
+        XCTAssertEqual(feedbackText(on: overlay), "Screen Recording is off. Opening Settings…")
         XCTAssertTrue(opened.isEmpty, "Settings waits for the notice")
         XCTAssertTrue(appDelegate.isInteractiveOverlayOpen)
         runLoop { !opened.isEmpty }
@@ -1103,7 +1105,7 @@ final class AnnotateCommandTests: XCTestCase {
 
         XCTAssertEqual(run(.capture(.screen)), .ran)
         runLoop { self.feedbackText(on: self.overlay) != nil }
-        XCTAssertEqual(feedbackText(on: overlay), "🔒 Screen Recording is off. Answer the macOS prompt")
+        XCTAssertEqual(feedbackText(on: overlay), "Screen Recording is off. Answer the macOS prompt")
         // The overlay still closes, or it would cover the prompt.
         runLoop { !self.appDelegate.isInteractiveOverlayOpen }
         wait(for: 0.1)
@@ -1172,7 +1174,7 @@ final class AnnotateCommandTests: XCTestCase {
         appDelegate.captureScreen()
         await finishCaptures()
 
-        XCTAssertEqual(feedbackText(on: overlay), "⚠️ Capture Failed")
+        XCTAssertEqual(feedbackText(on: overlay), "Capture Failed")
         XCTAssertTrue(captureProblemAlerts.isEmpty)
     }
 
@@ -1230,7 +1232,7 @@ final class AnnotateCommandTests: XCTestCase {
         await finishCaptures()
 
         let file = try XCTUnwrap(try FileManager.default.contentsOfDirectory(atPath: folder.path).first)
-        XCTAssertEqual(feedbackText(on: overlay), "⚠️ Couldn't Copy. Saved \(file)")
+        XCTAssertEqual(feedbackText(on: overlay), "Couldn't Copy. Saved \(file)")
         XCTAssertTrue(captureProblemAlerts.isEmpty)
     }
 
@@ -1242,7 +1244,7 @@ final class AnnotateCommandTests: XCTestCase {
 
     func testCaptureMenuItemTakesTheShortcut() throws {
         let item = try XCTUnwrap(
-            appDelegate.statusItem.menu?.items.first { $0.action == #selector(AppDelegate.captureScreen) })
+            appDelegate.statusMenuItems.first { $0.action == #selector(AppDelegate.captureScreen) })
         XCTAssertEqual(item.title, "Capture Screen")
         XCTAssertEqual(item.keyEquivalent, "s")
         XCTAssertEqual(item.keyEquivalentModifierMask, .command)
@@ -1555,7 +1557,7 @@ final class AnnotateCommandTests: XCTestCase {
 
         let files = try FileManager.default.contentsOfDirectory(atPath: folder.path)
         XCTAssertEqual(files.count, 1)
-        XCTAssertEqual(feedbackText(on: overlay), "📸 Saved \(try XCTUnwrap(files.first))")
+        XCTAssertEqual(feedbackText(on: overlay), "Saved \(try XCTUnwrap(files.first))")
         let image = try XCTUnwrap(NSBitmapImageRep(data: try XCTUnwrap(pasteboard.data(forType: .png)))?.cgImage)
         let scale = screen.backingScaleFactor
         XCTAssertEqual(image.width, Int(80 * scale))
@@ -2002,7 +2004,7 @@ final class AnnotateCommandTests: XCTestCase {
 
     func testCaptureAreaMenuItemTakesTheShortcut() throws {
         let item = try XCTUnwrap(
-            appDelegate.statusItem.menu?.items.first { $0.action == #selector(AppDelegate.captureArea) })
+            appDelegate.statusMenuItems.first { $0.action == #selector(AppDelegate.captureArea) })
         XCTAssertEqual(item.title, "Capture Area")
         XCTAssertEqual(item.keyEquivalent, "s")
         XCTAssertEqual(item.keyEquivalentModifierMask, [.shift, .command])

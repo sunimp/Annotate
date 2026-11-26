@@ -950,11 +950,11 @@ final class OverlayWindowTests: XCTestCase {
 
     func testFeedbackPillFitsALongMessage() throws {
         window.overlayView.pickerUserDefaultsOverride = TestUserDefaults.create()
-        for (text, icon) in [
-            ("Saved Annotate 2026-11-02 at 10.23.45 (2).png", "📸"),
-            ("Screen Recording is off. Opening Settings…", "🔒"),
+        for (text, symbol) in [
+            ("Saved Annotate 2026-11-02 at 10.23.45 (2).png", "square.and.arrow.down"),
+            ("Screen Recording is off. Opening Settings…", "lock.fill"),
         ] {
-            window.showToggleFeedback(text, icon: icon)
+            window.showToggleFeedback(text, symbol: symbol)
 
             let label = try XCTUnwrap(feedbackLabel)
             let container = try XCTUnwrap(window.currentFeedbackView)
@@ -967,7 +967,7 @@ final class OverlayWindowTests: XCTestCase {
 
     func testFeedbackPillTruncatesTheMiddleOfAMessageWiderThanTheDisplay() throws {
         window.overlayView.pickerUserDefaultsOverride = TestUserDefaults.create()
-        window.showToggleFeedback(String(repeating: "Annotate ", count: 30) + "(2).png", icon: "📸")
+        window.showToggleFeedback(String(repeating: "Annotate ", count: 30) + "(2).png", symbol: "square.and.arrow.down")
 
         let label = try XCTUnwrap(feedbackLabel)
         let container = try XCTUnwrap(window.currentFeedbackView)
@@ -1072,6 +1072,53 @@ final class OverlayWindowTests: XCTestCase {
         }
     }
     
+    func testToolFeedbackShowsTheActiveStyleAsASymbolInsteadOfAnEmoji() throws {
+        let defaults = TestUserDefaults.create()
+        defer { TestUserDefaults.removeSuite() }
+        window.overlayView.pickerUserDefaultsOverride = defaults
+        SettingsStore(defaults: defaults)[.arrowStyle] = .classic
+        SettingsStore(defaults: defaults)[.redactionStyle] = .blur
+
+        for (tool, style) in [(ToolType.arrow, "Classic"), (.redact, "Blur"), (.pen, nil)] {
+            window.showToolFeedback(tool)
+            let text = try XCTUnwrap(feedbackLabel).attributedStringValue
+            var icon: NSImage?
+            text.enumerateAttribute(.attachment, in: NSRange(location: 0, length: text.length)) { value, _, _ in
+                icon = icon ?? (value as? NSTextAttachment)?.image
+            }
+            XCTAssertNotNil(icon, "\(tool) feedback must lead with the tool's symbol")
+            XCTAssertFalse(text.string.unicodeScalars.contains { $0.properties.isEmojiPresentation })
+            XCTAssertTrue(text.string.contains(tool.displayName))
+            if let style { XCTAssertTrue(text.string.contains(style), "\(tool) must name its active style") }
+        }
+    }
+
+    func testArrowFeedbackIconDrawsTheActiveArrowStyle() throws {
+        let defaults = TestUserDefaults.create()
+        defer { TestUserDefaults.removeSuite() }
+        window.overlayView.pickerUserDefaultsOverride = defaults
+
+        var renders = Set<Data>()
+        for style in ArrowStyle.allCases {
+            SettingsStore(defaults: defaults)[.arrowStyle] = style
+            window.showToolFeedback(.arrow)
+            let text = try XCTUnwrap(feedbackLabel).attributedStringValue
+            let attachment = try XCTUnwrap(
+                text.attribute(.attachment, at: 0, effectiveRange: nil) as? NSTextAttachment)
+            let image = try XCTUnwrap(attachment.image)
+            let bitmap = try XCTUnwrap(NSBitmapImageRep(
+                bitmapDataPlanes: nil, pixelsWide: 56, pixelsHigh: 56, bitsPerSample: 8,
+                samplesPerPixel: 4, hasAlpha: true, isPlanar: false, colorSpaceName: .deviceRGB,
+                bytesPerRow: 0, bitsPerPixel: 0))
+            NSGraphicsContext.saveGraphicsState()
+            NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: bitmap)
+            image.draw(in: NSRect(x: 0, y: 0, width: 56, height: 56))
+            NSGraphicsContext.restoreGraphicsState()
+            renders.insert(try XCTUnwrap(bitmap.representation(using: .png, properties: [:])))
+        }
+        XCTAssertEqual(renders.count, ArrowStyle.allCases.count, "Each arrow style must draw its own icon")
+    }
+
     func testToolFeedbackForNonDrawingTools() {
         // Test that non-drawing tools can show feedback
         let nonDrawingTools: [ToolType] = [.counter, .text]

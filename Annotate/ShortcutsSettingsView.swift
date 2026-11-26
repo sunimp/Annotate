@@ -1,3 +1,4 @@
+import KeyboardShortcuts
 import SwiftUI
 
 struct ShortcutSettingActionResult {
@@ -69,7 +70,23 @@ struct ShortcutsSettingsView: View {
     var body: some View {
         Form {
             Section {
-                PaneHeader(pane: .shortcuts)
+                LabeledContent {
+                    GlobalShortcutRecorder(name: .toggleOverlay)
+                } label: {
+                    Text("Activation Shortcut")
+                    Text("Primary keyboard shortcut to activate Annotate")
+                    Text("Requires modifier keys (⌘, ⌥, ⌃, or ⇧)")
+                }
+
+                LabeledContent {
+                    GlobalShortcutRecorder(name: .toggleAlwaysOnMode)
+                } label: {
+                    Text("Always-On Mode")
+                    Text("Keep Annotate active without auto-hide")
+                    Text("Requires modifier keys (⌘, ⌥, ⌃, or ⇧)")
+                }
+            } header: {
+                Text("Global Shortcuts")
             }
 
             Section {
@@ -102,12 +119,7 @@ struct ShortcutsSettingsView: View {
                     editingShortcut: $editingShortcut
                 )
             } header: {
-                SettingsHeader(
-                    icon: "pencil.tip",
-                    color: .blue,
-                    title: L10n.string("Drawing Tools"),
-                    subtitle: L10n.string("Basic drawing and annotation shortcuts")
-                )
+                Text("Drawing Tools")
             }
 
             Section {
@@ -147,12 +159,7 @@ struct ShortcutsSettingsView: View {
                     editingShortcut: $editingShortcut
                 )
             } header: {
-                SettingsHeader(
-                    icon: "square.on.circle",
-                    color: .green,
-                    title: L10n.string("Shapes"),
-                    subtitle: L10n.string("Geometric shape shortcuts")
-                )
+                Text("Shapes")
             }
 
             Section {
@@ -185,12 +192,7 @@ struct ShortcutsSettingsView: View {
                     editingShortcut: $editingShortcut
                 )
             } header: {
-                SettingsHeader(
-                    icon: "wand.and.stars",
-                    color: .purple,
-                    title: L10n.string("Advanced Tools"),
-                    subtitle: L10n.string("Additional annotation features")
-                )
+                Text("Advanced Tools")
             }
 
             Section {
@@ -283,12 +285,7 @@ struct ShortcutsSettingsView: View {
                     editingShortcut: $editingShortcut
                 )
             } header: {
-                SettingsHeader(
-                    icon: "slider.horizontal.3",
-                    color: .orange,
-                    title: L10n.string("Utilities"),
-                    subtitle: L10n.string("Pickers, sizes, and overlay controls")
-                )
+                Text("Utilities")
             }
 
             Section {
@@ -296,12 +293,7 @@ struct ShortcutsSettingsView: View {
                     BuiltInShortcutRow(shortcut: shortcut)
                 }
             } header: {
-                SettingsHeader(
-                    icon: "lock",
-                    color: .gray,
-                    title: L10n.string("Built-in Shortcuts"),
-                    subtitle: L10n.string("Fixed editing and dismissal keys")
-                )
+                Text("Built-in Shortcuts")
             }
 
             Section {
@@ -317,7 +309,6 @@ struct ShortcutsSettingsView: View {
             }
         }
         .formStyle(.grouped)
-        .settingsScrollEdgeEffect()
         .onAppear {
             shortcuts = ShortcutManager.shared.allShortcuts
         }

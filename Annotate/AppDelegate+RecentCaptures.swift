@@ -239,14 +239,14 @@ extension CaptureProblem {
     static func recentCopyFailed(_ file: URL, error: Error) -> CaptureProblem {
         CaptureProblem(
             title: L10n.string("Couldn't Copy \(file.lastPathComponent)"),
-            icon: "⚠️",
+            symbol: "exclamationmark.triangle.fill",
             detail: L10n.string("Annotate couldn't copy the capture to the clipboard. \(error.localizedDescription)"))
     }
 
     static func captureFolderUnavailable(error: Error) -> CaptureProblem {
         CaptureProblem(
             title: L10n.string("Couldn't Open the Capture Folder"),
-            icon: "📁",
+            symbol: "folder",
             detail: CaptureFileActions.folderErrorMessage(error))
     }
 }

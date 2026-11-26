@@ -76,15 +76,13 @@ final class AppDelegateTests: XCTestCase {
             [
                 "Show Overlay",
                 "---",
-                "Color…", "Line Width…", "Tool: Pen",
-                "---",
-                "Show \(board)", "Cursor Highlight", "Fade Mode", "Always-On Mode", "Hide Toolbar",
+                "Tool: Pen", "Color…", "Line Width…", "Modes",
                 "---",
                 "Undo", "Redo", "Clear All",
                 "---",
                 "Capture Screen", "Capture Area", "Recent Captures",
                 "---",
-                "Settings...", "Check for Updates...",
+                "Settings...", "About Annotate", "Check for Updates...",
                 "---",
                 "Quit Annotate",
             ])
@@ -94,6 +92,11 @@ final class AppDelegateTests: XCTestCase {
                 "Arrow", "Line", "Pen", "Highlighter", "Rectangle", "Oval", "Filled Rectangle",
                 "Filled Oval", "Redact", "Counter", "Text", "Select", "Eraser",
             ])
+        let modes = try XCTUnwrap(menu.items.first { $0.title == "Modes" }?.submenu)
+        XCTAssertNil(modes.delegate, "The Modes submenu must not share the status menu's delegate")
+        XCTAssertEqual(
+            modes.items.map(\.title),
+            ["Show \(board)", "Cursor Highlight", "Fade Mode", "Always-On Mode", "Hide Toolbar"])
     }
 
     // MARK: - Status menu helpers
@@ -903,7 +906,7 @@ final class AppDelegateTests: XCTestCase {
     func testFadeAndClearAllMenuActionsRequireOverlayKeyWindow() throws {
         let menu = try XCTUnwrap(appDelegate.statusItem.menu)
         let fadeItem = try XCTUnwrap(
-            menu.items.first { $0.action == #selector(AppDelegate.toggleFadeMode(_:)) })
+            appDelegate.statusMenuItems.first { $0.action == #selector(AppDelegate.toggleFadeMode(_:)) })
         let clearItem = try XCTUnwrap(
             menu.items.first { $0.action == #selector(AppDelegate.clearAllAnnotations) })
         // Clear All acts on the screen under the pointer. Pin the pointer to this overlay's
@@ -995,12 +998,7 @@ final class AppDelegateTests: XCTestCase {
     }
 
     func testUpdateBoardMenuItems() {
-        guard let menu = appDelegate.statusItem.menu else {
-            XCTFail("Status bar menu not initialized")
-            return
-        }
-
-        let toggleBoardItem = menu.items.first {
+        let toggleBoardItem = appDelegate.statusMenuItems.first {
             $0.action == #selector(AppDelegate.toggleBoardVisibility(_:))
         }
         XCTAssertNotNil(toggleBoardItem, "Board toggle menu item should exist")
@@ -1024,8 +1022,7 @@ final class AppDelegateTests: XCTestCase {
     /// press had shown it again. Toggle through both the `b` key and the menu item, at gaps
     /// inside and outside the fade, and check every board agrees with the menu once it settles.
     func testRapidBoardTogglesKeepBoardAndMenuInSync() throws {
-        let menu = try XCTUnwrap(appDelegate.statusItem.menu)
-        let itemIndex = try XCTUnwrap(menu.items.firstIndex {
+        let boardItem = try XCTUnwrap(appDelegate.statusMenuItems.first {
             $0.action == #selector(AppDelegate.toggleBoardVisibility(_:))
         })
         let delegate = try XCTUnwrap(appDelegate)
@@ -1037,13 +1034,13 @@ final class AppDelegateTests: XCTestCase {
         // The status menu's items have no target and AppDelegate isn't NSApp's delegate under
         // test, so send the item's action to it the way a click would.
         let clickMenuItem = {
-            let item = menu.items[itemIndex]
+            let item = boardItem
             XCTAssertTrue(NSApp.sendAction(item.action!, to: delegate, from: item))
         }
 
         func assertInSync(_ context: String, file: StaticString = #filePath, line: UInt = #line) {
             let enabled = BoardManager.shared.isEnabled
-            let title = menu.items[itemIndex].title
+            let title = boardItem.title
             XCTAssertEqual(title.hasPrefix("Hide"), enabled, "\(context): menu says \(title)", file: file, line: line)
             for overlay in delegate.overlayWindows.values {
                 let board: BoardView = overlay.boardView

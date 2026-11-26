@@ -3,7 +3,7 @@ options:
   bundleIdPrefix: com.sunimp
   developmentLanguage: en
   deploymentTarget:
-    macOS: "14.0"
+    macOS: "26.0"
 
 targets:
   Annotate:
@@ -28,11 +28,11 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.sunimp.Annotate
-        MARKETING_VERSION: "1.9.1"
+        MARKETING_VERSION: "2.0.0"
         CURRENT_PROJECT_VERSION: "1"
         CODE_SIGN_ENTITLEMENTS: Annotate/Annotate.entitlements
         SWIFT_VERSION: "6.0"
-        MACOSX_DEPLOYMENT_TARGET: "14.0"
+        MACOSX_DEPLOYMENT_TARGET: "26.0"
         SWIFT_EMIT_LOC_STRINGS: true
         LOCALIZATION_PREFERS_STRING_CATALOGS: true
         ENABLE_HARDENED_RUNTIME: true
