@@ -1,4 +1,6 @@
 import KeyboardShortcuts
+import OSLog
+import ServiceManagement
 import SwiftUI
 
 struct GeneralSettingsView: View {
@@ -37,6 +39,8 @@ struct GeneralSettingsView: View {
     @AppStorage(.usesFixedColor)
     private var usesFixedColor: Bool
     @State private var fixedColor = Color(SettingsStore.standard[.fixedColor])
+    // ponytail: the system owns login-item state, so read SMAppService instead of a setting key.
+    @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
 
     /// Tools offered in the Default Tool picker, excluding Select and Eraser since neither
     /// is a sensible tool to land on when the overlay opens.
@@ -76,6 +80,14 @@ struct GeneralSettingsView: View {
             }
 
             Section {
+                Toggle(isOn: $launchAtLogin) {
+                    Text("Launch at Login")
+                    Text("Open Annotate automatically when you log in")
+                }
+                .onChange(of: launchAtLogin) { _, enabled in
+                    launchAtLogin = Self.setLaunchAtLogin(enabled)
+                }
+
                 Picker(selection: $overlayScope) {
                     ForEach(OverlayScope.allCases, id: \.self) { scope in
                         Text(scope.displayName).tag(scope)
@@ -250,6 +262,24 @@ struct GeneralSettingsView: View {
         .formStyle(.grouped)
         .toggleStyle(.switch)
         .settingsScrollEdgeEffect()
+        .onAppear { launchAtLogin = SMAppService.mainApp.status == .enabled }
+    }
+
+    /// Registers or unregisters the app as a login item and returns the resulting state.
+    private static func setLaunchAtLogin(_ enabled: Bool) -> Bool {
+        let service = SMAppService.mainApp
+        guard enabled != (service.status == .enabled) else { return enabled }
+        do {
+            if enabled {
+                try service.register()
+            } else {
+                try service.unregister()
+            }
+        } catch {
+            Logger(subsystem: "com.sunimp.Annotate", category: "LaunchAtLogin")
+                .error("Launch at login change failed: \(error.localizedDescription, privacy: .public)")
+        }
+        return service.status == .enabled
     }
 }
 

@@ -433,6 +433,7 @@ Settings are organized into a sidebar with six panes: **General**, **Tools**, **
 
 - **Activation Shortcut**: Set a global keyboard shortcut to activate Annotate (requires modifier keys).
 - **Always-On Mode**: Set a global keyboard shortcut to keep Annotate active without auto-hide (requires modifier keys).
+- **Launch at Login**: Open Annotate automatically when you log in. Off by default. The state lives in macOS login items, so System Settings > General > Login Items changes it too.
 - **Annotate On**: Screen Under Pointer (default) opens the overlay only on the display under the pointer. All Screens opens and closes it on every display together; the toolbar stays on the display you opened it from, even when the pointer moves to another one.
 - **Clear Drawings on Toggle**: Automatically clear all drawings when toggling the overlay off.
 - **Hide Tool Feedback**: Disable visual feedback when switching tools.
