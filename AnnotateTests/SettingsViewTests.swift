@@ -26,7 +26,7 @@ final class SettingsViewTests: XCTestCase {
 
     func testSettingsViewInitialState() {
         XCTAssertFalse(testDefaults.settings[.clearDrawingsOnStart])
-        XCTAssertFalse(testDefaults.settings[.hideDockIcon])
+        XCTAssertTrue(testDefaults.settings[.hideDockIcon])
     }
 
     // MARK: - View Structure Tests

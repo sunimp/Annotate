@@ -275,6 +275,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         updateStatusBarIcon(with: .gray)
         setupStatusBarItemMenu()
+        updateMenuBarIconVisibility()
+    }
+
+    /// Hides the status item without removing it, so its menu, icon, and confirmations keep
+    /// working and come back as they were.
+    func updateMenuBarIconVisibility() {
+        statusItem?.isVisible = settings[.showMenuBarIcon]
+    }
+
+    /// Opening Annotate again while it runs shows Settings, which is the way back when the
+    /// Dock icon and the menu bar icon are both hidden.
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        if !flag { showSettings() }
+        return true
     }
 
     /// Builds the status menu with titles in the current language. Rerun to relabel it.

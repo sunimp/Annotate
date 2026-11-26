@@ -464,7 +464,8 @@ Settings are organized into a sidebar with six panes: **General**, **Tools**, **
 - **Toolbar Layout**: Horizontal (default) runs the bar along the bottom of the screen; Vertical runs it as a column down the left edge. Each layout remembers its own position per display.
 - **Play sounds**: Play feedback sounds for overlay and clear actions. Off by default.
 - **Sound Theme**: Choose between Chalk (default), Paper, Marker, Pencil, and Typewriter feedback sounds.
-- **Show in Dock**: Display Annotate icon in the Dock.
+- **Show in Dock**: Display Annotate icon in the Dock. Off by default.
+- **Show in Menu Bar**: Display Annotate icon in the menu bar. On by default. Hiding it keeps the global shortcuts working. With both icons hidden, open Annotate again (from Finder, Launchpad, or Spotlight) to show Settings.
 - **Switch to Select after placing text**: After committing a label, switch to the Select tool with that label selected. Off by default so text mode stays selected.
 - **Default Tool**: Choose which tool is selected each time the overlay is activated (defaults to last used).
 - **Allow URL commands**: Run [`annotate://` links](#url-scheme) from other apps, scripts, and the browser. On by default; turn it off to ignore every link.

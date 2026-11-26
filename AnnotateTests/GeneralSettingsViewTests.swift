@@ -36,11 +36,11 @@ final class GeneralSettingsViewTests: XCTestCase {
 
     func testHideDockIconBinding() {
         let initialValue = testDefaults.settings[.hideDockIcon]
-        XCTAssertFalse(initialValue, "hideDockIcon should default to false")
+        XCTAssertTrue(initialValue, "hideDockIcon should default to true")
 
-        testDefaults.settings[.hideDockIcon] = true
+        testDefaults.settings[.hideDockIcon] = false
         let updatedValue = testDefaults.settings[.hideDockIcon]
-        XCTAssertTrue(updatedValue, "hideDockIcon should be true after setting")
+        XCTAssertFalse(updatedValue, "hideDockIcon should be false after setting")
     }
 
     func testHideToolFeedbackBinding() {
@@ -227,9 +227,13 @@ final class GeneralSettingsViewTests: XCTestCase {
             testDefaults.settings[.clearDrawingsOnStart],
             "clearDrawingsOnStart should default to false"
         )
-        XCTAssertFalse(
+        XCTAssertTrue(
             testDefaults.settings[.hideDockIcon],
-            "hideDockIcon should default to false"
+            "hideDockIcon should default to true"
+        )
+        XCTAssertTrue(
+            testDefaults.settings[.showMenuBarIcon],
+            "showMenuBarIcon should default to true"
         )
         XCTAssertFalse(
             testDefaults.settings[.hideToolFeedback],

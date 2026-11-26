@@ -8,6 +8,8 @@ struct GeneralSettingsView: View {
     private var clearDrawingsOnStart: Bool
     @AppStorage(.hideDockIcon)
     private var hideDockIcon: Bool
+    @AppStorage(.showMenuBarIcon)
+    private var showMenuBarIcon: Bool
     @AppStorage(.hideToolFeedback)
     private var hideToolFeedback: Bool
     @AppStorage(.toolbarVisible)
@@ -178,6 +180,14 @@ struct GeneralSettingsView: View {
                 }
                 .onChange(of: hideDockIcon) { _, _ in
                     AppDelegate.shared?.updateDockIconVisibility()
+                }
+
+                Toggle(isOn: $showMenuBarIcon) {
+                    Text("Show in Menu Bar")
+                    Text("Display Annotate icon in the menu bar. With both icons hidden, open Annotate again to show Settings")
+                }
+                .onChange(of: showMenuBarIcon) { _, _ in
+                    AppDelegate.shared?.updateMenuBarIconVisibility()
                 }
 
                 Toggle(isOn: $selectAfterPlacingText) {

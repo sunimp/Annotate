@@ -51,7 +51,9 @@ struct SettingsStore {
 
 extension SettingKey<Bool> {
     static var clearDrawingsOnStart: Self { .bool("ClearDrawingsOnStart") }
-    static var hideDockIcon: Self { .bool("HideDockIcon") }
+    /// Off the Dock by default: Annotate is a menu bar app.
+    static var hideDockIcon: Self { .bool("HideDockIcon", default: true) }
+    static var showMenuBarIcon: Self { .bool("ShowMenuBarIcon", default: true) }
     static var hideToolFeedback: Self { .bool("HideToolFeedback") }
     static var fadeMode: Self { .bool("FadeMode", default: true, acceptsText: false) }
     static var alwaysOnMode: Self { .bool("AlwaysOnMode") }

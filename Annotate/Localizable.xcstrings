@@ -5059,6 +5059,40 @@
         }
       }
     },
+    "Display Annotate icon in the menu bar. With both icons hidden, open Annotate again to show Settings": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muestra el icono de Annotate en la barra de menús. Si ocultas ambos iconos, vuelve a abrir Annotate para ver Ajustes"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher l’icône d’Annotate dans la barre des menus. Si les deux icônes sont masquées, rouvrez Annotate pour afficher les Réglages"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annotateのアイコンをメニューバーに表示します。両方のアイコンを非表示にした場合は、Annotateをもう一度開くと設定が表示されます"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在菜单栏中显示 Annotate 图标。两个图标都隐藏时，再次打开 Annotate 即可显示设置"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在選單列中顯示 Annotate 圖像。兩個圖像都隱藏時，再次打開 Annotate 即可顯示設定"
+          }
+        }
+      }
+    },
     "Display the floating shortcut toolbar on annotation overlays": {
       "localizations": {
         "es": {
@@ -10906,6 +10940,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "在 Finder 中顯示"
+          }
+        }
+      }
+    },
+    "Show in Menu Bar": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostrar en la barra de menús"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher dans la barre des menus"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "メニューバーに表示"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在菜单栏中显示"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在選單列中顯示"
           }
         }
       }

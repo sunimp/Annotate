@@ -28,7 +28,8 @@ final class SettingsStoreTests: XCTestCase {
 
     func testUnsetKeysReadTheirDefaults() {
         XCTAssertFalse(settings[.clearDrawingsOnStart])
-        XCTAssertFalse(settings[.hideDockIcon])
+        XCTAssertTrue(settings[.hideDockIcon])
+        XCTAssertTrue(settings[.showMenuBarIcon])
         XCTAssertFalse(settings[.hideToolFeedback])
         XCTAssertTrue(settings[.fadeMode])
         XCTAssertFalse(settings[.alwaysOnMode])

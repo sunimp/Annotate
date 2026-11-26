@@ -49,6 +49,24 @@ final class AppDelegateTests: XCTestCase {
         XCTAssertNotNil(AppDelegate.shared)
     }
 
+    func testMenuBarIconFollowsItsSetting() {
+        XCTAssertTrue(appDelegate.statusItem.isVisible, "The menu bar icon shows by default")
+
+        testDefaults.settings[.showMenuBarIcon] = false
+        appDelegate.updateMenuBarIconVisibility()
+        XCTAssertFalse(appDelegate.statusItem.isVisible)
+        XCTAssertNotNil(appDelegate.statusItem.menu, "Hiding the icon keeps its menu")
+
+        testDefaults.settings[.showMenuBarIcon] = true
+        appDelegate.updateMenuBarIconVisibility()
+        XCTAssertTrue(appDelegate.statusItem.isVisible)
+    }
+
+    func testReopeningWithNoWindowShowsSettings() {
+        XCTAssertTrue(appDelegate.applicationShouldHandleReopen(NSApp, hasVisibleWindows: false))
+        XCTAssertEqual(SettingsWindowManager.shared.settingsWindow?.isVisible, true)
+    }
+
     func testStatusBarMenu() throws {
         let menu = try XCTUnwrap(appDelegate.statusItem.menu)
         let board = BoardManager.shared.displayName
@@ -739,7 +757,7 @@ final class AppDelegateTests: XCTestCase {
 
     func testHideDockIconDefaultValue() {
         testDefaults.settings.removeValue(for: .hideDockIcon)
-        XCTAssertFalse(testDefaults.settings[.hideDockIcon])
+        XCTAssertTrue(testDefaults.settings[.hideDockIcon])
     }
 
     func testDockIconVisibilityPersistence() {
