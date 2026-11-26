@@ -121,7 +121,9 @@ extension OverlayView {
         case let (.rectangle(index), .endpoints(fromStart, fromEnd), .endpoints(toStart, toEnd)):
             registerUndo(action: .moveRectangle(index, fromStart, fromEnd, toStart, toEnd))
         case let (.circle(index), .endpoints(fromStart, fromEnd), .endpoints(toStart, toEnd)):
-            registerUndo(action: .moveCircle(index, fromStart, fromEnd, toStart, toEnd))
+            // By id, since deleting a circle or undoing that shifts the indices.
+            guard circles.indices.contains(index) else { return }
+            registerUndo(action: .moveCircle(circles[index].id, fromStart, fromEnd, toStart, toEnd))
         case let (.text(index), .point(from), .point(to)):
             registerUndo(action: .moveText(index, from, to))
         case let (.counter(index), .point(from), .point(to)):

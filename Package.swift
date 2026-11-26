@@ -35,7 +35,10 @@ let package = Package(
         .testTarget(
             name: "AnnotateTests",
             dependencies: ["Annotate"],
-            path: "AnnotateTests"
+            path: "AnnotateTests",
+            resources: [
+                .copy("Fixtures")
+            ]
         ),
     ]
 )

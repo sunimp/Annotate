@@ -62,6 +62,8 @@ extension SettingKey<Bool> {
     static var enableBoard: Self { .bool("EnableBoard") }
     /// Whether `annotate://` links run commands. When off, links are ignored.
     static var urlCommandsEnabled: Self { .bool("URLCommandsEnabled", default: true) }
+    /// Whether each saved capture gets a JSON `CaptureRecord` next to its PNG. Off by default.
+    static var saveAnnotationData: Self { .bool("SaveAnnotationData") }
 
     static var textBackground: Self { .bool("TextBackgroundOn") }
     /// Whether committing a label switches to the Select tool with that label selected.
@@ -99,6 +101,10 @@ extension SettingKey<Double> {
     static var fadeDelay: Self {
         .double("FadeDelay", default: defaultFadeDelay) { $0 > 0 ? $0.clamped(to: fadeDelayRange) : nil }
     }
+    /// When Clear Menu last emptied Recent Captures, in seconds since 1970. The menu hides
+    /// captures made at or before it. 0, the default, hides nothing. `RecentCaptureStore` is
+    /// the only reader.
+    static var recentCapturesClearedAt: Self { .double("RecentCapturesClearedAt", default: 0) }
 }
 
 extension SettingKey<CGFloat> {
@@ -157,7 +163,7 @@ extension SettingKey<OverlayScope> {
 extension SettingKey<RectangleStyle> {
     /// The fill the Redact tool gives new rectangles. Never `.outline`: a stored outline falls
     /// back to the solid default so a redaction always hides.
-    static var redactionStyle: Self { .rawValue("RedactionStyle", default: .solid) { $0 != .outline } }
+    static var redactionStyle: Self { .rawValue("RedactionStyle", default: .solid) { RectangleStyle.redactionStyles.contains($0) } }
 }
 
 extension SettingKey<CounterStyle> {
@@ -174,6 +180,23 @@ extension SettingKey<ArrowStyle> {
 
 extension SettingKey<ActiveCursorStyle> {
     static var activeCursorStyle: Self { .rawValue("ActiveCursorStyle", default: .none) }
+}
+
+extension SettingKey<AfterCapture> {
+    /// Where a finished capture goes: a file, the clipboard, or both.
+    static var afterCapture: Self { .rawValue("AfterCapture", default: .both) }
+}
+
+extension SettingKey<Data> {
+    /// A security-scoped bookmark of the folder chosen for captures. Empty, the default, means
+    /// the default folder. `CaptureFolderStore` is the only reader.
+    static var captureFolderBookmark: Self {
+        SettingKey(
+            name: "CaptureFolderBookmark",
+            defaultValue: Data(),
+            decode: { defaults, name in defaults.data(forKey: name) },
+            encode: { $0 })
+    }
 }
 
 extension SettingKey<NSColor> {

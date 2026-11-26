@@ -8,7 +8,11 @@ enum ToolType: String, CaseIterable, Sendable {
     case line
     case highlighter
     case rectangle
+    /// Shown as Oval, and `filledCircle` as Filled Oval. The cases keep `circle` because their
+    /// raw values are what settings, `annotate://` links and Shortcuts actions store.
     case circle
+    case filledRectangle
+    case filledCircle
     case redact
     case text
     case counter
@@ -22,7 +26,9 @@ enum ToolType: String, CaseIterable, Sendable {
         case .arrow: return L10n.string("Arrow")
         case .line: return L10n.string("Line")
         case .rectangle: return L10n.string("Rectangle")
-        case .circle: return L10n.string("Circle")
+        case .circle: return L10n.string("Oval")
+        case .filledRectangle: return L10n.string("Filled Rectangle")
+        case .filledCircle: return L10n.string("Filled Oval")
         case .redact: return L10n.string("Redact")
         case .text: return L10n.string("Text")
         case .counter: return L10n.string("Counter")
@@ -41,6 +47,8 @@ enum ToolType: String, CaseIterable, Sendable {
         case .highlighter: return .highlighter
         case .rectangle: return .rectangle
         case .circle: return .circle
+        case .filledRectangle: return .filledRectangle
+        case .filledCircle: return .filledCircle
         case .redact: return .redact
         case .text: return .text
         case .counter: return .counter
@@ -57,7 +65,9 @@ enum ToolType: String, CaseIterable, Sendable {
         case .line: return "line.diagonal"
         case .highlighter: return "highlighter"
         case .rectangle: return "rectangle"
-        case .circle: return "circle"
+        case .circle: return "oval"
+        case .filledRectangle: return "rectangle.fill"
+        case .filledCircle: return "oval.fill"
         case .redact: return "eye.slash"
         case .text: return "t.square"
         case .counter: return "number"
@@ -162,6 +172,9 @@ struct DrawingPath {
     /// When the stroke was committed (pen up). Fade Mode holds and fades the whole stroke from
     /// this time, like every other annotation, rather than from its point timestamps.
     var creationTime: CFTimeInterval? = nil
+    /// Stable identity that survives moves, edits, undo and fade compaction. Not part of
+    /// equality. A pasted or duplicated copy gets a fresh one.
+    var id = UUID()
 
     mutating func recacheBounds() {
         cachedBounds = DrawingPath.bounds(of: points)
@@ -210,6 +223,9 @@ struct Arrow {
     var lineWidth: CGFloat
     var creationTime: CFTimeInterval?
     var style: ArrowStyle = .standard
+    /// Stable identity that survives moves, edits, undo and fade compaction. Not part of
+    /// equality. A pasted or duplicated copy gets a fresh one.
+    var id = UUID()
 }
 
 /// Represents a line annotation with start and end points.
@@ -219,15 +235,23 @@ struct Line {
     var color: NSColor
     var lineWidth: CGFloat
     var creationTime: CFTimeInterval?
+    /// Stable identity that survives moves, edits, undo and fade compaction. Not part of
+    /// equality. A pasted or duplicated copy gets a fresh one.
+    var id = UUID()
 }
 
-/// How a rectangle annotation is filled. `.outline` is the plain Rectangle tool; the
-/// other three are the Redact tool's styles and hide whatever sits under the rectangle.
+/// How a rectangle annotation is painted. `.outline` is the plain Rectangle tool and
+/// `.filled` the Filled Rectangle tool; the other three are the Redact tool's styles and
+/// hide whatever sits under the rectangle.
 enum RectangleStyle: String, CaseIterable {
     case outline
+    case filled
     case solid
     case pixelate
     case blur
+
+    /// The styles the Redact tool offers.
+    static let redactionStyles: [RectangleStyle] = [.solid, .pixelate, .blur]
 
     var displayName: String {
         switch self {
@@ -235,6 +259,7 @@ enum RectangleStyle: String, CaseIterable {
         case .solid: return L10n.string("Solid")
         case .pixelate: return L10n.string("Pixelate")
         case .blur: return L10n.string("Blur")
+        case .filled: return L10n.string("Filled")
         }
     }
 }
@@ -252,9 +277,16 @@ struct Rectangle {
     /// Deliberately not part of `==`: the same annotation with or without its sample is
     /// the same annotation for undo, selection and clipboard purposes.
     var sample: RedactionSample? = nil
+    /// Stable identity that survives moves, edits, undo and fade compaction. Not part of
+    /// equality. A pasted or duplicated copy gets a fresh one.
+    var id = UUID()
 
-    /// Whether this rectangle hides content instead of outlining it.
-    var isRedaction: Bool { style != .outline }
+    /// Whether this rectangle is a redaction, which hides content instead of drawing it.
+    var isRedaction: Bool { RectangleStyle.redactionStyles.contains(style) }
+
+    /// Whether this rectangle covers everything created before it, whatever the kind, and
+    /// sits under everything created after it. Redactions and filled rectangles do.
+    var coversOlder: Bool { style != .outline }
 
     /// Whether this rectangle needs captured screen pixels to render its style.
     var needsSample: Bool { style == .pixelate || style == .blur }
@@ -277,6 +309,24 @@ struct Circle {
     var color: NSColor
     var lineWidth: CGFloat
     var creationTime: CFTimeInterval?
+    /// Whether the Filled Oval tool drew it, filled with `color` rather than drawn as an outline.
+    var filled = false
+    /// Stable identity that survives moves, edits, undo and fade compaction. Not part of
+    /// equality. A pasted or duplicated copy gets a fresh one.
+    var id = UUID()
+
+    /// Whether this circle covers everything created before it, as a filled rectangle does.
+    var coversOlder: Bool { filled }
+
+    /// The bounds of the ellipse, spanned by the two corner points.
+    var bounds: NSRect {
+        NSRect(
+            x: min(startPoint.x, endPoint.x),
+            y: min(startPoint.y, endPoint.y),
+            width: abs(endPoint.x - startPoint.x),
+            height: abs(endPoint.y - startPoint.y)
+        )
+    }
 }
 
 /// Represents a text annotation.
@@ -436,6 +486,9 @@ struct CounterAnnotation {
     var fontSize: CGFloat = defaultCounterFontSize
     var style: CounterStyle = .bordered
     var creationTime: CFTimeInterval?
+    /// Stable identity that survives moves, edits, undo and fade compaction. Not part of
+    /// equality. A pasted or duplicated copy gets a fresh one.
+    var id = UUID()
 
     /// The number color for the Filled style: white, or black on a fill light enough that a
     /// white number would wash out. The cutoff sits in the palette's gap: orange and green
@@ -523,7 +576,7 @@ enum DrawingAction {
     case moveArrow(Int, NSPoint, NSPoint, NSPoint, NSPoint)  // index, fromStart, fromEnd, toStart, toEnd
     case moveLine(Int, NSPoint, NSPoint, NSPoint, NSPoint)
     case moveRectangle(Int, NSPoint, NSPoint, NSPoint, NSPoint)
-    case moveCircle(Int, NSPoint, NSPoint, NSPoint, NSPoint)
+    case moveCircle(UUID, NSPoint, NSPoint, NSPoint, NSPoint)
     case movePath(Int, NSPoint, NSPoint)  // index, first point before, first point after
     case moveHighlight(Int, NSPoint, NSPoint)
     case moveCounter(Int, NSPoint, NSPoint)  // index, from, to
@@ -575,6 +628,7 @@ extension Circle: Equatable {
     public static func == (lhs: Circle, rhs: Circle) -> Bool {
         return lhs.startPoint == rhs.startPoint && lhs.endPoint == rhs.endPoint
             && lhs.color.isEqual(rhs.color) && lhs.lineWidth == rhs.lineWidth && lhs.creationTime == rhs.creationTime
+            && lhs.filled == rhs.filled
     }
 }
 

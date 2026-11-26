@@ -409,4 +409,34 @@ enum TestAccessibility {
         visit(root)
         return found
     }
+
+    /// Presses the element with `identifier` the way VoiceOver does (VO-Space), which runs its
+    /// default accessibility action rather than a mouse click.
+    static func press(in root: NSObject, identifier: String) {
+        let press = NSSelectorFromString("accessibilityPerformPress")
+        func visit(_ node: NSObject) -> Bool {
+            if node.value(forKey: "accessibilityIdentifier") as? String == identifier {
+                _ = node.perform(press)
+                return true
+            }
+            let children = node.value(forKey: "accessibilityChildren") as? [NSObject] ?? []
+            return children.contains { visit($0) }
+        }
+        _ = visit(root)
+    }
+
+    /// The named actions VoiceOver offers on the element with `identifier`, besides pressing it.
+    static func customActions(in root: NSObject, identifier: String) -> [NSAccessibilityCustomAction] {
+        var actions: [NSAccessibilityCustomAction] = []
+        func visit(_ node: NSObject) {
+            if node.value(forKey: "accessibilityIdentifier") as? String == identifier {
+                actions = node.value(forKey: "accessibilityCustomActions") as? [NSAccessibilityCustomAction] ?? []
+            }
+            for child in node.value(forKey: "accessibilityChildren") as? [NSObject] ?? [] {
+                visit(child)
+            }
+        }
+        visit(root)
+        return actions
+    }
 }

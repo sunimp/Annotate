@@ -690,8 +690,10 @@ class OverlayView: NSView, NSTextFieldDelegate {
         case .addCircle(let circle):
             manager?.registerUndo(withTarget: self) { target in
                 MainActor.assumeIsolated {
-                    if !target.circles.isEmpty {
-                        target.circles.removeLast()
+                    // Match by id: Delete Last removes the newest circle of the active tool's
+                    // kind, and undoing that appends it, so this circle may not be last.
+                    if let index = target.circles.lastIndex(where: { $0.id == circle.id }) {
+                        target.circles.remove(at: index)
                         target.registerUndo(action: .removeCircle(circle))
                     }
                 }
@@ -778,15 +780,14 @@ class OverlayView: NSView, NSTextFieldDelegate {
                     }
                 }
             }
-        case let .moveCircle(storedIndex, fromStart, fromEnd, toStart, toEnd):
+        case let .moveCircle(id, fromStart, fromEnd, toStart, toEnd):
             manager?.registerUndo(withTarget: self) { target in
                 MainActor.assumeIsolated {
-                    if let index = Self.movedIndex(in: target.circles, stored: storedIndex, isMoved: {
-                        $0.startPoint == toStart && $0.endPoint == toEnd
-                    }) {
+                    // By id, since deleting an circle or undoing that shifts the indices.
+                    if let index = target.circles.firstIndex(where: { $0.id == id }) {
                         target.circles[index].startPoint = fromStart
                         target.circles[index].endPoint = fromEnd
-                        target.registerUndo(action: .moveCircle(index, toStart, toEnd, fromStart, fromEnd))
+                        target.registerUndo(action: .moveCircle(id, toStart, toEnd, fromStart, fromEnd))
                     }
                 }
             }
@@ -1359,12 +1360,22 @@ class OverlayView: NSView, NSTextFieldDelegate {
 
     var redactionIndicesByCreation: [Int] { document.redactionIndicesByCreation }
 
-    /// Whether a redaction newer than something created at `creationTime` covers `point`,
-    /// so interactions do not reach what that redaction hides.
-    func isPointCoveredByRedaction(_ point: NSPoint, over creationTime: CFTimeInterval?) -> Bool {
+    /// Whether a covering shape (a redaction, filled rectangle or filled circle) newer than
+    /// something created at `creationTime` covers `point`, so interactions do not reach what
+    /// it hides. A filled shape that has faded out no longer covers anything. Coverage is
+    /// what the shape paints, so a filled shape's outline counts as well as its inside.
+    func isPointCovered(_ point: NSPoint, over creationTime: CFTimeInterval?) -> Bool {
         let time = RedactionLayer.time(of: creationTime)
-        return rectangles.contains {
-            $0.isRedaction && RedactionLayer.time(of: $0.creationTime) > time && $0.bounds.contains(point)
+        func isNewer(_ other: CFTimeInterval?) -> Bool { RedactionLayer.time(of: other) > time }
+        let byRectangle = rectangles.indices.contains { index in
+            let rectangle = rectangles[index]
+            return rectangle.coversOlder && isNewer(rectangle.creationTime)
+                && rectangle.ink.contains(point) && !isFadedOut(.rectangle(index: index))
+        }
+        return byRectangle || circles.indices.contains { index in
+            let circle = circles[index]
+            return circle.coversOlder && isNewer(circle.creationTime)
+                && circle.ink.contains(point) && !isFadedOut(.circle(index: index))
         }
     }
 
@@ -1827,20 +1838,27 @@ class OverlayView: NSView, NSTextFieldDelegate {
             let lastHighlight = highlightPaths.last!
             registerUndo(action: .removeHighlight(lastHighlight))
             highlightPaths.removeLast()
-        case .rectangle, .redact:
+        case .rectangle, .filledRectangle, .redact:
             // Only the active tool's kind, so the Rectangle tool never deletes a redaction.
-            let wantsRedaction = currentTool == .redact
-            guard let index = rectangles.lastIndex(where: { $0.isRedaction == wantsRedaction }) else { return }
+            let tool = currentTool
+            guard let index = rectangles.lastIndex(where: { rectangle in
+                switch tool {
+                case .redact: return rectangle.isRedaction
+                case .filledRectangle: return rectangle.style == .filled
+                default: return rectangle.style == .outline
+                }
+            }) else { return }
             var lastRectangle = rectangles[index]
             // Undo resamples instead of restoring an old capture.
             lastRectangle.sample = nil
             registerUndo(action: .removeRectangle(lastRectangle))
             rectangles.remove(at: index)
-        case .circle:
-            guard !circles.isEmpty else { return }
-            let lastCircle = circles.last!
-            registerUndo(action: .removeCircle(lastCircle))
-            circles.removeLast()
+        case .circle, .filledCircle:
+            // Only the active tool's kind, as for rectangles.
+            let wantsFilled = currentTool == .filledCircle
+            guard let index = circles.lastIndex(where: { $0.filled == wantsFilled }) else { return }
+            registerUndo(action: .removeCircle(circles[index]))
+            circles.remove(at: index)
         case .text:
             guard !textAnnotations.isEmpty else { return }
             let lastText = textAnnotations.last!
@@ -2054,6 +2072,7 @@ class OverlayView: NSView, NSTextFieldDelegate {
         for (item, pasteTime) in zip(clipboard, pasteTimes) {
             switch item {
             case .arrow(var arrow):
+                arrow.id = UUID()
                 arrow.startPoint = NSPoint(x: arrow.startPoint.x + offsetX, y: arrow.startPoint.y + offsetY)
                 arrow.endPoint = NSPoint(x: arrow.endPoint.x + offsetX, y: arrow.endPoint.y + offsetY)
                 arrow.creationTime = pasteTime
@@ -2062,6 +2081,7 @@ class OverlayView: NSView, NSTextFieldDelegate {
                 pastedObjects.append(.arrow(index: arrows.count - 1))
 
             case .line(var line):
+                line.id = UUID()
                 line.startPoint = NSPoint(x: line.startPoint.x + offsetX, y: line.startPoint.y + offsetY)
                 line.endPoint = NSPoint(x: line.endPoint.x + offsetX, y: line.endPoint.y + offsetY)
                 line.creationTime = pasteTime
@@ -2070,6 +2090,7 @@ class OverlayView: NSView, NSTextFieldDelegate {
                 pastedObjects.append(.line(index: lines.count - 1))
 
             case .rectangle(var rect):
+                rect.id = UUID()
                 rect.startPoint = NSPoint(x: rect.startPoint.x + offsetX, y: rect.startPoint.y + offsetY)
                 rect.endPoint = NSPoint(x: rect.endPoint.x + offsetX, y: rect.endPoint.y + offsetY)
                 rect.sample = nil
@@ -2079,6 +2100,7 @@ class OverlayView: NSView, NSTextFieldDelegate {
                 pastedObjects.append(.rectangle(index: rectangles.count - 1))
 
             case .circle(var circle):
+                circle.id = UUID()
                 circle.startPoint = NSPoint(x: circle.startPoint.x + offsetX, y: circle.startPoint.y + offsetY)
                 circle.endPoint = NSPoint(x: circle.endPoint.x + offsetX, y: circle.endPoint.y + offsetY)
                 circle.creationTime = pasteTime
@@ -2087,6 +2109,7 @@ class OverlayView: NSView, NSTextFieldDelegate {
                 pastedObjects.append(.circle(index: circles.count - 1))
 
             case .path(var path):
+                path.id = UUID()
                 path.points = path.points.map { timedPoint in
                     TimedPoint(
                         point: NSPoint(x: timedPoint.point.x + offsetX, y: timedPoint.point.y + offsetY),
@@ -2100,6 +2123,7 @@ class OverlayView: NSView, NSTextFieldDelegate {
                 pastedObjects.append(.path(index: paths.count - 1))
 
             case .highlight(var highlight):
+                highlight.id = UUID()
                 highlight.points = highlight.points.map { timedPoint in
                     TimedPoint(
                         point: NSPoint(x: timedPoint.point.x + offsetX, y: timedPoint.point.y + offsetY),
@@ -2121,6 +2145,7 @@ class OverlayView: NSView, NSTextFieldDelegate {
                 pastedObjects.append(.text(index: textAnnotations.count - 1))
 
             case .counter(var counter):
+                counter.id = UUID()
                 counter.position = NSPoint(x: counter.position.x + offsetX, y: counter.position.y + offsetY)
                 counter.number = nextCounterNumber
                 counter.creationTime = pasteTime
@@ -2403,7 +2428,7 @@ class OverlayView: NSView, NSTextFieldDelegate {
                 window.invalidateCursorRects(for: window.overlayView)
                 window.overlayView.updateCursor()
             }
-            appDelegate.updateCurrentToolMenuItem(to: ToolType.select.displayName)
+            appDelegate.updateCurrentToolMenuItem(to: .select)
         } else {
             currentTool = .select
         }

@@ -16,8 +16,10 @@ enum AnnotateCommand: Hashable, Sendable {
     case toolbar(CommandSwitch)
     case fade(CommandSwitch)
     case board(CommandSwitch)
-    /// Saves an image of the display, or of an area the user drags out, with its annotations
-    /// and copies it to the clipboard. Never runs from a link.
+    /// Takes an image of the display, or of an area the user drags out, with its annotations,
+    /// and saves it, copies it, or both, as After Capture says. Never runs from a link. The
+    /// Shortcuts actions don't go through `run`, which returns before the capture finishes:
+    /// they await `AppDelegate.captureForShortcuts` for the image.
     case capture(CaptureScope)
 
     /// Whether running a command changed anything.
@@ -38,15 +40,15 @@ enum AnnotateCommand: Hashable, Sendable {
     // MARK: - Path form
 
     /// The command's stable string form, `/<command>[/<value>]`, such as `/show`, `/tool/arrow`,
-    /// or `/toolbar/off`. Values are the raw values of `ToolType`, `PaletteColor`,
-    /// `CommandSwitch`, and `CaptureScope`.
+    /// or `/toolbar/off`. Values are the raw values of `ToolType`, `CommandSwitch`, and
+    /// `CaptureScope`. A color is its palette slot, such as `/color/4`.
     var path: String {
         switch self {
         case .toggle: return "/toggle"
         case .show: return "/show"
         case .hide: return "/hide"
         case .tool(let tool): return "/tool/\(tool.rawValue)"
-        case .color(let color): return "/color/\(color.rawValue)"
+        case .color(let color): return "/color/\(color.slot)"
         case .clear: return "/clear"
         case .toolbar(let target): return "/toolbar/\(target.rawValue)"
         case .fade(let target): return "/fade/\(target.rawValue)"
@@ -72,10 +74,12 @@ enum AnnotateCommand: Hashable, Sendable {
         case ("hide", nil): self = .hide
         case ("clear", nil): self = .clear
         case ("tool", let value?):
-            guard let tool = ToolType(rawValue: value) else { return nil }
+            // The path is lowercased, and some tool names, like filledRectangle, are not.
+            guard let tool = ToolType.allCases.first(where: { $0.rawValue.lowercased() == value }) else { return nil }
             self = .tool(tool)
         case ("color", let value?):
-            guard let color = PaletteColor(rawValue: value) else { return nil }
+            // `Int` also takes "+1" and "01", which aren't how a slot is written.
+            guard let slot = Int(value), String(slot) == value, let color = PaletteColor(slot: slot) else { return nil }
             self = .color(color)
         case ("toolbar", let value?):
             guard let target = CommandSwitch(rawValue: value) else { return nil }

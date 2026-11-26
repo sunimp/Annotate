@@ -10,7 +10,7 @@ import Cocoa
 extension OverlayView {
     // MARK: - Selection and Hit Testing
     
-    private func isFadedOut(_ object: SelectedObject) -> Bool {
+    func isFadedOut(_ object: SelectedObject) -> Bool {
         guard fadeMode else { return false }
         let now = fadeClock()
         let fade = fade
@@ -46,21 +46,29 @@ extension OverlayView {
 
     /// Find object at point, checking in reverse order (topmost/latest first)
     func findObjectAt(point: NSPoint) -> SelectedObject {
-        // Walk the redaction layers newest first, mirroring how draw stacks them: the
-        // annotations above a redaction, then the redaction itself, then what it covers.
+        // Walk the layers newest first, mirroring how draw stacks them: the annotations above
+        // a covering shape, then the shape itself, then what it covers.
         var layer = RedactionLayer()
-        for index in redactionIndicesByCreation.reversed() {
-            layer.start = RedactionLayer.time(of: rectangles[index].creationTime)
+        for cover in document.coversByCreation.reversed() {
+            layer.start = RedactionLayer.time(of: document.creationTime(of: cover))
             if let object = findAnnotation(at: point, in: layer) { return object }
-            if !isFadedOut(.rectangle(index: index)) && hitTestRectangle(rectangles[index], point: point) {
-                return .rectangle(index: index)
+            switch cover {
+            case .rectangle(let index):
+                if !isFadedOut(.rectangle(index: index)) && hitTestRectangle(rectangles[index], point: point) {
+                    return .rectangle(index: index)
+                }
+            case .circle(let index):
+                if !isFadedOut(.circle(index: index)) && hitTestCircle(circles[index], point: point) {
+                    return .circle(index: index)
+                }
             }
             layer = RedactionLayer(end: layer.start)
         }
         return findAnnotation(at: point, in: layer) ?? .none
     }
 
-    /// The topmost non-redaction annotation created within `layer` that contains `point`.
+    /// The topmost annotation created within `layer` that contains `point`, apart from the
+    /// covering shapes, which `findObjectAt` checks between layers.
     private func findAnnotation(at point: NSPoint, in layer: RedactionLayer) -> SelectedObject? {
         // Check in reverse order - last drawn is on top
 
@@ -80,7 +88,9 @@ extension OverlayView {
         }
         
         // 3. Check circles
-        for (index, circle) in circles.enumerated().reversed() where layer.contains(circle.creationTime) {
+        for (index, circle) in circles.enumerated().reversed()
+            where !circle.coversOlder && layer.contains(circle.creationTime)
+        {
             if isFadedOut(.circle(index: index)) { continue }
             if hitTestCircle(circle, point: point) {
                 return .circle(index: index)
@@ -89,7 +99,7 @@ extension OverlayView {
         
         // 4. Check rectangles
         for (index, rect) in rectangles.enumerated().reversed()
-            where !rect.isRedaction && layer.contains(rect.creationTime)
+            where !rect.coversOlder && layer.contains(rect.creationTime)
         {
             if isFadedOut(.rectangle(index: index)) { continue }
             if hitTestRectangle(rect, point: point) {
@@ -332,44 +342,33 @@ extension OverlayView {
         let outerBounds = bounds.insetBy(dx: -edgeTolerance, dy: -edgeTolerance)
         let innerBounds = bounds.insetBy(dx: edgeTolerance, dy: edgeTolerance)
 
-        // A redaction is a filled block, so its whole area is clickable.
-        if rect.isRedaction { return outerBounds.contains(point) }
+        // A redaction or filled rectangle is a solid block, so its whole area is clickable.
+        if rect.coversOlder { return outerBounds.contains(point) }
 
         // Point is on edge if it's in outer but not in inner
         return outerBounds.contains(point) && !innerBounds.contains(point)
     }
     
     private func hitTestCircle(_ circle: Circle, point: NSPoint) -> Bool {
-        let bounds = NSRect(
-            x: min(circle.startPoint.x, circle.endPoint.x),
-            y: min(circle.startPoint.y, circle.endPoint.y),
-            width: abs(circle.endPoint.x - circle.startPoint.x),
-            height: abs(circle.endPoint.y - circle.startPoint.y)
-        )
-        
-        let centerX = bounds.midX
-        let centerY = bounds.midY
-        let radiusX = bounds.width / 2
-        let radiusY = bounds.height / 2
-        
-        let dx = (point.x - centerX) / radiusX
-        let dy = (point.y - centerY) / radiusY
-        let normalizedDistance = sqrt(dx * dx + dy * dy)
-        
-        // Only check edge/perimeter (not inside)
-        let baseTolerance = circle.lineWidth / 2.0
-        let minClickableTolerance: CGFloat = 5.0
-        let edgeTolerance = max(baseTolerance, minClickableTolerance)
-        
-        let toleranceNormalized = edgeTolerance / min(radiusX, radiusY)
-        
-        // Point is on edge if distance is between (1.0 - tolerance) and (1.0 + tolerance)
-        let innerBoundary = max(0, 1.0 - toleranceNormalized)
-        let outerBoundary = 1.0 + toleranceNormalized
-        
-        return normalizedDistance >= innerBoundary && normalizedDistance <= outerBoundary
+        let ellipse = CGPath(
+            ellipseIn: AnnotationRenderer.paddedBounds(circle.startPoint, circle.endPoint, padding: 0),
+            transform: nil)
+
+        // The outline is clickable within its own half width, or 5 points when it is thinner.
+        // Measured in points from the ellipse itself, so the reach is the same all the way
+        // round, however flat the circle is.
+        let edgeTolerance = max(circle.lineWidth / 2.0, 5.0)
+        let edge = ellipse.copy(
+            strokingWithWidth: edgeTolerance * 2,
+            lineCap: .butt,
+            lineJoin: .miter,
+            miterLimit: 10)
+        if edge.contains(point) { return true }
+
+        // A filled circle's whole area is clickable; an outline is not clickable inside.
+        return circle.filled && ellipse.contains(point)
     }
-    
+
     private func hitTestText(_ text: TextAnnotation, point: NSPoint) -> Bool {
         let textRect = getTextRect(for: text)
         return textRect.contains(point)
@@ -520,8 +519,9 @@ extension OverlayView {
         // Check if point is near any of the four edges
         let bounds = rectangle.bounds
 
-        // A redaction is a filled block, so the eraser removes it from anywhere inside.
-        if rectangle.isRedaction && bounds.insetBy(dx: -radius, dy: -radius).contains(point) {
+        // A redaction or filled rectangle is a solid block, so the eraser removes it from
+        // anywhere inside.
+        if rectangle.coversOlder && bounds.insetBy(dx: -radius, dy: -radius).contains(point) {
             return true
         }
 
@@ -537,25 +537,21 @@ extension OverlayView {
     }
 
     private func circleIntersectsPoint(_ circle: Circle, point: NSPoint, radius: CGFloat) -> Bool {
-        let bounds = NSRect(
-            x: min(circle.startPoint.x, circle.endPoint.x),
-            y: min(circle.startPoint.y, circle.endPoint.y),
-            width: abs(circle.endPoint.x - circle.startPoint.x),
-            height: abs(circle.endPoint.y - circle.startPoint.y)
-        )
+        let ellipse = CGPath(
+            ellipseIn: AnnotationRenderer.paddedBounds(circle.startPoint, circle.endPoint, padding: 0),
+            transform: nil)
 
-        let centerX = bounds.midX
-        let centerY = bounds.midY
-        let radiusX = bounds.width / 2
-        let radiusY = bounds.height / 2
+        // Within the eraser's radius of the ellipse, measured in points so the reach is the
+        // same all the way round, however flat the circle is.
+        let reach = ellipse.copy(
+            strokingWithWidth: radius * 2,
+            lineCap: .butt,
+            lineJoin: .miter,
+            miterLimit: 10)
+        if reach.contains(point) { return true }
 
-        // Distance from point to ellipse edge (approximate)
-        let dx = point.x - centerX
-        let dy = point.y - centerY
-        let normalizedDist = sqrt((dx * dx) / (radiusX * radiusX) + (dy * dy) / (radiusY * radiusY))
-        let edgeDistance = abs(normalizedDist - 1.0) * min(radiusX, radiusY)
-
-        return edgeDistance <= radius
+        // The eraser removes a filled circle from anywhere inside.
+        return circle.filled && ellipse.contains(point)
     }
 
     private func textIntersectsPoint(_ text: TextAnnotation, point: NSPoint, radius: CGFloat) -> Bool {

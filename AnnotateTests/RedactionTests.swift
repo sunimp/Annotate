@@ -1203,7 +1203,7 @@ final class RedactionTests: XCTestCase {
         overlayView.rectangles = [makeRectangle(style: .solid, creationTime: 2)]
         XCTAssertEqual(overlayView.findObjectAt(point: NSPoint(x: 100, y: 100)), .rectangle(index: 0))
         XCTAssertEqual(overlayView.findObjectAt(point: textPoint), .rectangle(index: 0))
-        XCTAssertTrue(overlayView.isPointCoveredByRedaction(textPoint, over: label.creationTime))
+        XCTAssertTrue(overlayView.isPointCovered(textPoint, over: label.creationTime))
 
         // Created after the redaction, so drawn and hit on top of it.
         overlayView.arrows = [
@@ -1212,7 +1212,7 @@ final class RedactionTests: XCTestCase {
         ]
         XCTAssertEqual(overlayView.findObjectAt(point: NSPoint(x: 100, y: 130)), .arrow(index: 0))
         XCTAssertEqual(overlayView.findObjectAt(point: NSPoint(x: 100, y: 140)), .rectangle(index: 0))
-        XCTAssertFalse(overlayView.isPointCoveredByRedaction(NSPoint(x: 100, y: 130), over: 3))
+        XCTAssertFalse(overlayView.isPointCovered(NSPoint(x: 100, y: 130), over: 3))
     }
 
     func testTextToolDoubleClickNeverEditsALabelUnderARedaction() throws {

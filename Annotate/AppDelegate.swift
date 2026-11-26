@@ -3,6 +3,20 @@ import Cocoa
 import Sparkle
 import SwiftUI
 
+extension NSUserInterfaceItemIdentifier {
+    /// The status menu's Show Overlay / Hide Overlay item.
+    static let overlay = Self("statusMenu.overlay")
+    /// The status menu's Tool item, whose submenu lists the tools.
+    static let currentTool = Self("statusMenu.tool")
+    /// One tool in the Tool submenu.
+    static func tool(_ tool: ToolType) -> Self { Self("statusMenu.tool.\(tool.rawValue)") }
+    static let board = Self("statusMenu.board")
+    static let cursorHighlight = Self("statusMenu.cursorHighlight")
+    static let fadeMode = Self("statusMenu.fadeMode")
+    static let alwaysOnMode = Self("statusMenu.alwaysOnMode")
+    static let toolbar = Self("statusMenu.toolbar")
+}
+
 @MainActor
 class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItemValidation, NSMenuDelegate {
     static weak var shared: AppDelegate?
@@ -34,9 +48,22 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
 
     /// Makes Capture Screen's and Capture Area's images. Tests swap in one with a stub source,
     /// a temporary folder, and a private pasteboard.
-    lazy var captureService = CaptureService(source: ScreenSampler.shared, sinks: Self.captureSinks())
+    lazy var captureService = CaptureService(
+        source: ScreenSampler.shared,
+        sinks: Self.captureSinks(chosenFolder: captureFolders))
+    /// The folder chosen for captures in Settings.
+    lazy var captureFolders = CaptureFolderStore(settings: settings)
+    /// Sends the notification a finished capture gets. Tests swap in a stub.
+    lazy var captureNotifier: CaptureNotifying = SystemCaptureNotifier.forThisProcess { [weak self] file in
+        self?.showCaptureInFinder(file)
+    }
     /// The latest capture. The next one waits for it, and tests await it.
     var captureTask: Task<Void, Never>?
+    /// Capture problems waiting for their alert, oldest first. See `queueCaptureProblemAlert`.
+    var pendingCaptureProblems: [CaptureProblem] = []
+    /// Whether a run-loop pass is scheduled, or running, to show `pendingCaptureProblems`.
+    /// Tests wait for it to clear.
+    var isPresentingCaptureProblems = false
     /// How long the Screen Recording HUD stays up before the overlay closes for Settings.
     var screenRecordingNoticeDelay: TimeInterval = 1.5
     /// Reports a capture problem when no overlay HUD can show it. Tests replace it.
@@ -67,6 +94,35 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
     /// Overlays closed by the app rather than the user, which keep their drawings the next
     /// time they open even with Clear Drawings on Start.
     var overlaysKeepingDrawings: Set<ObjectIdentifier> = []
+    /// The circle color `updateStatusBarIcon(with:)` was last given, which the pencil comes
+    /// back in when a capture's confirmation icon ends.
+    private(set) var statusIconColor: NSColor = .gray
+    /// The status item's confirmation icon after a capture. Tests shorten it or run its expiry
+    /// by hand.
+    lazy var captureConfirmation = StatusIconConfirmation { [weak self] in self?.renderStatusIcon() }
+    /// What the confirmation icon showing now confirms.
+    var shownCaptureConfirmation: CaptureConfirmation?
+    /// Speaks a capture's confirmation to VoiceOver. Tests replace it.
+    var announceForAccessibility: (String) -> Void = { message in
+        NSAccessibility.post(
+            element: NSApp as Any,
+            notification: .announcementRequested,
+            userInfo: [
+                .announcement: message,
+                .priority: NSAccessibilityPriorityLevel.high.rawValue,
+            ])
+    }
+    /// Opens, copies, and shows saved captures, and opens the capture folder. Tests replace
+    /// its system calls so Finder and the default apps stay put.
+    var captureFileActions = CaptureFileActions()
+    /// The saved captures the status menu's Recent Captures lists.
+    lazy var recentCaptures = RecentCaptureStore(settings: settings) { [unowned self] in
+        (self.captureFolders, self.captureDefaultFolder ?? FileSink.defaultFolder)
+    }
+    /// The Recent Captures submenu, made with the status menu.
+    var recentCapturesMenu: RecentCapturesMenu?
+    /// The latest Copy from Recent Captures. Tests await it.
+    var recentCaptureCopyTask: Task<Void, Never>?
     /// Overlays Capture Area opened from Always-On. They keep Always-On's Persist fade until
     /// the picker closes, so drawings Always-On still shows past their fade stay for the pick
     /// and the capture.
@@ -95,6 +151,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
         // By now macOS has made this process frontmost, so `frontmostApplication` names Annotate.
         handoff.noteLaunch(previousApp: LinkFocusHandoff.appOwningTopmostWindow())
         linkFocusHandoff = handoff
+        // A click on a capture's notification can be what launched the app, and is dropped
+        // unless the notification center's delegate is set by the time launch finishes.
+        _ = captureNotifier
     }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -129,7 +188,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
 
         let persistedTool = settings[.lastUsedTool]
         overlayWindows.values.forEach { $0.overlayView.currentTool = persistedTool }
-        updateCurrentToolMenuItem(to: persistedTool.displayName)
+        updateCurrentToolMenuItem(to: persistedTool)
 
         let enableBoard = settings[.enableBoard]
         overlayWindows.values.forEach {
@@ -183,6 +242,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
         localMouseClickMonitor = nil
         localMouseUpMonitor = nil
         localFlagsChangedMonitor = nil
+        captureConfirmation.end()
     }
 
     @MainActor
@@ -223,237 +283,48 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
             let menu = NSMenu()
             menu.delegate = self
 
-            let colorItem = NSMenuItem(
-                title: L10n.string("Color…"),
-                action: #selector(showColorPicker(_:)),
-                keyEquivalent: ShortcutManager.shared.getShortcut(for: .colorPicker))
-            colorItem.keyEquivalentModifierMask = []
-            menu.addItem(colorItem)
-
-            let lineWidthItem = NSMenuItem(
-                title: L10n.string("Line Width…"),
-                action: #selector(showLineWidthPicker(_:)),
-                keyEquivalent: ShortcutManager.shared.getShortcut(for: .lineWidthPicker))
-            lineWidthItem.keyEquivalentModifierMask = []
-            menu.addItem(lineWidthItem)
+            menu.addItem(makeStatusMenuItem(L10n.string("Show Overlay"), #selector(toggleOverlay), .overlay))
 
             menu.addItem(NSMenuItem.separator())
 
-            let currentToolItem = NSMenuItem(
-                title: L10n.string("Current Tool: \(ToolType.pen.displayName)"),
-                action: nil,
-                keyEquivalent: ""
-            )
-            currentToolItem.identifier = Self.currentToolItemID
-            currentToolItem.isEnabled = false
-            menu.addItem(currentToolItem)
-
-            let arrowModeItem = NSMenuItem(
-                title: L10n.string("Arrow"),
-                action: #selector(enableArrowMode(_:)),
-                keyEquivalent: ShortcutManager.shared.getShortcut(for: .arrow))
-            arrowModeItem.keyEquivalentModifierMask = []
-            menu.addItem(arrowModeItem)
-
-            let lineModeItem = NSMenuItem(
-                title: L10n.string("Line"),
-                action: #selector(enableLineMode(_:)),
-                keyEquivalent: ShortcutManager.shared.getShortcut(for: .line))
-            lineModeItem.keyEquivalentModifierMask = []
-            menu.addItem(lineModeItem)
-
-            let penModeItem = NSMenuItem(
-                title: L10n.string("Pen"),
-                action: #selector(enablePenMode(_:)),
-                keyEquivalent: ShortcutManager.shared.getShortcut(for: .pen))
-            penModeItem.keyEquivalentModifierMask = []
-            menu.addItem(penModeItem)
-
-            let highlighterModeItem = NSMenuItem(
-                title: L10n.string("Highlighter"),
-                action: #selector(enableHighlighterMode(_:)),
-                keyEquivalent: ShortcutManager.shared.getShortcut(for: .highlighter))
-            highlighterModeItem.keyEquivalentModifierMask = []
-            menu.addItem(highlighterModeItem)
-
-            let rectangleModeItem = NSMenuItem(
-                title: L10n.string("Rectangle"),
-                action: #selector(enableRectangleMode(_:)),
-                keyEquivalent: ShortcutManager.shared.getShortcut(for: .rectangle))
-            rectangleModeItem.keyEquivalentModifierMask = []
-            menu.addItem(rectangleModeItem)
-
-            let circleModeItem = NSMenuItem(
-                title: L10n.string("Circle"),
-                action: #selector(enableCircleMode(_:)),
-                keyEquivalent: ShortcutManager.shared.getShortcut(for: .circle))
-            circleModeItem.keyEquivalentModifierMask = []
-            menu.addItem(circleModeItem)
-
-            let redactModeItem = NSMenuItem(
-                title: L10n.string("Redact"),
-                action: #selector(enableRedactMode(_:)),
-                keyEquivalent: ShortcutManager.shared.getShortcut(for: .redact))
-            redactModeItem.keyEquivalentModifierMask = []
-            menu.addItem(redactModeItem)
-
-            let counterModeItem = NSMenuItem(
-                title: L10n.string("Counter"),
-                action: #selector(enableCounterMode(_:)),
-                keyEquivalent: ShortcutManager.shared.getShortcut(for: .counter))
-            counterModeItem.keyEquivalentModifierMask = []
-            menu.addItem(counterModeItem)
-
-            let textModeItem = NSMenuItem(
-                title: L10n.string("Text"),
-                action: #selector(enableTextMode(_:)),
-                keyEquivalent: ShortcutManager.shared.getShortcut(for: .text))
-            textModeItem.keyEquivalentModifierMask = []
-            menu.addItem(textModeItem)
-            
-            let selectModeItem = NSMenuItem(
-                title: L10n.string("Select"),
-                action: #selector(enableSelectMode(_:)),
-                keyEquivalent: ShortcutManager.shared.getShortcut(for: .select))
-            selectModeItem.keyEquivalentModifierMask = []
-            menu.addItem(selectModeItem)
-
-            let eraserModeItem = NSMenuItem(
-                title: L10n.string("Eraser"),
-                action: #selector(enableEraserMode(_:)),
-                keyEquivalent: ShortcutManager.shared.getShortcut(for: .eraser))
-            eraserModeItem.keyEquivalentModifierMask = []
-            menu.addItem(eraserModeItem)
+            menu.addItem(NSMenuItem(title: L10n.string("Color…"), action: #selector(showColorPicker(_:)), keyEquivalent: ""))
+            menu.addItem(
+                NSMenuItem(title: L10n.string("Line Width…"), action: #selector(showLineWidthPicker(_:)), keyEquivalent: ""))
+            menu.addItem(makeToolMenuItem())
 
             menu.addItem(NSMenuItem.separator())
 
-            let toggleBoardItem = NSMenuItem(
-                title: Self.boardMenuTitle(
-                    isBlackboard: BoardManager.shared.currentBoardType == .blackboard,
-                    enabled: settings[.enableBoard]),
-                action: #selector(toggleBoardVisibility(_:)),
-                keyEquivalent: ShortcutManager.shared.getShortcut(for: .toggleBoard))
-            toggleBoardItem.keyEquivalentModifierMask = []
-            menu.addItem(toggleBoardItem)
-
-            let clickEffectsEnabled = CursorHighlightManager.shared.clickEffectsEnabled
-            let toggleClickEffectsItem = NSMenuItem(
-                title: clickEffectsEnabled ? L10n.string("Disable Cursor Highlight") : L10n.string("Enable Cursor Highlight"),
-                action: #selector(toggleClickEffects(_:)),
-                keyEquivalent: ShortcutManager.shared.getShortcut(for: .toggleClickEffects))
-            toggleClickEffectsItem.keyEquivalentModifierMask = []
-            menu.addItem(toggleClickEffectsItem)
+            menu.addItem(makeStatusMenuItem(L10n.string("Show Whiteboard"), #selector(toggleBoardVisibility(_:)), .board))
+            menu.addItem(makeStatusMenuItem(L10n.string("Cursor Highlight"), #selector(toggleClickEffects(_:)), .cursorHighlight))
+            menu.addItem(makeStatusMenuItem(L10n.string("Fade Mode"), #selector(toggleFadeMode(_:)), .fadeMode))
+            menu.addItem(makeStatusMenuItem(L10n.string("Always-On Mode"), #selector(toggleAlwaysOnMode), .alwaysOnMode))
+            menu.addItem(makeStatusMenuItem(L10n.string("Show Toolbar"), #selector(toggleToolbar), .toolbar))
 
             menu.addItem(NSMenuItem.separator())
 
-            let persistedFadeMode = settings[.fadeMode]
-            let currentDrawingModeItem = NSMenuItem(
-                title: persistedFadeMode ? L10n.string("Drawing Mode: Fade") : L10n.string("Drawing Mode: Persist"),
-                action: nil,
-                keyEquivalent: ""
-            )
-            currentDrawingModeItem.identifier = Self.drawingModeItemID
-            currentDrawingModeItem.isEnabled = false
-            menu.addItem(currentDrawingModeItem)
-
-            let toggleDrawingModeItem = NSMenuItem(
-                title: persistedFadeMode ? L10n.string("Persist") : L10n.string("Fade"),
-                action: #selector(toggleFadeMode(_:)),
-                keyEquivalent: ""
-            )
-            toggleDrawingModeItem.keyEquivalentModifierMask = []
-            menu.addItem(toggleDrawingModeItem)
-
-            menu.addItem(NSMenuItem.separator())
-            
-            let currentOverlayModeItem = NSMenuItem(
-                title: alwaysOnMode ? L10n.string("Overlay Mode: Always-On") : L10n.string("Overlay Mode: Interactive"),
-                action: nil,
-                keyEquivalent: ""
-            )
-            currentOverlayModeItem.identifier = Self.overlayModeItemID
-            currentOverlayModeItem.isEnabled = false
-            menu.addItem(currentOverlayModeItem)
-            
-            let toggleAlwaysOnModeItem = NSMenuItem(
-                title: alwaysOnMode ? L10n.string("Exit Always-On Mode") : L10n.string("Always-On Mode"),
-                action: #selector(toggleAlwaysOnMode),
-                keyEquivalent: ""
-            )
-            menu.addItem(toggleAlwaysOnModeItem)
-
-            let toolbarItem = NSMenuItem(
-                title: toolbarVisible ? L10n.string("Hide Toolbar") : L10n.string("Show Toolbar"),
-                action: #selector(toggleToolbar),
-                keyEquivalent: ""
-            )
-            menu.addItem(toolbarItem)
+            menu.addItem(NSMenuItem(title: L10n.string("Undo"), action: #selector(undo), keyEquivalent: "z"))
+            menu.addItem(NSMenuItem(title: L10n.string("Redo"), action: #selector(redo), keyEquivalent: "Z"))
+            menu.addItem(NSMenuItem(title: L10n.string("Clear All"), action: #selector(clearAllAnnotations), keyEquivalent: ""))
 
             menu.addItem(NSMenuItem.separator())
 
-            let clearAllItem = NSMenuItem(
-                title: L10n.string("Clear All"),
-                action: #selector(clearAllAnnotations),
-                keyEquivalent: ""
-            )
-            menu.addItem(clearAllItem)
+            menu.addItem(NSMenuItem(title: L10n.string("Capture Screen"), action: #selector(captureScreen), keyEquivalent: ""))
+            menu.addItem(NSMenuItem(title: L10n.string("Capture Area"), action: #selector(captureArea), keyEquivalent: ""))
+            menu.addItem(makeRecentCapturesItem())
 
-            let undoItem = NSMenuItem(
-                title: L10n.string("Undo"),
-                action: #selector(undo),
-                keyEquivalent: "z")
-            menu.addItem(undoItem)
+            menu.addItem(NSMenuItem.separator())
 
-            let redoItem = NSMenuItem(
-                title: L10n.string("Redo"),
-                action: #selector(redo),
-                keyEquivalent: "Z")
-            menu.addItem(redoItem)
+            menu.addItem(NSMenuItem(title: L10n.string("Settings..."), action: #selector(showSettings), keyEquivalent: ","))
+            menu.addItem(NSMenuItem(title: L10n.string("Check for Updates..."), action: #selector(checkForUpdates), keyEquivalent: ""))
 
             menu.addItem(NSMenuItem.separator())
 
             menu.addItem(
-                NSMenuItem(
-                    title: L10n.string("Capture Screen"),
-                    action: #selector(captureScreen),
-                    keyEquivalent: ""))
-            menu.addItem(
-                NSMenuItem(
-                    title: L10n.string("Capture Area"),
-                    action: #selector(captureArea),
-                    keyEquivalent: ""))
-
-            menu.addItem(NSMenuItem.separator())
-
-            let settingsItem = NSMenuItem(
-                title: L10n.string("Settings..."),
-                action: #selector(showSettings),
-                keyEquivalent: ",")
-            settingsItem.keyEquivalentModifierMask = [.command]
-            menu.addItem(settingsItem)
-
-            let checkForUpdatesItem = NSMenuItem(
-                title: L10n.string("Check for Updates..."),
-                action: #selector(checkForUpdates),
-                keyEquivalent: "")
-            menu.addItem(checkForUpdatesItem)
-
-            menu.addItem(NSMenuItem.separator())
-
-            menu.addItem(
-                NSMenuItem(
-                    title: L10n.string("Close"),
-                    action: #selector(closeOverlay),
-                    keyEquivalent: "w"))
-
-            menu.addItem(
-                NSMenuItem(
-                    title: L10n.string("Quit"),
-                    action: #selector(NSApplication.terminate(_:)),
-                    keyEquivalent: "q"))
+                NSMenuItem(title: L10n.string("Quit Annotate"), action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
 
             statusItem?.menu = menu
             refreshMenuKeyEquivalents()
+            refreshStatusMenu()
         }
     }
 
@@ -468,14 +339,53 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
         let menu = statusItem?.menu
         setupStatusBarItemMenu()
         menu?.cancelTracking()
-        updateBoardMenuItems()
-        updateClickEffectsMenuItems()
-        updateAlwaysOnMenuItems()
-        updateFadeModeMenuItems(isCurrentlyFadeMode: !settings[.fadeMode])
-        updateCurrentToolMenuItem(to: (overlayWindows.values.first?.overlayView.currentTool ?? settings[.lastUsedTool]).displayName)
+        refreshStatusMenu()
         aboutWindow?.title = L10n.string("About Annotate")
         SettingsWindowManager.shared.settingsWindow?.title = L10n.string("Annotate Settings")
         overlayWindows.values.forEach { $0.refreshToolbarShortcuts() }
+    }
+
+    /// The tools in the order the status menu's Tool submenu lists them, with the action each
+    /// row sends.
+    static let statusMenuTools: [(tool: ToolType, action: Selector)] = [
+        (.arrow, #selector(enableArrowMode(_:))),
+        (.line, #selector(enableLineMode(_:))),
+        (.pen, #selector(enablePenMode(_:))),
+        (.highlighter, #selector(enableHighlighterMode(_:))),
+        (.rectangle, #selector(enableRectangleMode(_:))),
+        (.circle, #selector(enableCircleMode(_:))),
+        (.filledRectangle, #selector(enableFilledRectangleMode(_:))),
+        (.filledCircle, #selector(enableFilledCircleMode(_:))),
+        (.redact, #selector(enableRedactMode(_:))),
+        (.counter, #selector(enableCounterMode(_:))),
+        (.text, #selector(enableTextMode(_:))),
+        (.select, #selector(enableSelectMode(_:))),
+        (.eraser, #selector(enableEraserMode(_:))),
+    ]
+
+    /// The Tool item, titled with the current tool, whose submenu lists every tool with the
+    /// current one checked. The submenu has no delegate: the status menu's delegate drops every
+    /// overlay back above menus when its menu closes (#122), and a submenu closes while the
+    /// status menu is still open.
+    private func makeToolMenuItem() -> NSMenuItem {
+        let submenu = NSMenu(title: L10n.string("Tool"))
+        for (tool, action) in Self.statusMenuTools {
+            let item = makeStatusMenuItem(tool.displayName, action, .tool(tool))
+            item.target = self
+            submenu.addItem(item)
+        }
+        let item = NSMenuItem(title: L10n.string("Tool"), action: nil, keyEquivalent: "")
+        item.identifier = .currentTool
+        item.submenu = submenu
+        return item
+    }
+
+    private func makeStatusMenuItem(
+        _ title: String, _ action: Selector, _ identifier: NSUserInterfaceItemIdentifier
+    ) -> NSMenuItem {
+        let item = NSMenuItem(title: title, action: action, keyEquivalent: "")
+        item.identifier = identifier
+        return item
     }
 
     @objc func screenParametersChanged() {
@@ -559,12 +469,17 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
     }
 
     // The overlay sits above pop-up menus, so the status menu would open under it (#122).
-    // Every display's overlay yields, since the menu bar can be on any of them.
+    // Every display's overlay yields, since the menu bar can be on any of them. Only the status
+    // menu itself counts: a submenu closes while the status menu is still open.
     func menuWillOpen(_ menu: NSMenu) {
+        guard menu === statusItem?.menu else { return }
         overlayWindows.values.forEach { $0.setYieldsToMenus(true) }
+        recentCaptures.refresh()
+        refreshStatusMenu()
     }
 
     func menuDidClose(_ menu: NSMenu) {
+        guard menu === statusItem?.menu else { return }
         overlayWindows.values.forEach { $0.setYieldsToMenus(false) }
     }
 
@@ -607,18 +522,32 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
             ?? overlayWindows.values.contains { $0.isVisible && $0.isKeyWindow }
     }
 
-    /// The visible overlay the quick pickers open on: the one on the display under the pointer,
-    /// then the key overlay, then the one on the main screen, then any other. Choosing a menu
-    /// item leaves the pointer on the menu's display, which is the overlay the menu opened from.
-    /// `NSScreen.main` can't come first: on macOS 27 it names the display with the menu bar even
-    /// while the key window is an overlay on another display, so a menu opened from that other
-    /// display's overlay greyed out the pickers (#122).
+    /// The overlays in the order the status menu reads them: the one on the display under the
+    /// pointer, then the key overlay, then the one on the main screen, then the rest in display
+    /// order. Opening the status menu or choosing one of its items leaves the pointer on the
+    /// menu's display, which is the overlay the menu opened from. `NSScreen.main` can't come
+    /// first: on macOS 27 it names the display with the menu bar even while the key window is an
+    /// overlay on another display, so a menu opened from that other display's overlay greyed out
+    /// the pickers (#122).
+    private var overlaysByMenuPreference: [OverlayWindow] {
+        Self.overlaysByMenuPreference(
+            in: overlayWindows, pointerScreen: getCurrentScreen(), mainScreen: NSScreen.main, screens: NSScreen.screens)
+    }
+
+    /// `overlaysByMenuPreference` for any kind of screen key, so tests can stand in for displays
+    /// a single-display Mac doesn't have.
+    static func overlaysByMenuPreference<Screen: Hashable>(
+        in overlays: [Screen: OverlayWindow], pointerScreen: Screen?, mainScreen: Screen?, screens: [Screen]
+    ) -> [OverlayWindow] {
+        let keyOverlay = overlays.values.first { $0.isKeyWindow }
+        let candidates = [pointerScreen.flatMap { overlays[$0] }, keyOverlay, mainScreen.flatMap { overlays[$0] }]
+            + screens.map { overlays[$0] }
+        return candidates.compactMap { $0 }
+    }
+
+    /// The visible overlay the quick pickers open on, the first in `overlaysByMenuPreference`.
     private var pickerOverlayWindow: OverlayWindow? {
-        let pointerOverlay = getCurrentScreen().flatMap { overlayWindows[$0] }
-        let mainOverlay = NSScreen.main.flatMap { overlayWindows[$0] }
-        let candidates = [pointerOverlay, NSApp.keyWindow as? OverlayWindow, mainOverlay]
-            + NSScreen.screens.map { overlayWindows[$0] }
-        return candidates.lazy.compactMap { $0 }.first { $0.isVisible }
+        overlaysByMenuPreference.first { $0.isVisible }
     }
 
     private func showQuickPicker(_ mode: QuickPickerView.Mode) {
@@ -827,7 +756,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
             window.invalidateCursorRects(for: window.overlayView)
             window.overlayView.updateCursor()
         }
-        updateCurrentToolMenuItem(to: tool.displayName)
+        updateCurrentToolMenuItem(to: tool)
         showOverlay()
     }
 
@@ -897,6 +826,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
         switchTool(to: .circle)
     }
 
+    @objc func enableFilledRectangleMode(_ sender: NSMenuItem) {
+        switchTool(to: .filledRectangle)
+    }
+
+    @objc func enableFilledCircleMode(_ sender: NSMenuItem) {
+        switchTool(to: .filledCircle)
+    }
+
     @objc func enableRedactMode(_ sender: NSMenuItem) {
         switchTool(to: .redact)
     }
@@ -930,15 +867,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
     }
 
     func updateBoardMenuItems() {
-        guard let menu = statusItem?.menu else { return }
-
-        let toggleBoardItem = menu.items.first { $0.action == #selector(toggleBoardVisibility(_:)) }
-
-        if let item = toggleBoardItem {
-            item.title = Self.boardMenuTitle(
-                isBlackboard: BoardManager.shared.currentBoardType == .blackboard,
-                enabled: BoardManager.shared.isEnabled)
-        }
+        statusMenuItem(.board)?.title = Self.boardMenuTitle(
+            isBlackboard: BoardManager.shared.currentBoardType == .blackboard,
+            enabled: BoardManager.shared.isEnabled)
     }
 
     /// One whole phrase per board and state, so every language can order the words its own way.
@@ -970,32 +901,47 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
     }
 
     func updateClickEffectsMenuItems() {
-        guard let menu = statusItem?.menu else { return }
-        if let item = menu.items.first(where: { $0.action == #selector(toggleClickEffects(_:)) }) {
-            let isEnabled = CursorHighlightManager.shared.clickEffectsEnabled
-            item.title = isEnabled ? L10n.string("Disable Cursor Highlight") : L10n.string("Enable Cursor Highlight")
-        }
+        statusMenuItem(.cursorHighlight)?.state = CursorHighlightManager.shared.clickEffectsEnabled ? .on : .off
     }
 
     func updateAlwaysOnMenuItems() {
-        guard let menu = statusItem?.menu else { return }
-        
-        let currentOverlayModeItem = menu.items.first { $0.identifier == Self.overlayModeItemID }
-        if let item = currentOverlayModeItem {
-            item.title = alwaysOnMode ? L10n.string("Overlay Mode: Always-On") : L10n.string("Overlay Mode: Interactive")
-        }
-        
-        let toggleAlwaysOnModeItem = menu.items.first { $0.action == #selector(toggleAlwaysOnMode) }
-        if let item = toggleAlwaysOnModeItem {
-            item.title = alwaysOnMode ? L10n.string("Exit Always-On Mode") : L10n.string("Always-On Mode")
-        }
+        statusMenuItem(.alwaysOnMode)?.state = alwaysOnMode ? .on : .off
+        updateOverlayMenuItem()
     }
-    
-    func updateCurrentToolMenuItem(to toolName: String) {
-        guard let menu = statusItem?.menu else { return }
-        
-        let currentToolItem = menu.items.first { $0.identifier == Self.currentToolItemID }
-        currentToolItem?.title = L10n.string("Current Tool: \(toolName)")
+
+    /// Titles the overlay item for what `toggleOverlay` would do: hide the interactive overlay
+    /// on the display under the pointer, or show it, leaving Always-On first.
+    func updateOverlayMenuItem() {
+        let isShowing = !alwaysOnMode && getCurrentScreen().flatMap { overlayWindows[$0] }?.isVisible == true
+        statusMenuItem(.overlay)?.title = isShowing ? L10n.string("Hide Overlay") : L10n.string("Show Overlay")
+    }
+
+    /// Titles the Tool item with `tool` and checks it in the Tool submenu. OverlayView also
+    /// changes the tool without `switchTool`, and calls this itself.
+    func updateCurrentToolMenuItem(to tool: ToolType) {
+        guard let toolItem = statusMenuItem(.currentTool) else { return }
+        toolItem.title = L10n.string("Tool: \(tool.displayName)")
+        toolItem.submenu?.items.forEach { $0.state = $0.identifier == .tool(tool) ? .on : .off }
+    }
+
+    /// Brings every state the status menu shows up to date. Runs as the menu opens, since the
+    /// overlay, the cursor highlight, and the tool also change from shortcuts, Settings, and links.
+    func refreshStatusMenu() {
+        updateOverlayMenuItem()
+        // Overlays can disagree: a display connected later starts on the last-used tool, while
+        // the others may be on a default tool that isn't stored.
+        updateCurrentToolMenuItem(
+            to: overlaysByMenuPreference.first?.overlayView.currentTool ?? settings[.lastUsedTool])
+        updateBoardMenuItems()
+        updateClickEffectsMenuItems()
+        updateFadeModeMenuItems()
+        updateAlwaysOnMenuItems()
+        updateToolbarMenuItem()
+    }
+
+    /// The status menu's top-level item with `identifier`.
+    func statusMenuItem(_ identifier: NSUserInterfaceItemIdentifier) -> NSMenuItem? {
+        statusItem?.menu?.items.first { $0.identifier == identifier }
     }
     
     private func configureWindowForNormalMode(_ overlayWindow: OverlayWindow) {
@@ -1028,21 +974,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
         overlayWindows.values.forEach { $0.overlayView.fadeDelay = delay }
     }
 
-    private func updateFadeModeMenuItems(isCurrentlyFadeMode: Bool) {
-        guard let menu = statusItem?.menu else { return }
-        
-        let currentDrawingModeItem = menu.items.first { $0.identifier == Self.drawingModeItemID }
-        let toggleDrawingModeItem = menu.items.first { 
-            $0.action == #selector(toggleFadeMode(_:)) 
-        }
-
-        currentDrawingModeItem?.title = isCurrentlyFadeMode
-            ? L10n.string("Drawing Mode: Persist")
-            : L10n.string("Drawing Mode: Fade")
-
-        toggleDrawingModeItem?.title = isCurrentlyFadeMode
-            ? L10n.string("Fade")
-            : L10n.string("Persist")
+    /// Checks Fade Mode from the stored setting. Always-On turns its overlays' fade off without
+    /// changing the setting, which they go back to when they leave it.
+    private func updateFadeModeMenuItems() {
+        statusMenuItem(.fadeMode)?.state = settings[.fadeMode] ? .on : .off
     }
 
     func setupBoardObservers() {
@@ -1087,10 +1022,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
         refreshMenuKeyEquivalents()
     }
 
+    /// Gives the status menu's items, and the Tool submenu's, the key equivalents bound in
+    /// Settings. Recent Captures has none (see `RecentCapturesMenu`).
     func refreshMenuKeyEquivalents() {
         guard let menu = statusItem?.menu else { return }
+        let toolItems = statusMenuItem(.currentTool)?.submenu?.items ?? []
 
-        for item in menu.items {
+        for item in menu.items + toolItems {
             let action: ShortcutKey
             switch item.action {
             case #selector(showColorPicker(_:)):
@@ -1109,6 +1047,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
                 action = .rectangle
             case #selector(enableCircleMode(_:)):
                 action = .circle
+            case #selector(enableFilledRectangleMode(_:)):
+                action = .filledRectangle
+            case #selector(enableFilledCircleMode(_:)):
+                action = .filledCircle
             case #selector(enableRedactMode(_:)):
                 action = .redact
             case #selector(enableCounterMode(_:)):
@@ -1194,7 +1136,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
             overlayWindows.values.forEach { $0.overlayView.fadeMode = enabled }
         }
 
-        updateFadeModeMenuItems(isCurrentlyFadeMode: !enabled)
+        updateFadeModeMenuItems()
 
         showToggleFeedback(enabled ? L10n.string("Fade Mode") : L10n.string("Persist Mode"), icon: enabled ? "⏳" : "📌")
     }
@@ -1210,9 +1152,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
     func setToolbarVisible(_ visible: Bool) {
         settings[.toolbarVisible] = visible
         overlayWindows.values.forEach { $0.updateToolbarVisibility() }
-        if let item = statusItem?.menu?.items.first(where: { $0.action == #selector(toggleToolbar) }) {
-            item.title = visible ? L10n.string("Hide Toolbar") : L10n.string("Show Toolbar")
-        }
+        updateToolbarMenuItem()
+    }
+
+    private func updateToolbarMenuItem() {
+        statusMenuItem(.toolbar)?.title = toolbarVisible ? L10n.string("Hide Toolbar") : L10n.string("Show Toolbar")
     }
 
     /// Re-reads the toolbar's keycap visibility and layout into every overlay's bar.
@@ -1225,56 +1169,71 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuItem
         SettingsWindowManager.shared.show()
     }
 
-    /// Updates the status bar icon by layering a colored circle with a pencil.
-    /// - Parameter color: The color to apply to the circle.
+    /// Makes `color` the status item's circle color: the annotation color while an overlay is
+    /// up, gray while it is hidden. A capture's confirmation icon keeps showing, in this color,
+    /// until it ends, and the pencil then comes back in the latest color.
     func updateStatusBarIcon(with color: NSColor) {
-        let pencilSymbolName = "pencil"
-        let iconSize = NSSize(width: 18, height: 18)
+        statusIconColor = color
+        renderStatusIcon()
+    }
 
+    /// Draws the status item from the current state: the pencil, or a capture's confirmation
+    /// icon while it is up.
+    func renderStatusIcon() {
+        guard let button = statusItem?.button else { return }
+        let confirmation = captureConfirmation.isShowing ? shownCaptureConfirmation : nil
+        // Without the symbol, the icon already showing beats an empty status item.
+        guard let image = Self.statusIcon(color: statusIconColor, showing: confirmation) else { return }
+        button.image = image
+    }
+
+    /// The status item's icon: the pencil in a `color` ring, or `confirmation`'s glyph in a
+    /// filled `color` ring (see `CaptureConfirmation.statusIcon(ringColor:)`).
+    static func statusIcon(color: NSColor, showing confirmation: CaptureConfirmation?) -> NSImage? {
+        guard let confirmation else {
+            return statusIcon(color: color, symbolName: "pencil", description: "Annotate")
+        }
+        return confirmation.statusIcon(ringColor: color)
+    }
+
+    /// A colored circle with a white symbol in it.
+    static func statusIcon(color: NSColor, symbolName: String, description: String) -> NSImage? {
+        guard
+            let symbol = NSImage(systemSymbolName: symbolName, accessibilityDescription: nil),
+            let tinted = symbol.copy() as? NSImage
+        else {
+            return nil
+        }
+        let iconSize = NSSize(width: 18, height: 18)
         let compositeImage = NSImage(size: iconSize)
         compositeImage.lockFocus()
 
-        // Draw the circle outline
-        let circleFrame = NSRect(origin: NSPoint(x: 1, y: 1), size: NSSize(width: 16, height: 16))  // Slight inset for stroke
-        let circlePath = NSBezierPath(ovalIn: circleFrame)
+        // Slight inset for the stroke.
+        let circlePath = NSBezierPath(ovalIn: NSRect(x: 1, y: 1, width: 16, height: 16))
         color.setStroke()
         circlePath.lineWidth = 1.5
         circlePath.stroke()
 
-        // Load the pencil image
-        guard
-            let pencilImage = NSImage(
-                systemSymbolName: pencilSymbolName, accessibilityDescription: "Pencil")
-        else {
-            print("Failed to load system symbol: \(pencilSymbolName)")
-            return
-        }
-
-        let coloredPencil = pencilImage.copy() as! NSImage
-        coloredPencil.lockFocus()
+        tinted.lockFocus()
         NSColor.white.set()
-        let pencilBounds = NSRect(origin: .zero, size: pencilImage.size)
-        pencilBounds.fill(using: .sourceIn)  // Tint the image white
-        coloredPencil.unlockFocus()
+        NSRect(origin: .zero, size: symbol.size).fill(using: .sourceIn)
+        tinted.unlockFocus()
 
-        // Center and draw the white pencil icon
-        let pencilSize = NSSize(width: 11, height: 11)
-        let pencilOrigin = NSPoint(
-            x: (iconSize.width - pencilSize.width) / 2, y: (iconSize.height - pencilSize.height) / 2
-        )
-        coloredPencil.draw(
-            in: NSRect(origin: pencilOrigin, size: pencilSize),
+        let symbolSize = NSSize(width: 11, height: 11)
+        let symbolOrigin = NSPoint(
+            x: (iconSize.width - symbolSize.width) / 2, y: (iconSize.height - symbolSize.height) / 2)
+        tinted.draw(
+            in: NSRect(origin: symbolOrigin, size: symbolSize),
             from: .zero,
             operation: .sourceOver,
             fraction: 1.0)
 
         compositeImage.unlockFocus()
         compositeImage.isTemplate = false
-
-        // Set the composite image to the status bar button
-        statusItem?.button?.image = compositeImage
+        compositeImage.accessibilityDescription = description
+        return compositeImage
     }
-    
+
     func setupApplicationMenu() {
         guard let mainMenu = NSApp.mainMenu,
               let appMenuItem = mainMenu.items.first,

@@ -91,6 +91,11 @@ struct CaptureRequest {
     /// frame times use.
     var hostTime: CFTimeInterval
     var date: Date
+    /// Where the finished image goes, as the setting stood when the capture was asked for.
+    var afterCapture: AfterCapture = .both
+    /// Whether a saved image gets its `CaptureRecord` written next to it, as "Save annotation
+    /// data next to screenshots" stood when the capture was asked for.
+    var savesAnnotationData = false
 
     var needsScreenPixels: Bool { !(scene?.coversScreen ?? false) }
 }
@@ -107,6 +112,8 @@ struct Capture {
     let capturedAt: Date
     /// Mach host time of the capture; see `CaptureRequest.hostTime`.
     let hostTime: CFTimeInterval
+    /// The annotation data a saved image gets next to it, or nil when none is asked for.
+    var record: CaptureRecord?
 
     /// Image pixels per point.
     var scale: CGFloat { CGFloat(image.width) / region.width }
@@ -117,7 +124,10 @@ struct Capture {
 
 /// Where a capture went.
 enum CaptureDelivery: Equatable, Sendable {
-    case file(URL)
+    /// Saved at the URL. `missedFolder` names the chosen folder when it could not be reached
+    /// and the file went to the default folder instead. `annotationDataError` describes why the image's `CaptureRecord` couldn't be saved next
+    /// to it, when one was asked for and the image was saved without it.
+    case file(URL, missedFolder: String? = nil, annotationDataError: String? = nil)
     case clipboard
 }
 
@@ -125,6 +135,31 @@ enum CaptureDelivery: Equatable, Sendable {
 enum CaptureDestination: Equatable, Sendable {
     case file
     case clipboard
+}
+
+/// The After Capture setting. The raw values are stored, so renaming a case resets the setting.
+enum AfterCapture: String, CaseIterable, Sendable {
+    case save
+    case copy
+    case both
+
+    var title: String {
+        switch self {
+        case .save: L10n.string("Save to folder")
+        case .copy: L10n.string("Copy to clipboard")
+        case .both: L10n.string("Both")
+        }
+    }
+
+    func includes(_ destination: CaptureDestination) -> Bool {
+        switch self {
+        case .save: destination == .file
+        case .copy: destination == .clipboard
+        case .both: true
+        }
+    }
+
+    var savesFile: Bool { includes(.file) }
 }
 
 /// A destination for finished captures.
@@ -152,17 +187,33 @@ enum CaptureError: Error, Equatable {
     case renderFailed
     /// The area to keep lies off the display or is less than a pixel across.
     case emptyRegion
+    /// Capture Area's picker closed before an area was picked.
+    case cancelled
+    /// Capture Area had no overlay to pick on, or its picker was already open.
+    case pickerUnavailable
 }
 
 /// The outcome of a capture that produced an image. `failures` holds the sinks that threw;
 /// a capture with no delivery at all throws instead.
 struct CaptureResult {
     let capture: Capture
+    /// The PNG every sink was handed.
+    let png: Data
     let deliveries: [CaptureDelivery]
     let failures: [CaptureSinkFailure]
 
     var savedFile: URL? {
-        deliveries.lazy.compactMap { if case .file(let url) = $0 { return url } else { return nil } }.first
+        deliveries.lazy.compactMap { if case .file(let url, _, _) = $0 { return url } else { return nil } }.first
+    }
+
+    /// The chosen folder a saved file should have gone to, when it went to the default instead.
+    var missedFolder: String? {
+        deliveries.lazy.compactMap { if case .file(_, let missed, _) = $0 { return missed } else { return nil } }.first
+    }
+
+    /// Why the saved file's annotation data couldn't be saved next to it, if it couldn't.
+    var annotationDataError: String? {
+        deliveries.lazy.compactMap { if case .file(_, _, let error) = $0 { return error } else { return nil } }.first
     }
 
     var copiedToClipboard: Bool { deliveries.contains(.clipboard) }
@@ -174,7 +225,7 @@ struct CaptureResult {
 }
 
 /// Makes captures: takes the screen pixels, composites the scene over them, encodes a PNG,
-/// and hands it to each sink.
+/// and hands it to each sink the request's `afterCapture` includes.
 @MainActor
 final class CaptureService {
     let source: DisplayCapturing
@@ -205,13 +256,16 @@ final class CaptureService {
         else { throw CaptureError.renderFailed }
         guard let (image, region) = CaptureCompositor.crop(composite, to: request.region, display: request.display)
         else { throw CaptureError.emptyRegion }
-        let capture = Capture(
+        var capture = Capture(
             image: image,
             display: request.display,
             region: region,
             scene: scene,
             capturedAt: request.date,
             hostTime: request.hostTime)
+        if request.savesAnnotationData {
+            capture.record = CaptureRecord(capture)
+        }
 
         guard let png = await CaptureCompositor.encodePNG(image, scale: capture.scale) else {
             throw CaptureError.renderFailed
@@ -219,7 +273,7 @@ final class CaptureService {
 
         var deliveries: [CaptureDelivery] = []
         var failures: [CaptureSinkFailure] = []
-        for sink in sinks {
+        for sink in sinks where request.afterCapture.includes(sink.destination) {
             do {
                 deliveries.append(try await sink.deliver(capture, png: png))
             } catch {
@@ -228,7 +282,7 @@ final class CaptureService {
             }
         }
         if deliveries.isEmpty, let first = failures.first { throw first.error }
-        return CaptureResult(capture: capture, deliveries: deliveries, failures: failures)
+        return CaptureResult(capture: capture, png: png, deliveries: deliveries, failures: failures)
     }
 }
 

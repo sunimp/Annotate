@@ -163,14 +163,22 @@ struct AnnotationRenderer {
             switch step {
             case let .content(content, layer, includesLive):
                 draw(content, in: layer, live: includesLive ? live : nil)
-            case .redaction(let index):
+            case .cover(.rectangle(let index)):
                 let rectangle = document.rectangles[index]
-                if isDirty(rectangle.redrawBounds) {
+                if let alpha = fade.alpha(for: rectangle, at: now), isDirty(rectangle.redrawBounds) {
+                    drawRectangle(rectangle, alpha: alpha)
+                }
+            case .cover(.circle(let index)):
+                let circle = document.circles[index]
+                if let alpha = fade.alpha(creationTime: circle.creationTime, at: now), isDirty(circle.redrawBounds) {
+                    drawCircle(circle, alpha: alpha)
+                }
+            case .liveCover:
+                if let rectangle = live?.rectangle, rectangle.coversOlder, isDirty(rectangle.redrawBounds) {
                     drawRectangle(rectangle, alpha: 1)
                 }
-            case .liveRedaction:
-                if let rectangle = live?.rectangle, rectangle.isRedaction, isDirty(rectangle.redrawBounds) {
-                    drawRectangle(rectangle, alpha: 1)
+                if let circle = live?.circle, circle.coversOlder, isDirty(circle.redrawBounds) {
+                    drawCircle(circle, alpha: 1)
                 }
             case .selection:
                 // Chrome belongs to the view, which paints it after this pass.
@@ -234,24 +242,24 @@ struct AnnotationRenderer {
 
         case .outlines:
             for rectangle in document.rectangles
-            where !rectangle.isRedaction && layer.contains(rectangle.creationTime) {
+            where !rectangle.coversOlder && layer.contains(rectangle.creationTime) {
                 guard let alpha = fade.alpha(for: rectangle, at: now) else { continue }
                 guard isDirty(rectangle.redrawBounds) else { continue }
                 drawRectangle(rectangle, alpha: alpha)
             }
 
-            if let rectangle = live?.rectangle, !rectangle.isRedaction, isDirty(rectangle.redrawBounds) {
+            if let rectangle = live?.rectangle, !rectangle.coversOlder, isDirty(rectangle.redrawBounds) {
                 drawRectangle(rectangle, alpha: 1)
             }
 
         case .circles:
-            for circle in document.circles where layer.contains(circle.creationTime) {
+            for circle in document.circles where !circle.coversOlder && layer.contains(circle.creationTime) {
                 guard let alpha = fade.alpha(creationTime: circle.creationTime, at: now) else { continue }
                 guard isDirty(circle.redrawBounds) else { continue }
                 drawCircle(circle, alpha: alpha)
             }
 
-            if let circle = live?.circle, isDirty(circle.redrawBounds) {
+            if let circle = live?.circle, !circle.coversOlder, isDirty(circle.redrawBounds) {
                 drawCircle(circle, alpha: 1)
             }
 
@@ -316,16 +324,34 @@ struct AnnotationRenderer {
 
     private func drawRectangle(_ rectangle: Rectangle, alpha: CGFloat) {
         let rect = rectangle.bounds
-        guard rectangle.style == .outline else {
+        guard !rectangle.isRedaction else {
             drawRedaction(rectangle, in: rect)
             return
         }
 
-        let adaptedColor = board.adapt(rectangle.color)
         let path = NSBezierPath(rect: rect)
-        adaptedColor.withAlphaComponent(alpha).setStroke()
         path.lineWidth = rectangle.lineWidth
+        guard rectangle.style == .filled else {
+            board.adapt(rectangle.color).withAlphaComponent(alpha).setStroke()
+            path.stroke()
+            return
+        }
+        drawFilled(path, color: board.adapt(rectangle.color), alpha: alpha)
+    }
+
+    /// Fills `path` and strokes its outline in `color`, fading the two together so the
+    /// outline doesn't show darker where it overlaps the fill.
+    private func drawFilled(_ path: NSBezierPath, color: NSColor, alpha: CGFloat) {
+        let context = NSGraphicsContext.current?.cgContext
+        context?.saveGState()
+        context?.setAlpha(alpha)
+        context?.beginTransparencyLayer(auxiliaryInfo: nil)
+        color.setFill()
+        path.fill()
+        color.setStroke()
         path.stroke()
+        context?.endTransparencyLayer()
+        context?.restoreGState()
     }
 
     /// Always lays down the opaque placeholder first so nothing shows through, then paints
@@ -377,8 +403,12 @@ struct AnnotationRenderer {
         )
 
         let path = NSBezierPath(ovalIn: rect)
-        adaptedColor.withAlphaComponent(alpha).setStroke()
         path.lineWidth = circle.lineWidth
+        if circle.filled {
+            drawFilled(path, color: adaptedColor, alpha: alpha)
+            return
+        }
+        adaptedColor.withAlphaComponent(alpha).setStroke()
         path.stroke()
     }
 
@@ -484,6 +514,72 @@ extension AnnotationRenderer {
             width: abs(end.x - start.x),
             height: abs(end.y - start.y)
         ).insetBy(dx: -padding, dy: -padding)
+    }
+}
+
+// MARK: - Ink
+
+// The area each annotation actually paints, with no padding: the stroke at its width with the
+// caps and joins the renderer uses, plus any fill. Unlike the paint bounds, which are padded
+// for culling, these say whether two things really overlap on screen.
+
+extension Arrow {
+    var ink: CGPath { outline.cgPath }
+}
+
+extension Line {
+    var ink: CGPath {
+        let line = CGMutablePath()
+        line.move(to: startPoint)
+        line.addLine(to: endPoint)
+        return line.copy(strokingWithWidth: lineWidth, lineCap: .butt, lineJoin: .miter, miterLimit: 10)
+    }
+}
+
+extension Rectangle {
+    /// An outline's stroke. A redaction fills its whole rect, and a filled rectangle its rect
+    /// and the outer half of its outline.
+    var ink: CGPath {
+        if isRedaction { return CGPath(rect: bounds, transform: nil) }
+        if style == .filled {
+            return CGPath(rect: bounds.insetBy(dx: -lineWidth / 2, dy: -lineWidth / 2), transform: nil)
+        }
+        return CGPath(rect: bounds, transform: nil)
+            .copy(strokingWithWidth: lineWidth, lineCap: .butt, lineJoin: .miter, miterLimit: 10)
+    }
+}
+
+extension Circle {
+    /// An outline's stroke, or for a filled circle the ellipse together with that stroke. The
+    /// stroke's outer edge is not itself an ellipse: between the axes it reaches a little
+    /// past the ellipse grown by half the line width.
+    var ink: CGPath {
+        let ellipse = CGPath(ellipseIn: AnnotationRenderer.paddedBounds(startPoint, endPoint, padding: 0), transform: nil)
+        let outline = ellipse.copy(strokingWithWidth: lineWidth, lineCap: .butt, lineJoin: .miter, miterLimit: 10)
+        return filled ? ellipse.union(outline) : outline
+    }
+}
+
+extension DrawingPath {
+    /// The stroke as `tool` draws it, with round caps and joins. A single point is a dot.
+    func ink(tool: ToolType) -> CGPath {
+        let width = lineWidth * tool.strokeWidthMultiplier
+        guard let first = points.first else { return CGMutablePath() }
+        if points.count == 1 {
+            let dot = NSRect(origin: first.point, size: .zero).insetBy(dx: -width / 2, dy: -width / 2)
+            return CGPath(ellipseIn: dot, transform: nil)
+        }
+        let line = CGMutablePath()
+        line.addLines(between: points.map(\.point))
+        return line.copy(strokingWithWidth: width, lineCap: .round, lineJoin: .round, miterLimit: 10)
+    }
+}
+
+extension CounterAnnotation {
+    /// The badge, with a bordered badge's stroke reaching past its circle.
+    var ink: CGPath {
+        let outset = style == .bordered ? strokeWidth / 2 : 0
+        return CGPath(ellipseIn: badgeRect.insetBy(dx: -outset, dy: -outset), transform: nil)
     }
 }
 

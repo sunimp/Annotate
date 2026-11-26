@@ -30,6 +30,29 @@ extension ToolbarAction {
     }
 }
 
+extension ToolType {
+    /// The overlay toolbar's tool chips, in order. A filled tool has no chip of its own: it
+    /// shares its shape's chip (`toolbarChip`), which shows whichever of the two was selected
+    /// last and selects the filled one on a Shift-click.
+    static let toolbarChips: [ToolType] = [
+        .pen, .arrow, .line, .highlighter, .rectangle, .circle, .redact, .text, .counter, .select, .eraser,
+    ]
+
+    /// The chip this tool is shown on: its own, or for a filled tool its shape's chip.
+    var toolbarChip: ToolType {
+        switch self {
+        case .filledRectangle: return .rectangle
+        case .filledCircle: return .circle
+        default: return self
+        }
+    }
+
+    /// The filled tool that shares this tool's chip, for the two outline shapes.
+    var filledVersion: ToolType? {
+        ToolType.allCases.first { $0 != self && $0.toolbarChip == self }
+    }
+}
+
 /// Which way the floating toolbar runs.
 enum ToolbarLayout: String, CaseIterable {
     /// One row along the bottom, wrapping onto two rows on a narrow display.
@@ -47,7 +70,15 @@ enum ToolbarLayout: String, CaseIterable {
 
 @MainActor
 final class ToolbarModel: ObservableObject {
-    @Published var activeTool: ToolType = .pen
+    @Published var activeTool: ToolType = .pen {
+        didSet {
+            let chip = activeTool.toolbarChip
+            if shownTools[chip] != activeTool { shownTools[chip] = activeTool }
+        }
+    }
+    /// The tool each chip showed last, for the chips two tools share. Not saved between
+    /// launches.
+    @Published private var shownTools: [ToolType: ToolType] = [:]
     @Published var currentColor: NSColor = .systemRed
     @Published var currentWidth: CGFloat = 3
     @Published var fadeMode = true
@@ -59,6 +90,12 @@ final class ToolbarModel: ObservableObject {
     /// Bumped after the live host is given a new measured size so `ViewThatFits` remounts
     /// against that width instead of keeping a stacked choice from a previous overlay.
     @Published var layoutGeneration = 0
+
+    /// The tool `chip` shows: the current tool when it is one of the chip's tools, otherwise
+    /// the one of them selected last, starting with the chip's own.
+    func shownTool(on chip: ToolType) -> ToolType {
+        shownTools[chip] ?? chip
+    }
 
     var widthDotDiameter: CGFloat {
         let index = QuickPickerView.nearestIndex(in: QuickPickerView.widthOptions, to: currentWidth)
@@ -140,15 +177,8 @@ struct ToolbarView: View {
 
     private var toolsSegment: some View {
         segmentLayout {
-            ForEach(ToolType.allCases, id: \.self) { tool in
-                let active = model.activeTool == tool
-                toolbarButton(.tool(tool), identifier: "toolbar.tool.\(tool.rawValue)") {
-                    chip(symbol: tool.symbolName, keycap: keycapText(for: .tool(tool)), active: active)
-                        .anchorPreference(key: SelectedToolBounds.self, value: .bounds) {
-                            active ? $0 : nil
-                        }
-                }
-                .accessibilityAddTraits(active ? .isSelected : [])
+            ForEach(ToolType.toolbarChips, id: \.self) { chipTool in
+                toolChip(chipTool)
             }
         }
         .backgroundPreferenceValue(SelectedToolBounds.self) { anchor in
@@ -244,13 +274,52 @@ struct ToolbarView: View {
             .accessibilityHint(shortcutHint(for: action))
     }
 
-    private func chip(symbol: String, keycap text: String, active: Bool = false) -> some View {
+    /// A tool chip. It shows, and is named for, the tool it showed last (`shownTool(on:)`),
+    /// and is active while either of its tools is current. A click always asks for the chip's
+    /// own tool, and the panel turns a Shift-click on a shape chip into the filled tool.
+    /// VoiceOver can't Shift-click, so its press selects the tool the chip is named for and
+    /// the other version is a named action.
+    private func toolChip(_ chipTool: ToolType) -> some View {
+        let shown = model.shownTool(on: chipTool)
+        let active = model.activeTool.toolbarChip == chipTool
+        let other = chipTool.filledVersion.map { shown == chipTool ? $0 : chipTool }
+        return HoverScaleButton(action: { perform(.tool(chipTool)) }, label: {
+            chip(
+                symbol: shown.symbolName,
+                keycap: keycapText(for: .tool(shown)),
+                reserving: other.map { [keycapText(for: .tool($0))] } ?? [],
+                active: active)
+                .anchorPreference(key: SelectedToolBounds.self, value: .bounds) {
+                    active ? $0 : nil
+                }
+        })
+        .accessibilityIdentifier("toolbar.tool.\(chipTool.rawValue)")
+        .accessibilityLabel(shown.displayName)
+        .accessibilityHint(toolHint(showing: shown, hasFilledVersion: other != nil))
+        .accessibilityAddTraits(active ? .isSelected : [])
+        .accessibilityAction { perform(.tool(shown)) }
+        .otherVersionAction(other) { perform(.tool($0)) }
+    }
+
+    /// The shortcut of the tool the chip shows, then how to reach the filled version.
+    private func toolHint(showing shown: ToolType, hasFilledVersion: Bool) -> String {
+        let shortcut = shortcutHint(for: .tool(shown))
+        guard hasFilledVersion else { return shortcut }
+        let shiftClick = L10n.string("Shift-click for the filled version")
+        return shortcut.isEmpty ? shiftClick : L10n.string("\(shortcut). \(shiftClick)")
+    }
+
+    /// `reserving` names keycaps the chip can switch to, such as a shape chip's other version
+    /// (R and ⇧R), so the chip keeps one width whichever it shows.
+    private func chip(
+        symbol: String, keycap text: String, reserving reserved: [String] = [], active: Bool = false
+    ) -> some View {
         HStack(spacing: 6) {
             iconSlot {
                 Image(systemName: symbol)
                     .font(Self.symbolFont)
             }
-            keycap(text, lit: active)
+            keycap(text, lit: active, reserving: reserved)
         }
         .chipWidth(filling: isVertical)
         .foregroundStyle(Color.primary.opacity(active ? 1 : 0.76))
@@ -280,25 +349,30 @@ struct ToolbarView: View {
     }
 
     @ViewBuilder
-    private func keycap(_ text: String, lit: Bool = false) -> some View {
+    private func keycap(_ text: String, lit: Bool = false, reserving reserved: [String] = []) -> some View {
         if model.showsShortcuts {
-            keycapLabel(text, lit: lit)
+            keycapLabel(text, lit: lit, reserving: reserved)
         }
     }
 
-    private func keycapLabel(_ text: String, lit: Bool) -> some View {
-        Text(keycap: text.uppercased())
-            .font(.system(size: 10, weight: .bold, design: .monospaced))
-            // The chip's hint speaks the shortcut, so the keycap stays out of its label.
-            .accessibilityHidden(true)
-            .foregroundStyle(Color.primary.opacity(lit ? 0.95 : 0.58))
-            .fixedSize()
-            .padding(.horizontal, 4)
-            .padding(.vertical, 2)
-            .background(
-                RoundedRectangle(cornerRadius: 4)
-                    .fill(Color.primary.opacity(0.1))
-            )
+    /// The keycap is as wide as the widest of `text` and `reserved`, with `text` centered in it.
+    /// The reserved keycaps are laid out hidden, so the width follows custom shortcuts too.
+    private func keycapLabel(_ text: String, lit: Bool, reserving reserved: [String] = []) -> some View {
+        ZStack {
+            ForEach(reserved, id: \.self) { Text(keycap: $0.uppercased()).hidden() }
+            Text(keycap: text.uppercased())
+        }
+        .font(.system(size: 10, weight: .bold, design: .monospaced))
+        // The chip's hint speaks the shortcut, so the keycap stays out of its label.
+        .accessibilityHidden(true)
+        .foregroundStyle(Color.primary.opacity(lit ? 0.95 : 0.58))
+        .fixedSize()
+        .padding(.horizontal, 4)
+        .padding(.vertical, 2)
+        .background(
+            RoundedRectangle(cornerRadius: 4)
+                .fill(Color.primary.opacity(0.1))
+        )
     }
 
     private func shortcut(for key: ShortcutKey) -> String {
@@ -374,6 +448,16 @@ private extension View {
     /// targets line up. `EqualWidthColumn` gives every segment the widest one's width.
     func chipWidth(filling: Bool) -> some View {
         frame(maxWidth: filling ? .infinity : nil, alignment: .leading)
+    }
+
+    /// Adds an accessibility action named after `other` that selects it, when there is one.
+    @ViewBuilder
+    func otherVersionAction(_ other: ToolType?, select: @escaping (ToolType) -> Void) -> some View {
+        if let other {
+            accessibilityAction(named: Text(other.displayName)) { select(other) }
+        } else {
+            self
+        }
     }
 
     func chipPadding() -> some View {

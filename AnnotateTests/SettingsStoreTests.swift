@@ -131,6 +131,14 @@ final class SettingsStoreTests: XCTestCase {
         XCTAssertEqual(settings[.shortcut(.arrow)], .unassigned)
     }
 
+    func testColorShortcutsAreStoredByPaletteSlot() {
+        for color in PaletteColor.allCases {
+            settings[.shortcut(.color(color))] = ShortcutBinding("j")
+            XCTAssertNotNil(defaults.object(forKey: "shortcut.color\(color.slot)"), color.displayName)
+        }
+        XCTAssertEqual(SettingKey.shortcut(.colorGreen).name, "shortcut.color4")
+    }
+
     func testEveryPaletteColorRoundTrips() {
         for color in colorPalette {
             settings[.selectedColor] = color
@@ -148,6 +156,25 @@ final class SettingsStoreTests: XCTestCase {
         XCTAssertEqual(settings[.textFontSize], defaultTextAnnotationFontSize)
         XCTAssertEqual(settings[.counterFontSize], defaultCounterFontSize)
         XCTAssertEqual(settings[.spotlightDimmingOpacity], 0.5)
+    }
+
+    func testAfterCaptureDefaultsToBothAndAnUnknownValueReadsTheDefault() {
+        XCTAssertEqual(settings[.afterCapture], .both)
+
+        settings[.afterCapture] = .copy
+        XCTAssertEqual(defaults.string(forKey: "AfterCapture"), "copy")
+        XCTAssertEqual(settings[.afterCapture], .copy)
+
+        defaults.set("sideways", forKey: "AfterCapture")
+        XCTAssertEqual(settings[.afterCapture], .both)
+    }
+
+    func testCaptureFolderBookmarkDefaultsToEmptyAndRoundTrips() {
+        XCTAssertEqual(settings[.captureFolderBookmark], Data())
+
+        settings[.captureFolderBookmark] = Data([1, 2])
+        XCTAssertEqual(defaults.data(forKey: "CaptureFolderBookmark"), Data([1, 2]))
+        XCTAssertEqual(settings[.captureFolderBookmark], Data([1, 2]))
     }
 
     func testWrongTypeReadsTheDefault() {

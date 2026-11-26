@@ -19,6 +19,16 @@ extension OverlayWindow {
         }
         if handleQuickPickerKeyDown(chord) || handleOverlayShortcut(chord) { return true }
 
+        // Command+W closes the overlay, following the layout's Command layer (see `KeyChord`).
+        // It runs here, ahead of the text field and `keyDown`, so it also works while a label is
+        // being typed.
+        if ShortcutBinding("w", modifiers: .command)
+            .matches(chord, on: .command, ignoring: [.shift, .option, .control])
+        {
+            AppDelegate.shared?.closeOverlay()
+            return true
+        }
+
         // Selection commands accept any extra modifiers. Command-B accepts only Shift.
         let selectionCommand = ["a", "c", "x", "v", "d"].first {
             ShortcutBinding($0, modifiers: .command).matches(chord, ignoring: [.shift, .option, .control])

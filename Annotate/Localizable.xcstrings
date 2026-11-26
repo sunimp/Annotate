@@ -4,6 +4,108 @@
     "": {
       "shouldTranslate": false
     },
+    "%@": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@"
+          }
+        }
+      }
+    },
+    "%@ Annotate also couldn't save the annotation data next to the image. %@": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ Annotate tampoco ha podido guardar los datos de anotación junto a la imagen. %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ Annotate n’a pas non plus pu enregistrer les données d’annotation à côté de l’image. %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 画像の横に注釈データも保存できませんでした。%@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ Annotate 也无法在图像旁存储标注数据。%@"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ Annotate 也無法在影像旁儲存標註資料。%@"
+          }
+        }
+      }
+    },
+    "%@ Color": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Color %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couleur %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@カラー"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@颜色"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@顏色"
+          }
+        }
+      }
+    },
     "%@ px": {
       "shouldTranslate": false
     },
@@ -17,6 +119,74 @@
         }
       },
       "shouldTranslate": false
+    },
+    "%@. %@": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@. %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@. %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@。%@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@。%@"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@。%@"
+          }
+        }
+      }
+    },
+    "%@. Couldn't Save Annotation Data": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@. No se han podido guardar los datos de anotación"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@. Impossible d’enregistrer les données d’annotation"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@。注釈データを保存できませんでした"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@。无法存储标注数据"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@。無法儲存標註資料"
+          }
+        }
+      }
     },
     "%lld pt": {
       "shouldTranslate": false
@@ -500,6 +670,40 @@
         }
       }
     },
+    "After capture": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Después de capturar"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Après la capture"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "キャプチャ後"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "截图后"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "擷取後"
+          }
+        }
+      }
+    },
     "After committing a label, select it so you can move it right away": {
       "localizations": {
         "es": {
@@ -564,6 +768,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "所有螢幕"
+          }
+        }
+      }
+    },
+    "Allow Notifications": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permitir notificaciones"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autoriser les notifications"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "通知を許可"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "允许通知"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "允許通知"
           }
         }
       }
@@ -707,6 +945,108 @@
         }
       }
     },
+    "Annotate can't reach %@, so it saved %@ in %@. Choose another folder in Settings.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annotate no puede acceder a %@, así que ha guardado %@ en %@. Elige otra carpeta en Ajustes."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annotate ne peut pas accéder à %@ et a donc enregistré %@ dans %@. Choisissez un autre dossier dans les Réglages."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annotateは“%@”にアクセスできないため、%@を%@に保存しました。設定で別のフォルダを選択してください。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annotate 无法访问“%@”，因此已将 %@ 存储到 %@。请在设置中选择其他文件夹。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annotate 無法存取「%@」，因此已將 %@ 儲存至 %@。請在設定中選擇其他檔案夾。"
+          }
+        }
+      }
+    },
+    "Annotate couldn't copy the capture to the clipboard. %@": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annotate no ha podido copiar la captura al portapapeles. %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annotate n’a pas pu copier la capture dans le presse-papiers. %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annotateはキャプチャをクリップボードにコピーできませんでした。%@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annotate 无法将截图拷贝到剪贴板。%@"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annotate 無法將擷取畫面拷貝到剪貼板。%@"
+          }
+        }
+      }
+    },
+    "Annotate couldn't deliver the image. %@": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annotate no ha podido entregar la imagen. %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annotate n’a pas pu transmettre l’image. %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annotateは画像を出力できませんでした。%@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annotate 无法输出图像。%@"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annotate 無法輸出影像。%@"
+          }
+        }
+      }
+    },
     "Annotate couldn't finish the capture. Try again in a moment.": {
       "localizations": {
         "es": {
@@ -741,6 +1081,40 @@
         }
       }
     },
+    "Annotate couldn't start Capture Area. If an area is already being picked, finish or cancel it first.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annotate no ha podido iniciar Capturar área. Si ya se está eligiendo un área, termina o cancela primero."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annotate n’a pas pu lancer Capturer une zone. Si une zone est déjà en cours de sélection, terminez-la ou annulez-la d’abord."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annotateは“範囲をキャプチャ”を開始できませんでした。範囲を選択中の場合は、先に完了またはキャンセルしてください。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annotate 无法开始“截取区域”。如果正在选择区域，请先完成或取消。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annotate 無法開始「擷取區域」。如果正在選擇區域，請先完成或取消。"
+          }
+        }
+      }
+    },
     "Annotate is still starting up. Try again in a moment.": {
       "localizations": {
         "es": {
@@ -771,6 +1145,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Annotate 仍在啟動中。請稍後再試一次。"
+          }
+        }
+      }
+    },
+    "Annotate needs Screen Recording permission to capture. Turn it on in Annotate's Settings, in the Capture pane.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annotate necesita permiso de grabación de pantalla para capturar. Actívalo en Ajustes de Annotate, en el panel Captura."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annotate a besoin de l’autorisation d’enregistrement de l’écran pour capturer. Activez-la dans les Réglages d’Annotate, dans la sous-fenêtre Capture."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "キャプチャするには画面収録の許可が必要です。Annotateの設定の“キャプチャ”パネルでオンにしてください。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annotate 需要屏幕录制权限才能截图。请在 Annotate 设置的“截图”面板中开启。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annotate 需要螢幕錄製權限才能擷取。請在 Annotate 設定的「擷取」面板中開啟。"
           }
         }
       }
@@ -941,6 +1349,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "基本繪圖與註解快速鍵"
+          }
+        }
+      }
+    },
+    "Bind each color to the number the color picker shows under it": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Asigna a cada color el número que muestra debajo el selector de color"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Associe chaque couleur au chiffre affiché sous elle dans le sélecteur de couleur"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "各カラーを、カラーピッカーでその下に表示される数字に割り当てます"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "将每种颜色绑定到颜色选择器中显示在其下方的数字"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "將每種顏色綁定到顏色選擇器中顯示在其下方的數字"
           }
         }
       }
@@ -1285,6 +1727,40 @@
         }
       }
     },
+    "Both": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ambos"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les deux"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "両方"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "两者"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "兩者"
+          }
+        }
+      }
+    },
     "Built-in Shortcuts": {
       "localizations": {
         "es": {
@@ -1315,6 +1791,74 @@
           "stringUnit": {
             "state": "translated",
             "value": "內建快速鍵"
+          }
+        }
+      }
+    },
+    "Can't Reach %@. Saved to Default Folder": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se puede acceder a %@. Guardado en la carpeta por omisión"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible d’accéder à %@. Enregistré dans le dossier par défaut"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“%@”にアクセスできません。デフォルトのフォルダに保存しました"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法访问“%@”，已存储到默认文件夹"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無法存取「%@」，已儲存至預設檔案夾"
+          }
+        }
+      }
+    },
+    "Can't reach %@. Showing the default folder": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se puede acceder a %@. Mostrando la carpeta por omisión"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible d’accéder à %@. Affichage du dossier par défaut"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“%@”にアクセスできません。デフォルトのフォルダを表示しています"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法访问“%@”，正在显示默认文件夹"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無法存取「%@」，正在顯示預設檔案夾"
           }
         }
       }
@@ -1421,6 +1965,74 @@
         }
       }
     },
+    "Capture Area was cancelled before an area was picked.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se ha cancelado Capturar área antes de elegir un área."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capturer une zone a été annulé avant la sélection d’une zone."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "範囲を選ぶ前に“範囲をキャプチャ”がキャンセルされました。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在选好区域之前已取消“截取区域”。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在選好區域之前已取消「擷取區域」。"
+          }
+        }
+      }
+    },
+    "Capture Copied": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Captura copiada"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capture copiée"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "キャプチャをコピーしました"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "截图已拷贝"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "擷取畫面已拷貝"
+          }
+        }
+      }
+    },
     "Capture Failed": {
       "localizations": {
         "es": {
@@ -1451,6 +2063,74 @@
           "stringUnit": {
             "state": "translated",
             "value": "擷取失敗"
+          }
+        }
+      }
+    },
+    "Capture Saved": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Captura guardada"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capture enregistrée"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "キャプチャを保存しました"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "截图已存储"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "擷取畫面已儲存"
+          }
+        }
+      }
+    },
+    "Capture Saved to the Default Folder": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Captura guardada en la carpeta por omisión"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capture enregistrée dans le dossier par défaut"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "キャプチャをデフォルトのフォルダに保存しました"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "截图已存储到默认文件夹"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "擷取畫面已儲存至預設檔案夾"
           }
         }
       }
@@ -1489,36 +2169,104 @@
         }
       }
     },
-    "Capture Screen saves a PNG of the display, and Capture Area of a part you drag out, with the board and annotations as they appear, to this folder and copies it to the clipboard.": {
+    "Capture Screen takes a PNG of the display, and Capture Area of a part you drag out, with the board and annotations as they appear. It is copied to the clipboard, and no file is saved.": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "“Capturar pantalla” guarda un PNG de la pantalla, y “Capturar área” uno de la parte que delimites arrastrando, con la pizarra y las anotaciones tal como se ven, en esta carpeta y lo copia en el portapapeles."
+            "value": "Capturar pantalla crea un PNG de la pantalla, y Capturar área de la parte que arrastres, con la pizarra y las anotaciones tal como se ven. Se copia al portapapeles y no se guarda ningún archivo."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Capturer l’écran enregistre un PNG de l’écran, et Capturer une zone un PNG de la partie que vous délimitez, avec le tableau et les annotations tels qu’ils apparaissent, dans ce dossier, puis le copie dans le presse-papiers."
+            "value": "Capturer l’écran crée un PNG de l’écran, et Capturer une zone de la partie que vous délimitez, avec le tableau et les annotations tels qu’ils apparaissent. L’image est copiée dans le presse-papiers et aucun fichier n’est enregistré."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "“画面をキャプチャ”はディスプレイ全体を、“範囲をキャプチャ”はドラッグで選択した部分を、表示中のボードと注釈を含めてPNGとしてこのフォルダに保存し、クリップボードにコピーします。"
+            "value": "“画面をキャプチャ”はディスプレイ全体を、“範囲をキャプチャ”はドラッグした部分を、ボードと注釈を表示どおりに含めてPNGにします。画像はクリップボードにコピーされ、ファイルは保存されません。"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "“截取屏幕”会将整个显示器、“截取区域”会将你拖选的部分，连同当前显示的画板和标注保存为 PNG 到此文件夹，并拷贝到剪贴板。"
+            "value": "“截取屏幕”会将整个显示器、“截取区域”会将你拖出的部分，连同画板和标注按显示效果截成 PNG。图像会拷贝到剪贴板，不存储文件。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "「擷取螢幕」會將整個顯示器、「擷取區域」會將你拖移選取的部分，連同畫面上的畫板與註解存成 PNG 到此檔案夾，並拷貝到剪貼板。"
+            "value": "「擷取螢幕」會將整個顯示器、「擷取區域」會將你拖出的部分，連同畫板和標註依顯示效果擷取成 PNG。影像會拷貝到剪貼板，不儲存檔案。"
+          }
+        }
+      }
+    },
+    "Capture Screen takes a PNG of the display, and Capture Area of a part you drag out, with the board and annotations as they appear. It is saved to this folder and copied to the clipboard.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capturar pantalla crea un PNG de la pantalla, y Capturar área de la parte que arrastres, con la pizarra y las anotaciones tal como se ven. Se guarda en esta carpeta y se copia al portapapeles."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capturer l’écran crée un PNG de l’écran, et Capturer une zone de la partie que vous délimitez, avec le tableau et les annotations tels qu’ils apparaissent. L’image est enregistrée dans ce dossier et copiée dans le presse-papiers."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“画面をキャプチャ”はディスプレイ全体を、“範囲をキャプチャ”はドラッグした部分を、ボードと注釈を表示どおりに含めてPNGにします。画像はこのフォルダに保存され、クリップボードにもコピーされます。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“截取屏幕”会将整个显示器、“截取区域”会将你拖出的部分，连同画板和标注按显示效果截成 PNG。图像会存储到此文件夹并拷贝到剪贴板。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「擷取螢幕」會將整個顯示器、「擷取區域」會將你拖出的部分，連同畫板和標註依顯示效果擷取成 PNG。影像會儲存至此檔案夾並拷貝到剪貼板。"
+          }
+        }
+      }
+    },
+    "Capture Screen takes a PNG of the display, and Capture Area of a part you drag out, with the board and annotations as they appear. It is saved to this folder.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capturar pantalla crea un PNG de la pantalla, y Capturar área de la parte que arrastres, con la pizarra y las anotaciones tal como se ven. Se guarda en esta carpeta."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capturer l’écran crée un PNG de l’écran, et Capturer une zone de la partie que vous délimitez, avec le tableau et les annotations tels qu’ils apparaissent. L’image est enregistrée dans ce dossier."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“画面をキャプチャ”はディスプレイ全体を、“範囲をキャプチャ”はドラッグした部分を、ボードと注釈を表示どおりに含めてPNGにします。画像はこのフォルダに保存されます。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“截取屏幕”会将整个显示器、“截取区域”会将你拖出的部分，连同画板和标注按显示效果截成 PNG。图像会存储到此文件夹。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「擷取螢幕」會將整個顯示器、「擷取區域」會將你拖出的部分，連同畫板和標註依顯示效果擷取成 PNG。影像會儲存至此檔案夾。"
           }
         }
       }
@@ -1553,6 +2301,108 @@
           "stringUnit": {
             "state": "translated",
             "value": "「擷取螢幕」、「擷取區域」，以及遮蔽工具的「像素化」和「模糊」樣式需要讀取螢幕上的像素。取得權限之前，只有在顯示完全不透明的畫板時才能擷取，遮蔽也會改用純色填滿。macOS 可能會要求你先重新啟動 Annotate。"
+          }
+        }
+      }
+    },
+    "Capture copied": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Captura copiada"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capture copiée"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "キャプチャをコピーしました"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "截图已拷贝"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "擷取畫面已拷貝"
+          }
+        }
+      }
+    },
+    "Capture saved": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Captura guardada"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capture enregistrée"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "キャプチャを保存しました"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "截图已存储"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "擷取畫面已儲存"
+          }
+        }
+      }
+    },
+    "Captures the display with its annotations as a PNG and passes it on. Also saves it, copies it, or both, as After Capture says in Annotate's Settings.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Captura la pantalla con sus anotaciones como PNG y la pasa a la siguiente acción. También la guarda, la copia o ambas cosas, según Después de capturar en Ajustes de Annotate."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capture l’écran avec ses annotations au format PNG et la transmet. L’enregistre aussi, la copie ou les deux, selon le réglage Après la capture d’Annotate."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ディスプレイを注釈ごとPNGとしてキャプチャし、次のアクションに渡します。Annotateの設定の“キャプチャ後”に従って、保存、コピー、またはその両方も行います。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "将显示器连同标注截成 PNG 并传给下一步。同时按 Annotate 设置中的“截图后”存储、拷贝或两者都做。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "將顯示器連同標註擷取成 PNG 並傳給下一步。同時依 Annotate 設定中的「擷取後」儲存、拷貝或兩者都做。"
           }
         }
       }
@@ -1689,6 +2539,108 @@
           "stringUnit": {
             "state": "translated",
             "value": "檢查更新項目…"
+          }
+        }
+      }
+    },
+    "Choose": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elegir"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisir"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "選択"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "选择"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "選擇"
+          }
+        }
+      }
+    },
+    "Choose Capture Folder": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elegir carpeta de capturas"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisir le dossier des captures"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "キャプチャフォルダを選択"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "选择截图文件夹"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "選擇擷取檔案夾"
+          }
+        }
+      }
+    },
+    "Choose a color slot from 1 to %lld.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige una posición de color del 1 al %lld."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez un emplacement de couleur de 1 à %lld."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1〜%lldのカラースロットを選択してください。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请选择 1 到 %lld 之间的颜色槽位。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "請選擇 1 到 %lld 之間的顏色槽位。"
           }
         }
       }
@@ -1859,6 +2811,74 @@
           "stringUnit": {
             "state": "translated",
             "value": "選擇新箭頭的形狀"
+          }
+        }
+      }
+    },
+    "Choose where Annotate saves captures.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige dónde guarda Annotate las capturas."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez où Annotate enregistre les captures."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annotateがキャプチャを保存する場所を選択します。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "选择 Annotate 存储截图的位置。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "選擇 Annotate 儲存擷取畫面的位置。"
+          }
+        }
+      }
+    },
+    "Choose…": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elegir…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisir…"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "選択…"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "选择…"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "選擇…"
           }
         }
       }
@@ -2067,6 +3087,74 @@
         }
       }
     },
+    "Clear Menu": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Borrar menú"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Effacer le menu"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "メニューを消去"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "清除菜单"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "清除選單"
+          }
+        }
+      }
+    },
+    "Clear Shortcut": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Borrar atajo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Effacer le raccourci"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ショートカットを消去"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "清除快捷键"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "清除快速鍵"
+          }
+        }
+      }
+    },
     "Clear all drawings when toggling overlay off": {
       "localizations": {
         "es": {
@@ -2237,40 +3325,6 @@
         }
       }
     },
-    "Close": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cerrar"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fermer"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "閉じる"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "关闭"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "關閉"
-          }
-        }
-      }
-    },
     "Close Overlay": {
       "localizations": {
         "es": {
@@ -2407,6 +3461,74 @@
         }
       }
     },
+    "Colors": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colores"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couleurs"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カラー"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "颜色"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "顏色"
+          }
+        }
+      }
+    },
+    "Colors on a number key use that number in the color picker. The rest fill the free numbers.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los colores asignados a una tecla numérica usan ese número en el selector de color. El resto ocupa los números libres."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les couleurs associées à une touche numérique utilisent ce chiffre dans le sélecteur de couleur. Les autres prennent les chiffres libres."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "数字キーに割り当てたカラーは、カラーピッカーでもその数字を使います。残りは空いている数字に入ります。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "绑定到数字键的颜色在颜色选择器中使用该数字，其余颜色依次填入空闲的数字。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "綁定到數字鍵的顏色在顏色選擇器中使用該數字，其餘顏色依序填入空閒的數字。"
+          }
+        }
+      }
+    },
     "Color…": {
       "localizations": {
         "es": {
@@ -2475,6 +3597,142 @@
         }
       }
     },
+    "Copied to Clipboard": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copiado al portapapeles"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copié dans le presse-papiers"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "クリップボードにコピーしました"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已拷贝到剪贴板"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已拷貝到剪貼板"
+          }
+        }
+      }
+    },
+    "Copy": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copiar"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copier"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "コピー"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "拷贝"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "拷貝"
+          }
+        }
+      }
+    },
+    "Copy to clipboard": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copiar al portapapeles"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copier dans le presse-papiers"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "クリップボードにコピー"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "拷贝到剪贴板"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "拷貝到剪貼板"
+          }
+        }
+      }
+    },
+    "Couldn't Copy %@": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se ha podido copiar %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de copier %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@をコピーできませんでした"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法拷贝 %@"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無法拷貝 %@"
+          }
+        }
+      }
+    },
     "Couldn't Copy. Saved %@": {
       "localizations": {
         "es": {
@@ -2505,6 +3763,74 @@
           "stringUnit": {
             "state": "translated",
             "value": "無法拷貝。已儲存 %@"
+          }
+        }
+      }
+    },
+    "Couldn't Open the Capture Folder": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se ha podido abrir la carpeta de capturas"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible d’ouvrir le dossier des captures"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "キャプチャフォルダを開けませんでした"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法打开截图文件夹"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無法打開擷取檔案夾"
+          }
+        }
+      }
+    },
+    "Couldn't Save Annotation Data. Saved %@": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se han podido guardar los datos de anotación. Guardado en %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible d’enregistrer les données d’annotation. %@ enregistré"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "注釈データを保存できませんでした。%@を保存しました"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法存储标注数据，已存储 %@"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無法儲存標註資料。已儲存 %@"
           }
         }
       }
@@ -2573,6 +3899,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "無法建立檔案夾。%@"
+          }
+        }
+      }
+    },
+    "Couldn't keep access to that folder. %@": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se ha podido conservar el acceso a esa carpeta. %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de conserver l’accès à ce dossier. %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "そのフォルダへのアクセスを保持できませんでした。%@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法保留对该文件夹的访问权限。%@"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無法保留對該檔案夾的存取權限。%@"
           }
         }
       }
@@ -2777,40 +4137,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "十字準線"
-          }
-        }
-      }
-    },
-    "Current Tool: %@": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Herramienta actual: %@"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Outil actuel : %@"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "現在のツール: %@"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "当前工具：%@"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "目前工具：%@"
           }
         }
       }
@@ -3665,40 +4991,6 @@
         }
       }
     },
-    "Disable Cursor Highlight": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Desactivar resaltado del cursor"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Désactiver la mise en évidence du curseur"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "カーソルのハイライトを無効にする"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "停用光标高亮"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "停用游標強調"
-          }
-        }
-      }
-    },
     "Disable visual feedback when switching tools": {
       "localizations": {
         "es": {
@@ -3835,36 +5127,70 @@
         }
       }
     },
-    "Draw circular shapes": {
+    "Draw a filled oval in the current color, over everything drawn before it": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dibujar formas circulares"
+            "value": "Dibuja un óvalo relleno con el color actual, encima de todo lo dibujado antes"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dessiner des cercles"
+            "value": "Dessine un ovale plein de la couleur actuelle, par-dessus tout ce qui a été dessiné avant"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "円形を描画"
+            "value": "現在のカラーで塗りつぶした楕円を描き、それまでに描いたものすべての上に重ねます"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "绘制圆形"
+            "value": "用当前颜色绘制实心椭圆，盖住之前绘制的所有内容"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "繪製圓形"
+            "value": "以目前顏色繪製實心橢圓，蓋住之前繪製的所有內容"
+          }
+        }
+      }
+    },
+    "Draw a filled rectangle in the current color, over everything drawn before it": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dibuja un rectángulo relleno con el color actual, encima de todo lo dibujado antes"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dessine un rectangle plein de la couleur actuelle, par-dessus tout ce qui a été dessiné avant"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "現在のカラーで塗りつぶした長方形を描き、それまでに描いたものすべての上に重ねます"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "用当前颜色绘制实心矩形，盖住之前绘制的所有内容"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "以目前顏色繪製實心矩形，蓋住之前繪製的所有內容"
           }
         }
       }
@@ -3937,6 +5263,40 @@
         }
       }
     },
+    "Draw oval shapes": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dibujar óvalos"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dessiner des ovales"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "楕円を描く"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "绘制椭圆"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "繪製橢圓"
+          }
+        }
+      }
+    },
     "Draw rectangular shapes": {
       "localizations": {
         "es": {
@@ -4005,74 +5365,6 @@
         }
       }
     },
-    "Drawing Mode: Fade": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Modo de dibujo: Desvanecer"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mode de dessin : Estompage"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "描画モード: フェード"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "绘制模式：淡出"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "繪圖模式：淡出"
-          }
-        }
-      }
-    },
-    "Drawing Mode: Persist": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Modo de dibujo: Permanente"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mode de dessin : Persistant"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "描画モード: 保持"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "绘制模式：保留"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "繪圖模式：保留"
-          }
-        }
-      }
-    },
     "Drawing Tools": {
       "localizations": {
         "es": {
@@ -4103,6 +5395,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "繪圖工具"
+          }
+        }
+      }
+    },
+    "Each capture sends a notification with a preview. A saved capture's has Show in Finder. The overlay's message shows either way, unless Hide Tool Feedback is on.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cada captura envía una notificación con una vista previa. La de una captura guardada incluye Mostrar en el Finder. El mensaje de la capa se muestra en ambos casos, salvo que Ocultar indicación de herramienta esté activado."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chaque capture envoie une notification avec un aperçu. Celle d’une capture enregistrée propose Afficher dans le Finder. Le message du calque s’affiche dans tous les cas, sauf si Masquer le retour d’outil est activé."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "キャプチャのたびにプレビュー付きの通知が届きます。保存したキャプチャの通知には“Finderに表示”があります。“ツールのフィードバックを非表示”がオンでない限り、オーバーレイのメッセージはどちらの場合も表示されます。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "每次截图都会发送一条带预览的通知，已存储的截图通知带有“在访达中显示”。无论是否发送通知，叠加层上的提示都会显示，除非开启了“隐藏工具反馈”。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "每次擷取都會傳送一則附預覽的通知，已儲存的擷取通知附有「在 Finder 中顯示」。無論是否傳送通知，覆蓋層上的提示都會顯示，除非開啟了「隱藏工具回饋」。"
           }
         }
       }
@@ -4205,40 +5531,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "啟用點按效果"
-          }
-        }
-      }
-    },
-    "Enable Cursor Highlight": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Activar resaltado del cursor"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Activer la mise en évidence du curseur"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "カーソルのハイライトを有効にする"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "启用光标高亮"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "啟用游標強調"
           }
         }
       }
@@ -4447,74 +5739,6 @@
         }
       }
     },
-    "Exit Always-On Mode": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Salir del modo Siempre activo"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Quitter le mode Toujours actif"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "常時表示モードを終了"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "退出常开模式"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "離開永遠開啟模式"
-          }
-        }
-      }
-    },
-    "Fade": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Desvanecer"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Estompage"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "フェード"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "淡出"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "淡出"
-          }
-        }
-      }
-    },
     "Fade Delay": {
       "localizations": {
         "es": {
@@ -4647,6 +5871,74 @@
           "stringUnit": {
             "state": "translated",
             "value": "填滿"
+          }
+        }
+      }
+    },
+    "Filled Oval": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Óvalo relleno"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ovale plein"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "塗りつぶし楕円"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "实心椭圆"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "實心橢圓"
+          }
+        }
+      }
+    },
+    "Filled Rectangle": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rectángulo relleno"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rectangle plein"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "塗りつぶし長方形"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "实心矩形"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "實心矩形"
           }
         }
       }
@@ -4922,6 +6214,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "綠色"
+          }
+        }
+      }
+    },
+    "Hear about captures made with the overlay closed": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recibe avisos de las capturas hechas con la capa cerrada"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Soyez averti des captures faites calque fermé"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "オーバーレイを閉じているときのキャプチャも通知します"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "叠加层关闭时截图也能收到通知"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "覆蓋層關閉時擷取也能收到通知"
           }
         }
       }
@@ -5810,6 +7136,74 @@
         }
       }
     },
+    "Left %@ alone because it's already assigned.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se ha cambiado %@ porque ya está asignado."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ n’a pas été modifié, car il est déjà attribué."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@はすでに割り当て済みのため変更しませんでした。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 已被占用，未作更改。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 已被佔用，未作更改。"
+          }
+        }
+      }
+    },
+    "Left %@ alone because they're already assigned.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se han cambiado %@ porque ya están asignados."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ n’ont pas été modifiés, car ils sont déjà attribués."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@はすでに割り当て済みのため変更しませんでした。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 已被占用，未作更改。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 已被佔用，未作更改。"
+          }
+        }
+      }
+    },
     "Line": {
       "localizations": {
         "es": {
@@ -6048,6 +7442,40 @@
         }
       }
     },
+    "No Recent Captures": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No hay capturas recientes"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune capture récente"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最近のキャプチャはありません"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无最近截图"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無最近擷取"
+          }
+        }
+      }
+    },
     "No excluded applications": {
       "localizations": {
         "es": {
@@ -6112,6 +7540,108 @@
           "stringUnit": {
             "state": "translated",
             "value": "未設定"
+          }
+        }
+      }
+    },
+    "Notifications": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notificaciones"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "通知"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "通知"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "通知"
+          }
+        }
+      }
+    },
+    "Notifications allowed": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notificaciones permitidas"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications autorisées"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "通知は許可されています"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已允许通知"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已允許通知"
+          }
+        }
+      }
+    },
+    "Notifications not allowed": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notificaciones no permitidas"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications non autorisées"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "通知は許可されていません"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未允许通知"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未允許通知"
           }
         }
       }
@@ -6252,6 +7782,40 @@
         }
       }
     },
+    "Open": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "開く"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打开"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打開"
+          }
+        }
+      }
+    },
     "Open Annotate automatically when you log in": {
       "localizations": {
         "es": {
@@ -6282,6 +7846,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "登入時自動開啟 Annotate"
+          }
+        }
+      }
+    },
+    "Open Capture Folder": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir carpeta de capturas"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir le dossier des captures"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "キャプチャフォルダを開く"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打开截图文件夹"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打開擷取檔案夾"
           }
         }
       }
@@ -6422,6 +8020,40 @@
         }
       }
     },
+    "Opens the overlay so you can drag out part of the display, then captures it with its annotations as a PNG and passes it on. Also saves it, copies it, or both, as After Capture says in Annotate's Settings. Fails if the pick is cancelled.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abre la capa para que arrastres sobre una parte de la pantalla y la captura con sus anotaciones como PNG para pasarla a la siguiente acción. También la guarda, la copia o ambas cosas, según Después de capturar en Ajustes de Annotate. Falla si se cancela la selección."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvre le calque pour que vous délimitiez une partie de l’écran, puis la capture avec ses annotations au format PNG et la transmet. L’enregistre aussi, la copie ou les deux, selon le réglage Après la capture d’Annotate. Échoue si la sélection est annulée."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "オーバーレイを開いてディスプレイの一部をドラッグで選び、注釈ごとPNGとしてキャプチャして次のアクションに渡します。Annotateの設定の“キャプチャ後”に従って、保存、コピー、またはその両方も行います。選択をキャンセルすると失敗します。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打开叠加层让你拖出显示器的一部分，然后将其连同标注截成 PNG 并传给下一步。同时按 Annotate 设置中的“截图后”存储、拷贝或两者都做。取消选择则失败。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打開覆蓋層讓你拖出顯示器的一部分，然後將其連同標註擷取成 PNG 並傳給下一步。同時依 Annotate 設定中的「擷取後」儲存、拷貝或兩者都做。取消選擇則失敗。"
+          }
+        }
+      }
+    },
     "Orange": {
       "localizations": {
         "es": {
@@ -6490,70 +8122,36 @@
         }
       }
     },
-    "Overlay Mode: Always-On": {
+    "Oval": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Modo de capa: Siempre activo"
+            "value": "Óvalo"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mode du calque : Toujours actif"
+            "value": "Ovale"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "オーバーレイモード: 常時表示"
+            "value": "楕円"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "叠加层模式：常开"
+            "value": "椭圆"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "覆蓋層模式：永遠開啟"
-          }
-        }
-      }
-    },
-    "Overlay Mode: Interactive": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Modo de capa: Interactivo"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mode du calque : Interactif"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "オーバーレイモード: インタラクティブ"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "叠加层模式：交互"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "覆蓋層模式：互動"
+            "value": "橢圓"
           }
         }
       }
@@ -6728,40 +8326,6 @@
         }
       }
     },
-    "Persist": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Permanente"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Persistant"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "保持"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "保留"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "保留"
-          }
-        }
-      }
-    },
     "Persist Mode": {
       "localizations": {
         "es": {
@@ -6792,6 +8356,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "保留模式"
+          }
+        }
+      }
+    },
+    "Pick a palette color in one keystroke": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige un color de la paleta con una sola tecla"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez une couleur de la palette d’une seule touche"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "パレットのカラーをワンキーで選択"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一键选择调色板中的颜色"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一鍵選擇調色盤中的顏色"
           }
         }
       }
@@ -7000,36 +8598,70 @@
         }
       }
     },
-    "Quit": {
+    "Quit Annotate": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Salir"
+            "value": "Salir de Annotate"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Quitter"
+            "value": "Quitter Annotate"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "終了"
+            "value": "Annotateを終了"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "退出"
+            "value": "退出 Annotate"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "結束"
+            "value": "結束 Annotate"
+          }
+        }
+      }
+    },
+    "Recent Captures": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capturas recientes"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Captures récentes"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最近のキャプチャ"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最近截图"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最近擷取"
           }
         }
       }
@@ -7064,6 +8696,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "錄製「%@」快速鍵"
+          }
+        }
+      }
+    },
+    "Recording shortcut": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grabando atajo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrement du raccourci"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ショートカットを記録中"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在录制快捷键"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在錄製快速鍵"
           }
         }
       }
@@ -7714,6 +9380,40 @@
         }
       }
     },
+    "Restore Default": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restaurar valor por omisión"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rétablir la valeur par défaut"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "デフォルトに戻す"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "恢复默认值"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "還原預設值"
+          }
+        }
+      }
+    },
     "Restore default": {
       "localizations": {
         "es": {
@@ -7850,6 +9550,40 @@
         }
       }
     },
+    "Save annotation data next to screenshots": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guardar los datos de anotación junto a las capturas"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer les données d’annotation à côté des captures"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "スクリーンショットの横に注釈データを保存"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在截图旁存储标注数据"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在擷取畫面旁儲存標註資料"
+          }
+        }
+      }
+    },
     "Save the display or an area with its annotations": {
       "localizations": {
         "es": {
@@ -7914,6 +9648,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "儲存顯示器及其註解並拷貝"
+          }
+        }
+      }
+    },
+    "Save to folder": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guardar en carpeta"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer dans un dossier"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "フォルダに保存"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "存储到文件夹"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "儲存至檔案夾"
           }
         }
       }
@@ -8496,36 +10264,36 @@
         }
       }
     },
-    "Set color to ${color}": {
+    "Set color to slot ${slot}": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cambiar color a ${color}"
+            "value": "Cambiar color a la posición ${slot}"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Régler la couleur sur ${color}"
+            "value": "Régler la couleur sur l’emplacement ${slot}"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "カラーを${color}に設定"
+            "value": "カラーをスロット${slot}に設定"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "将颜色设为${color}"
+            "value": "将颜色设为槽位 ${slot}"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "將顏色設為${color}"
+            "value": "將顏色設為槽位 ${slot}"
           }
         }
       }
@@ -8632,36 +10400,36 @@
         }
       }
     },
-    "Sets the annotation color. Doesn't open the overlay.": {
+    "Sets the annotation color to a palette slot: 1 red, 2 orange, 3 yellow, 4 green, 5 cyan, 6 indigo, 7 magenta, 8 white, 9 black. Doesn't open the overlay.": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Define el color de anotación. No abre la capa."
+            "value": "Cambia el color de anotación a una posición de la paleta: 1 rojo, 2 naranja, 3 amarillo, 4 verde, 5 cian, 6 índigo, 7 magenta, 8 blanco, 9 negro. No abre la capa."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Définit la couleur d’annotation. N’ouvre pas le calque."
+            "value": "Règle la couleur d’annotation sur un emplacement de la palette : 1 rouge, 2 orange, 3 jaune, 4 vert, 5 cyan, 6 indigo, 7 magenta, 8 blanc, 9 noir. N’ouvre pas le calque."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "注釈の色を設定します。オーバーレイは開きません。"
+            "value": "注釈のカラーをパレットのスロットに設定します：1 赤、2 オレンジ、3 黄、4 緑、5 シアン、6 インディゴ、7 マゼンタ、8 白、9 黒。オーバーレイは開きません。"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "设置标注颜色，不会打开叠加层。"
+            "value": "将标注颜色设为调色板槽位：1 红、2 橙、3 黄、4 绿、5 青、6 靛、7 品红、8 白、9 黑。不会打开叠加层。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "設定註解顏色。不會打開覆蓋層。"
+            "value": "將標註顏色設為調色盤槽位：1 紅、2 橙、3 黃、4 綠、5 青、6 靛、7 洋紅、8 白、9 黑。不會打開覆蓋層。"
           }
         }
       }
@@ -8764,6 +10532,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "形狀"
+          }
+        }
+      }
+    },
+    "Shift-click for the filled version": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Haz clic con Mayúsculas para la versión rellena"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maj-clic pour la version pleine"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shiftキーを押しながらクリックで塗りつぶし版"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "按住 Shift 点按可使用实心版本"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "按住 Shift 點按可使用實心版本"
           }
         }
       }
@@ -9448,6 +11250,40 @@
         }
       }
     },
+    "Slot": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Posición"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Emplacement"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "スロット"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "槽位"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "槽位"
+          }
+        }
+      }
+    },
     "Solid": {
       "localizations": {
         "es": {
@@ -10060,6 +11896,40 @@
         }
       }
     },
+    "The image is on the clipboard.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La imagen está en el portapapeles."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L’image est dans le presse-papiers."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "画像はクリップボードにあります。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "图像已在剪贴板中。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "影像已在剪貼板中。"
+          }
+        }
+      }
+    },
     "The image was saved, but Annotate couldn't copy it to the clipboard. %@": {
       "localizations": {
         "es": {
@@ -10090,6 +11960,74 @@
           "stringUnit": {
             "state": "translated",
             "value": "影像已儲存，但 Annotate 無法將其拷貝到剪貼板。%@"
+          }
+        }
+      }
+    },
+    "The image was saved, but Annotate couldn't save its annotation data next to it. %@": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La imagen se ha guardado, pero Annotate no ha podido guardar sus datos de anotación junto a ella. %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L’image a été enregistrée, mais Annotate n’a pas pu enregistrer ses données d’annotation à côté. %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "画像は保存しましたが、その横に注釈データを保存できませんでした。%@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "图像已存储，但 Annotate 无法在其旁边存储标注数据。%@"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "影像已儲存，但 Annotate 無法在其旁邊儲存標註資料。%@"
+          }
+        }
+      }
+    },
+    "This folder can't be reached, so captures go to %@ until it comes back.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se puede acceder a esta carpeta, así que las capturas irán a %@ hasta que vuelva a estar disponible."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce dossier est inaccessible, les captures vont donc dans %@ jusqu’à son retour."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このフォルダにアクセスできないため、戻るまでキャプチャは%@に保存されます。"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法访问此文件夹，在恢复之前截图会存储到 %@。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無法存取此檔案夾，在恢復之前擷取畫面會儲存至 %@。"
           }
         }
       }
@@ -10604,6 +12542,40 @@
         }
       }
     },
+    "Tool: %@": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herramienta: %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Outil : %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ツール: %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "工具：%@"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "工具：%@"
+          }
+        }
+      }
+    },
     "Toolbar Layout": {
       "localizations": {
         "es": {
@@ -10906,6 +12878,108 @@
           "stringUnit": {
             "state": "translated",
             "value": "還原上一個動作"
+          }
+        }
+      }
+    },
+    "Unknown folder": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carpeta desconocida"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dossier inconnu"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "不明なフォルダ"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未知文件夹"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未知檔案夾"
+          }
+        }
+      }
+    },
+    "Use 1–9 for colors": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usar 1–9 para los colores"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Utiliser 1–9 pour les couleurs"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カラーに1〜9を使用"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "颜色使用 1–9"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "顏色使用 1–9"
+          }
+        }
+      }
+    },
+    "Use Default": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usar por omisión"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Utiliser le dossier par défaut"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "デフォルトを使用"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使用默认"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使用預設"
           }
         }
       }
@@ -11284,6 +13358,40 @@
         }
       }
     },
+    "Write a JSON file beside each saved PNG with every annotation's position, color, and time": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escribe junto a cada PNG guardado un archivo JSON con la posición, el color y la hora de cada anotación"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Écrit à côté de chaque PNG enregistré un fichier JSON avec la position, la couleur et l’heure de chaque annotation"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存した各PNGの横に、すべての注釈の位置、カラー、時刻を記したJSONファイルを書き出します"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在每个存储的 PNG 旁写入一个 JSON 文件，记录每个标注的位置、颜色和时间"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在每個儲存的 PNG 旁寫入一個 JSON 檔案，記錄每個標註的位置、顏色和時間"
+          }
+        }
+      }
+    },
     "Yellow": {
       "localizations": {
         "es": {
@@ -11314,6 +13422,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "黃色"
+          }
+        }
+      }
+    },
+    "Your Folder": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu carpeta"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre dossier"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "選択したフォルダ"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的文件夹"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的檔案夾"
           }
         }
       }

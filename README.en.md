@@ -16,7 +16,7 @@
 
 ## ❓ Why?
 
-Sometimes you need to emphasize a part of your screen or share ideas visually, and Annotate fills that gap with a simple, efficient interface. It enables real-time screen annotations using tools like pen, arrow, highlighter, rectangle, circle, counter, and text—perfect for highlighting and explaining concepts during presentations, live demos, or teaching sessions where visual annotations enhance understanding and clarity.
+Sometimes you need to emphasize a part of your screen or share ideas visually, and Annotate fills that gap with a simple, efficient interface. It enables real-time screen annotations using tools like pen, arrow, highlighter, rectangle, oval, counter, and text—perfect for highlighting and explaining concepts during presentations, live demos, or teaching sessions where visual annotations enhance understanding and clarity.
 
 ## ✨ Features
 
@@ -26,7 +26,7 @@ Sometimes you need to emphasize a part of your screen or share ideas visually, a
   - 📏 **Line** tool for straight lines.
   - 🟨 **Highlighter** for emphasizing content.
   - 🔲 **Rectangle** shapes for boxing content.
-  - ⭕ **Circle** shapes for highlighting areas.
+  - ⭕ **Oval** shapes for highlighting areas.
   - 🕶️ **Redact** rectangles that hide confidential content with a solid, pixelated, or blurred fill. Use Solid for passwords and other secrets.
   - 🔢 **Counter** tool for adding sequential numbered circles.
   - 📝 **Text** annotations with drag & edit support, live resizing, and an optional background pill.
@@ -46,8 +46,8 @@ Sometimes you need to emphasize a part of your screen or share ideas visually, a
 - 🧹 **Auto-Clear Option:** Automatically clear all drawings when toggling the overlay.
 - ⌨️ **Keyboard Shortcuts:** Switch between modes and toggle the overlay with customizable keyboard shortcuts.
 - ⚡ **Global Hotkey:** Toggle Annotate with a global shortcut.
-- 🤖 **Shortcuts Actions:** Open the overlay, pick a tool or color, clear, and switch the toolbar, Fade Mode, or board from the Shortcuts app.
-- 🔗 **URL Scheme:** Run the same commands from `annotate://` links in scripts, launchers, Stream Deck, or the browser.
+- 🤖 **Shortcuts Actions:** Open the overlay, pick a tool or color, clear, switch the toolbar, Fade Mode, or board, and capture the screen or an area from the Shortcuts app.
+- 🔗 **URL Scheme:** Run the same commands, except capture, from `annotate://` links in scripts, launchers, Stream Deck, or the browser.
 - 🌐 **Localized:** English, Simplified Chinese, Traditional Chinese, Japanese, Spanish, and French, following the macOS language by default, or switched in Settings → General → Language without relaunching.
 - 🔄 **Auto-Updates:** Automatic update checking with secure, cryptographically signed updates.
 
@@ -127,8 +127,8 @@ Releases are ad-hoc signed, not signed with a Developer ID or notarized. macOS a
 4. Press <kbd>Esc</kbd> to exit the overlay.
 
 > [!TIP]
-> The application provides a menu bar item that lets you select tools, open the color and size pickers on the active overlay, and perform actions like undo and redo.
-> It also shows the application's active state, current color selection, tool, and mode.
+> The menu bar icon's menu opens and closes the overlay (**Show Overlay** / **Hide Overlay**), opens the color and size pickers on the active overlay, picks a tool from the **Tool** submenu, toggles the board, **Cursor Highlight**, **Fade Mode**, **Always-On Mode**, and the toolbar, and runs actions like undo, redo, and capture.
+> The icon shows whether the overlay is up and the current color. The menu shows the current tool, with checkmarks on the modes that are on.
 
 <img width="250" alt="image" src="https://github.com/user-attachments/assets/40a94d67-29f1-49a6-9a3a-453d7f3d89e1" />
 
@@ -141,18 +141,20 @@ Releases are ad-hoc signed, not signed with a Developer ID or notarized. macOS a
 
 #### 🎨 Drawing Tools
 
-| Key          | Tool            | Description                                                                |
-| ------------ | --------------- | -------------------------------------------------------------------------- |
-| <kbd>P</kbd> | **Pen**         | Freehand drawing                                                           |
-| <kbd>L</kbd> | **Line**        | Draw straight lines                                                        |
-| <kbd>H</kbd> | **Highlighter** | Highlight areas with semi-transparent brush                                |
-| <kbd>R</kbd> | **Rectangle**   | Draw rectangles (<kbd>Option</kbd>: center, <kbd>Shift</kbd>: square)      |
-| <kbd>O</kbd> | **Circle**      | Draw circles (<kbd>Option</kbd>: center, <kbd>Shift</kbd>: perfect circle) |
-| <kbd>X</kbd> | **Redact**      | Hide content behind a solid, pixelated, or blurred rectangle               |
-| <kbd>A</kbd> | **Arrow**       | Draw directional arrows                                                    |
-| <kbd>N</kbd> | **Counter**     | Add sequential numbered circles (1, 2, 3...)                               |
-| <kbd>T</kbd> | **Text**        | Add text annotations                                                       |
-| <kbd>E</kbd> | **Eraser**      | Remove annotations by dragging over them                                   |
+| Key                                 | Tool                 | Description                                                                |
+| ----------------------------------- | -------------------- | -------------------------------------------------------------------------- |
+| <kbd>P</kbd>                        | **Pen**              | Freehand drawing                                                           |
+| <kbd>L</kbd>                        | **Line**             | Draw straight lines                                                        |
+| <kbd>H</kbd>                        | **Highlighter**      | Highlight areas with semi-transparent brush                                |
+| <kbd>R</kbd>                        | **Rectangle**        | Draw rectangles (<kbd>Option</kbd>: center, <kbd>Shift</kbd>: square)      |
+| <kbd>O</kbd>                        | **Oval**             | Draw ovals (<kbd>Option</kbd>: center, <kbd>Shift</kbd>: perfect circle)   |
+| <kbd>Shift</kbd> + <kbd>R</kbd>     | **Filled Rectangle** | Draw a filled rectangle in the current color, over everything before it    |
+| <kbd>Shift</kbd> + <kbd>O</kbd>     | **Filled Oval**      | Draw a filled oval in the current color, over everything before it         |
+| <kbd>X</kbd>                        | **Redact**           | Hide content behind a solid, pixelated, or blurred rectangle               |
+| <kbd>A</kbd>                        | **Arrow**            | Draw directional arrows                                                    |
+| <kbd>N</kbd>                        | **Counter**          | Add sequential numbered circles (1, 2, 3...)                               |
+| <kbd>T</kbd>                        | **Text**             | Add text annotations                                                       |
+| <kbd>E</kbd>                        | **Eraser**           | Remove annotations by dragging over them                                   |
 
 #### 🎯 Tool Settings & Selection
 
@@ -164,6 +166,7 @@ Releases are ad-hoc signed, not signed with a Developer ID or notarized. macOS a
 | <kbd>B</kbd> | **Board**              | Toggle whiteboard/blackboard              |
 | <kbd>K</kbd> | **Cursor Highlight**   | Toggle cursor highlight and click effects |
 | Not set      | **Background Dimming** | Toggle background dimming                 |
+| Not set      | **Colors**             | Pick a palette color in one keystroke     |
 
 #### ⚡ Quick Actions
 
@@ -175,8 +178,8 @@ Fade mode, toolbar visibility, size stepping, Clear All, Capture Screen, and Cap
 | <kbd>Option</kbd> + <kbd>Command</kbd> + <kbd>T</kbd> | **Toggle Toolbar**   | Show or hide the floating overlay toolbar                                  |
 | <kbd>Delete</kbd>                                     | **Delete**           | Remove selected objects or most recent annotation                          |
 | <kbd>Option</kbd> + <kbd>Delete</kbd>                 | **Clear All**        | Remove all annotations                                                     |
-| <kbd>Command</kbd> + <kbd>S</kbd>                     | **Capture Screen**   | Save the display with its annotations as a PNG and copy it                 |
-| <kbd>Command</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd>  | **Capture Area**     | Drag out part of the display, save it as a PNG, and copy it                |
+| <kbd>Command</kbd> + <kbd>S</kbd>                     | **Capture Screen**   | Capture the display with its annotations as a PNG (see After Capture)      |
+| <kbd>Command</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd>  | **Capture Area**     | Drag out part of the display and capture it (see After Capture)            |
 | <kbd>Command</kbd> + <kbd>Z</kbd>                     | **Undo**             | Undo the last action                                                       |
 | <kbd>Command</kbd> + <kbd>Shift</kbd> + <kbd>Z</kbd>  | **Redo**             | Redo the last undone action                                                |
 | Mouse Backward Button                                 | **Undo**             | Undo the last action (mouse button 3)                                      |
@@ -235,6 +238,7 @@ Color and size live in glass pickers that open right on the overlay, so you neve
 
 - **Color Picker**: Press <kbd>C</kbd> to open the swatch picker
 - **Size Picker**: Press <kbd>W</kbd> to open the size ladder. It adapts to the active tool: stroke widths from 1 to 24 px for drawing tools, font sizes from 12 to 120 pt for Text, and badge sizes for Counter
+- **One-Key Colors**: Bind each palette color to its own key in Settings → Shortcuts, so a single keystroke changes color. **Use 1–9 for colors** binds them in palette order. A color on a number key shows that number in the color picker too, so <kbd>C</kbd> then the number picks the same color. The other colors keep their usual number if it's free, and the rest fill the free numbers. While a picker is open, digits pick from it, and while typing in a label they insert text
 - **Choosing**: Tap the key, then click a swatch or type its digit. Or hold the key, move over your choice, and release. Press the same key or <kbd>Esc</kbd> to dismiss without changing anything
 - **Size Stepping**: Press <kbd>[</kbd> or <kbd>]</kbd> by default (customizable in Settings → Shortcuts) to step the active ladder without opening the picker. They do nothing while a picker is open, and while typing in a label they insert text; use <kbd>Command</kbd> + <kbd>+</kbd> and <kbd>Command</kbd> + <kbd>-</kbd> there instead
 - **Command + Scroll**: Hold <kbd>Command</kbd> and scroll to fine-tune the active size, stroke width from 0.5 to 24 px for drawing tools or the text and counter size for those tools, with a preview at the bottom center of the screen
@@ -243,12 +247,26 @@ Color and size live in glass pickers that open right on the overlay, so you neve
 > [!TIP]
 > Color and size persist across sessions and apply to every drawing tool. The menu bar's Color and Line Width items open the same pickers on the active overlay.
 
-#### Shapes (Rectangle, Circle)
+#### Shapes (Rectangle, Oval, Filled Rectangle, Filled Oval)
 
 - Click and drag to create shapes
-- Hold <kbd>Shift</kbd> while drawing to constrain rectangles to squares and circles to perfect circles
+- Hold <kbd>Shift</kbd> while drawing to constrain rectangles to squares and ovals to perfect circles
 - Hold <kbd>Option</kbd> while drawing to expand from the center point
 - Combine <kbd>Shift</kbd> + <kbd>Option</kbd> for constrained shapes that expand from center
+
+#### Layering and Filled Shapes
+
+Annotations stack by kind, bottom to top: arrows, lines, pen strokes, highlights, rectangles, ovals, labels, counters. Within a kind, newer draws over older.
+
+**Filled Rectangle** (<kbd>Shift</kbd> + <kbd>R</kbd>) and **Filled Oval** (<kbd>Shift</kbd> + <kbd>O</kbd>) fill the shape and its outline with the current color, and stack by when you draw them instead:
+
+- A filled shape covers everything drawn before it, whatever the kind
+- Annotations drawn after it go on top of it, stacked by kind as usual
+- Another filled shape covers those in turn, and so on
+- Moving a filled shape keeps its place in the stack, so it never covers annotations drawn after it
+- Clicking with the Select tool picks what you see on top, and click the inside of a filled shape to select it. The Eraser removes it from anywhere inside
+- Filled shapes fade in Fade Mode like other annotations; as one fades, what it covered shows again
+- On the toolbar, the filled tools share the Rectangle and Oval buttons: click for the outline, <kbd>Shift</kbd>-click for the filled version. The button shows whichever version you picked last
 
 #### Redact
 
@@ -301,7 +319,7 @@ The Select tool allows you to manipulate existing annotations with precision:
 - **Select Objects**: Press <kbd>V</kbd> to enter select mode
 
   - Click on objects to select them (lines, arrows, shapes, text, etc.)
-  - Circles and rectangles must be clicked on their edges
+  - Ovals and rectangles must be clicked on their edges
   - A blue dashed bounding box appears around selected objects
 
 - **Multiple Selection**:
@@ -348,7 +366,7 @@ The Eraser tool allows you to remove specific annotations by dragging over them:
 
 ### Drawing Modes
 
-Toggle between modes with <kbd>Space</kbd> by default, or rebind **Toggle Fade Mode** in Settings → Shortcuts.
+Toggle between modes with <kbd>Space</kbd> by default, or rebind **Toggle Fade Mode** in Settings → Shortcuts. The menu bar's **Fade Mode** item is checked while fade mode is on and toggles it while the overlay is open.
 
 #### Fade Mode
 
@@ -365,7 +383,7 @@ Always-On Mode displays your annotations persistently without any user interacti
 #### How to use:
 
 1. Create your annotations in normal interactive mode
-2. Toggle always-on mode via the global hotkey (configurable in Settings) or menu bar
+2. Toggle always-on mode via the global hotkey (configurable in Settings) or the menu bar's **Always-On Mode** item, which is checked while it is on
 3. Annotations become persistent and non-interactive
 4. Use the same hotkey or menu option to exit always-on mode and resume editing
 
@@ -384,17 +402,21 @@ Annotate adds these actions to the Shortcuts app, so you can run them from a sho
 | Show Overlay      | Opens the overlay. Leaves Always-On Mode first.                                  |
 | Hide Overlay      | Closes the overlay on every display. Leaves Always-On Mode.                      |
 | Select Tool       | Selects a tool and opens the overlay.                                            |
-| Set Color         | Sets the annotation color from the palette. Doesn't open the overlay.            |
+| Set Color         | Sets the color to a [color slot](#url-scheme), 1 to 9. Doesn't open the overlay. |
 | Clear Annotations | Clears every open overlay. One Undo on any display brings them all back.         |
 | Set Toolbar       | Turns the toolbar on, off, or toggles it. Doesn't open the overlay.              |
 | Set Fade Mode     | Turns Fade Mode on, off, or toggles it. In Always-On Mode it applies on exit.    |
 | Set Board         | Turns the whiteboard (blackboard in Dark Mode) on, off, or toggles it.           |
+| Capture Screen    | Captures the display with its annotations and returns the PNG.                   |
+| Capture Area      | Opens the overlay to drag out an area, then captures it and returns the PNG.     |
 
 Select Tool, Set Color, Clear Annotations, and the Set actions show an on-screen message on any open overlay.
 
+Capture Screen and Capture Area work as they do from the menu: the image also goes where **After Capture** says, and the overlay and notification report it. With **Copy to clipboard**, the action hands Shortcuts a temporary file and nothing is saved to the capture folder. Capture Area fails with an error if you cancel the pick.
+
 ### URL Scheme
 
-Every Shortcuts action also has an `annotate://` link, so anything that can open a URL can run it:
+Every Shortcuts action except Capture Screen and Capture Area also has an `annotate://` link, so anything that can open a URL can run it:
 
 ```sh
 open "annotate://tool/arrow"
@@ -406,20 +428,20 @@ open "annotate://tool/arrow"
 | `annotate://show`                      | Opens the overlay. Leaves Always-On Mode first.                               |
 | `annotate://hide`                      | Closes the overlay on every display. Leaves Always-On Mode.                   |
 | `annotate://tool/<tool>`               | Selects a tool and opens the overlay.                                         |
-| `annotate://color/<color>`             | Sets the annotation color from the palette. Doesn't open the overlay.         |
+| `annotate://color/<slot>`              | Sets the annotation color to a palette slot. Doesn't open the overlay.        |
 | `annotate://clear`                     | Clears every open overlay. One Undo on any display brings them all back.      |
 | `annotate://toolbar/<on\|off\|toggle>` | Turns the toolbar on, off, or toggles it. Doesn't open the overlay.           |
 | `annotate://fade/<on\|off\|toggle>`    | Turns Fade Mode on, off, or toggles it. In Always-On Mode it applies on exit. |
 | `annotate://board/<on\|off\|toggle>`   | Turns the whiteboard (blackboard in Dark Mode) on, off, or toggles it.        |
 
-Capture has no link. Any web page or app can open a link, so links never read the screen or write to the clipboard. Use the keyboard or the menu bar icon instead.
+Capture has no link. Any web page or app can open a link, so links never read the screen or write to the clipboard. Use the keyboard, the menu bar icon, or the Shortcuts actions instead.
 
-- **Tools:** `pen`, `arrow`, `line`, `highlighter`, `rectangle`, `circle`, `redact`, `text`, `counter`, `select`, `eraser`
-- **Colors:** `red`, `orange`, `yellow`, `green`, `cyan`, `indigo`, `magenta`, `white`, `black`
+- **Tools:** `pen`, `arrow`, `line`, `highlighter`, `rectangle`, `circle` (the Oval tool), `filledRectangle`, `filledCircle` (the Filled Oval tool), `redact`, `text`, `counter`, `select`, `eraser`
+- **Color slots:** `1` to `9`, in palette order: red, orange, yellow, green, cyan, indigo, magenta, white, black. A slot stays the same if you bind its color to another key, but the color picker's numbers follow the keys, so they can differ from the slots
 
 Opening a link with plain `open` brings Annotate to the front for a moment. Once the link runs, focus goes back to the app you were in, unless an interactive overlay is still open, as it is after a tool or show link. When you open several links at once, that's decided after the last one. To keep a running Annotate in the background the whole time, open the link with `open -g`.
 
-Links show the same on-screen messages as the Shortcuts actions. Matching ignores case. A link Annotate doesn't recognize, including one with a query string, does nothing. Turn links off with **Allow URL commands** in Settings → General.
+Links show the same on-screen messages as the Shortcuts actions. Matching ignores case. A link Annotate doesn't recognize, including one with a query string or percent-encoding, does nothing. Turn links off with **Allow URL commands** in Settings → General.
 
 Debug builds answer to `annotate-debug://` instead, so a development build never takes links meant for the installed app.
 
@@ -481,8 +503,13 @@ Cursor effects hide while the macOS screenshot selection (<kbd>Shift</kbd> + <kb
 
 ### Capture
 
-- **Folder**: Capture Screen and Capture Area save to `~/Pictures/Annotate` and also copy the image to the clipboard. **Show in Finder** opens the folder, and says so here if it can't create it.
-- **Capture Area**: Drag out the part of the display to save. Escape cancels. Annotations hold their fade while you drag, and the image shows them as they were. With no overlay open, including in Always-On Mode, Capture Area opens the overlay first.
+- **After Capture**: Choose what Capture Screen and Capture Area do with the image: **Save to folder**, **Copy to clipboard**, or **Both** (the default). Copy to clipboard writes no file.
+- **Folder**: Captures save to `~/Pictures/Annotate` unless you pick another folder with **Choose…**. **Use Default** goes back to `~/Pictures/Annotate`. If the chosen folder is unavailable (deleted, in the Trash, or on a drive that isn't connected), captures save to `~/Pictures/Annotate` and Annotate says so, and the chosen folder is used again once it is back. **Show in Finder** opens the folder, and says so here if it can't create it.
+- **Save annotation data next to screenshots**: Off by default. When on, each saved capture also gets a JSON file with the same name (`Annotate 2026-11-01 at 10.23.45.json` beside `Annotate 2026-11-01 at 10.23.45.png`, including the ` (2)` names). It lists the annotations the image shows, bottom to top, with their kind, position in points from the display's top-left corner, sRGB hex color, and creation time, plus the captured area and the capture's time on both the system clock and the wall clock. For Capture Area, an annotation is listed only when part of what it draws (a label's text) is inside the area. Filled rectangles and ovals are listed as rectangles and ellipses with `"filled": true`, in their place in the stack. Pixels under a redaction are never recorded, and an annotation is left out when a newer redaction covers any part of it, while one drawn beside a redaction stays. An annotation under a filled shape is still listed. If the JSON can't be saved, the image is still saved and Annotate says so on the overlay, or in an alert when the overlay is closed or Hide Tool Feedback is on. With **Copy to clipboard**, no file is saved, so there is no JSON either.
+- **Notifications**: Each capture sends a notification with a preview. A saved capture's notification has **Show in Finder**, and clicking it does the same. Annotate asks for permission only from this pane (**Allow Notifications**), never from the overlay, where the system prompt would be hidden. If notifications are turned off, **Open System Settings** goes to Annotate's notification settings.
+- **Menu bar confirmation**: After a capture reaches its destination, the menu bar icon shows a saved or copied icon in place of the pencil for 1.5 seconds, and VoiceOver announces it. Another capture while it shows restarts the time.
+- **Recent Captures**: The menu bar icon's **Recent Captures** submenu, under Capture Area, lists the last 8 saved captures, newest first, each with a thumbnail and its day and time ("Today at 10:23 AM"). Hover one for its file name and folder. Each has **Copy**, **Open**, and **Show in Finder**. **Open Capture Folder** opens the folder captures go to now, creating `~/Pictures/Annotate` if needed. **Clear Menu** empties the list and leaves the files where they are; captures made after it show up as usual, and Annotate remembers the clear across launches. The list comes from the capture folder and `~/Pictures/Annotate` each time the menu opens: captures you rename or delete drop out, and choosing another folder drops the old folder's captures from the list. If the chosen folder can't be reached, the submenu says so and lists `~/Pictures/Annotate`. With **Copy to clipboard**, no file is saved, so nothing is listed. Open, Show in Finder, and Open Capture Folder close the interactive overlay first and keep its drawings; Always-On Mode stays on.
+- **Capture Area**: Drag out the part of the display to capture. Escape cancels. Annotations hold their fade while you drag, and the image shows them as they were. With no overlay open, including in Always-On Mode, Capture Area opens the overlay first.
 - **Screen Recording**: Shows whether Annotate has Screen Recording permission, with a shortcut to System Settings. Capture Screen, Capture Area, and the Redact tool's Pixelate and Blur styles need it. Capture works without it while a fully opaque board is showing, since the board hides the screen. If you capture without it otherwise, Annotate closes the overlay and opens this pane, which asks for access.
 
 ### Shortcuts
@@ -490,13 +517,17 @@ Cursor effects hide while the macOS screenshot selection (<kbd>Shift</kbd> + <kb
 Customize keys and modifier combinations for tools and utilities, organized into categories, with a **Reset All to Default** action:
 
 - **Drawing Tools**: Pen, Arrow, Line, Highlighter
-- **Shapes**: Rectangle, Circle
+- **Shapes**: Rectangle, Oval, Filled Rectangle, Filled Oval, Redact
 - **Advanced Tools**: Counter, Text, Select, Eraser
-- **Utilities**: Color Picker, Line Width, Toggle Board, Toggle Cursor Highlight, Toggle Background Dimming, Toggle Fade Mode, Toggle Toolbar, Decrease Size, Increase Size, Clear All, Capture Screen, Capture Area
+- **Utilities**: Color Picker, Colors, Line Width, Toggle Board, Toggle Cursor Highlight, Toggle Background Dimming, Toggle Fade Mode, Toggle Toolbar, Decrease Size, Increase Size, Clear All, Capture Screen, Capture Area
 
 The **Built-in Shortcuts** reference lists the fixed keys: Delete, Undo (Command + Z), Redo (Shift + Command + Z), and Escape. Editable bindings cannot conflict with another assigned action or a fixed editing command. Escape cancels recording without changing the binding.
 
 Each row can clear its shortcut (Not Set) or restore that row's default; **Reset All to Default** restores default keys and modifier combinations and leaves dimming unset. Bindings cannot reuse the Activation or Always-On shortcuts in General Settings; changing either global shortcut also checks for conflicts with tool and utility bindings. Defaults already used by a global shortcut stay Not Set when resetting. Existing custom bindings and cleared shortcuts are preserved on upgrade; if a new action’s default is already assigned, the new action starts as Not Set.
+
+**Colors** has a keycap under each palette color, all unassigned by default. Click a keycap to record a key for that color. Recording a key another color already has swaps the two colors' keys; a key used by any other action is rejected. **Use 1–9 for colors** clears the colors' number keys and binds them in palette order (red, orange, yellow, green, cyan, indigo, magenta, white, black). It skips any digit already assigned to another action and says which. Right-click a color to clear its shortcut or restore its default.
+
+The color picker follows these keys: a color on a number key 1–9 shows that number under its swatch, so with red on <kbd>7</kbd>, <kbd>C</kbd> then <kbd>7</kbd> also picks red. The other colors keep their palette position if it's free, and any left over take the free numbers in palette order. Only color shortcuts count, so a digit bound to another tool doesn't change the picker's numbers. The numbers are worked out each time the picker opens. The size pickers keep 1 to N.
 
 **Toggle Background Dimming** is unassigned by default. Assign a key to use it while annotating. Turning dimming on also enables the spotlight if needed; turning it off leaves the spotlight enabled. This shortcut does not change click effects or the Dim Automatically preference.
 
